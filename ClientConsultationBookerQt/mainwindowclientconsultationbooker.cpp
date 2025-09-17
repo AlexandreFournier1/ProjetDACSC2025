@@ -253,6 +253,11 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
     int patientId = this->getPatientId();
     bool newPatient = this->isNewPatientSelected();
 
+    if(lastName.empty()) return;
+    if(firstName.empty()) return;
+    if(patientId == 0) return;
+    if(!newPatient) return;
+
     cout << "lastName = " << lastName << endl;
     cout << "FirstName = " << firstName << endl;
     cout << "patientId = " << patientId << endl;
@@ -273,6 +278,11 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
     string startDate = this->getStartDate();
     string endDate = this->getEndDate();
 
+    if(specialty.empty()) return;
+    if(doctor.empty()) return;
+    if(startDate.empty()) return;
+    if(endDate.empty()) return;
+
     cout << "specialty = " << specialty << endl;
     cout << "doctor = " << doctor << endl;
     cout << "startDate = " << startDate << endl;
@@ -282,6 +292,8 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
 {
     int selectedTow = this->getSelectionIndexTableConsultations();
+
+    if(selectedTow.empty()) return;
 
     cout << "selectedRow = " << selectedTow << endl;
 }
