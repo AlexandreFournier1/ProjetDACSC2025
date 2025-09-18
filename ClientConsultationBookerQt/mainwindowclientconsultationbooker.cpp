@@ -293,7 +293,7 @@ void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
 {
     int selectedTow = this->getSelectionIndexTableConsultations();
 
-    if(selectedTow.empty()) return;
+    if(selectedTow == NULL) return;
 
     cout << "selectedRow = " << selectedTow << endl;
 }
