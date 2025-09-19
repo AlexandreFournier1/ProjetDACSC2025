@@ -9,9 +9,13 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 SERVER_SOURCES = Server1.cpp $(LIB)/TCP.cpp
 SERVER_OBJECTS = $(SERVER_SOURCES:.cpp=.o)
-SERVER_EXEC = server1
+SERVER_EXEC = Server1
 
-all: $(EXEC_INTERFACE) $(SERVER_EXEC)
+CLIENT_SOURCES = Client1.cpp $(LIB)/TCP.cpp
+CLIENT_OBJECTS = $(CLIENT_SOURCES:.cpp=.o)
+CLIENT_EXEC = Client1
+
+all: $(EXEC_INTERFACE) $(SERVER_EXEC) $(CLIENT_EXEC)
 
 
 $(EXEC_INTERFACE): $(OBJECTS)
@@ -27,7 +31,11 @@ $(LIB)/TCP.o: $(LIB)/TCP.cpp
 
 $(SERVER_EXEC): $(SERVER_OBJECTS)
 	echo $(ECHO) $(SERVER_EXEC)
-	g++ $(SERVER_OBJECTS) -o $(SERVER_EXEC)
+	g++ -Wall $(SERVER_OBJECTS) -o $(SERVER_EXEC)
+
+$(CLIENT_EXEC): $(CLIENT_OBJECTS)
+	echo $(ECHO) $(CLIENT_EXEC)
+	g++ -Wall $(CLIENT_OBJECTS) -o $(CLIENT_EXEC)
 
 %.o: %.cpp
 	g++ -Wall -Ilib -c $< -o $@

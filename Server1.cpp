@@ -36,70 +36,72 @@ int main(int argc,char* argv[])
 		close(sServer); 
 		exit(1); 
 	} 
-	// printf("Connexion acceptee !\n"); 
-	// // ***** Reception texte pur ************************************** 
-	// char buffer[100]; 
-	// int nbLus; 
+	printf("Connexion acceptee !\n"); 
 
-	// if ((nbLus = Receive(sService,buffer)) < 0) 
-	// { 
-	// 	perror("Erreur de Receive"); 
-	// 	close(sService); 
-	// 	close(sServer); 
-	// 	exit(1); 
-	// } 
+	// ***** Reception texte pur ************************************** 
+	char buffer[100]; 
+	int nbLus; 
 
-	// printf("NbLus = %d\n",nbLus); 
+	if ((nbLus = Receive(sService,buffer)) < 0) 
+	{ 
+		perror("Erreur de Receive"); 
+		close(sService); 
+		close(sServer); 
+		exit(1); 
+	} 
+
+	printf("NbLus = %d\n",nbLus); 
 	
-	// buffer[nbLus] = 0; 
+	buffer[nbLus] = 0; 
 	
-	// printf("Lu    = --%s--\n",buffer); 
+	printf("Lu    = --%s--\n",buffer); 
+
 	// // ***** Envoi de texte pur *************************************** 
-	// char texte[80]; 
-	// sprintf(texte,"Je vais bien merci ;) !"); 
-	// int nbEcrits; 
+	char texte[80]; 
+	sprintf(texte,"Je vais bien merci ;) !"); 
+	int nbEcrits; 
 	
-	// if ((nbEcrits = Send(sService,texte,strlen(texte))) < 0) 
-	// { 
-	// 	perror("Erreur de Send"); 
-	// 	close(sService); 
-	// 	close(sServer); 
-	// 	exit(1); 
-	// } 
+	if ((nbEcrits = Send(sService,texte,strlen(texte))) < 0) 
+	{ 
+		perror("Erreur de Send"); 
+		close(sService); 
+		close(sServer); 
+		exit(1); 
+	} 
 	
-	// printf("NbEcrits = %d\n",nbEcrits); 
-	// printf("Ecrit    = --%s--\n",texte); 
+	printf("NbEcrits = %d\n",nbEcrits); 
+	printf("Ecrit    = --%s--\n",texte); 
 	
-	// // ***** Reception d'une structure ******************************** 
-	// PERSONNE p;
-	// if ((nbLus = Receive(sService,(char*)&p)) < 0) 
-	// { 
-	//    perror("Erreur de Receive"); 
-	//    close(sService); 
-	//    close(sServer); 
-	//    exit(1); 
-	// } 
+	// ***** Reception d'une structure ******************************** 
+	PERSONNE p;
+	if ((nbLus = Receive(sService,(char*)&p)) < 0) 
+	{ 
+	   perror("Erreur de Receive"); 
+	   close(sService); 
+	   close(sServer); 
+	   exit(1); 
+	} 
  
- //  printf("NbLus = %d\n",nbLus); 
- //  printf("Lu    = --%s--%d--%f--\n",p.nom,p.age,p.poids); 
+	printf("NbLus = %d\n",nbLus); 
+	printf("Lu    = --%s--%d--%f--\n",p.nom,p.age,p.poids); 
+
+	// ***** Envoi d'une structure ************************************* 
+	strcpy(p.nom,"charlet"); 
+	p.age = 54; 
+	p.poids = 71.98f; 
+	if ((nbEcrits = Send(sService,(char*)&p,sizeof(PERSONNE))) < 0) 
+	{ 
+	   perror("Erreur de Send"); 
+	   close(sService); 
+	   close(sServer); 
+	   exit(1); 
+	} 
+
+	printf("NbEcrits = %d\n",nbEcrits); 
+	printf("Ecrit    = --%s--%d--%f--\n",p.nom,p.age,p.poids); 
+
+	close(sService); 
+	close(sServer); 
  
- //  // ***** Envoi d'une structure ************************************* 
- //  strcpy(p.nom,"charlet"); 
- //  p.age = 54; 
- //  p.poids = 71.98f; 
- //  if ((nbEcrits = Send(sService,(char*)&p,sizeof(PERSONNE))) < 0) 
- //  { 
-	//    perror("Erreur de Send"); 
-	//    close(sService); 
-	//    close(sServer); 
-	//    exit(1); 
- //  } 
- 
- //  printf("NbEcrits = %d\n",nbEcrits); 
- //  printf("Ecrit    = --%s--%d--%f--\n",p.nom,p.age,p.poids); 
- 
- //  close(sService); 
- //  close(sServer); 
- 
- //  exit(0); 
+ 	exit(0); 
 } 

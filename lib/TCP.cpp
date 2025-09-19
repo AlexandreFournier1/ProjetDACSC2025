@@ -8,7 +8,7 @@ int ServerSocket(int port)
 	
 	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 	{
-		perror("Erreur de socket()\n"); 
+		perror("Erreur de socket()"); 
 		return -1; 	
 	}
 
@@ -27,7 +27,7 @@ int ServerSocket(int port)
 
 	if(getaddrinfo(NULL, portStr, &hints, &Result) != 0)
 	{
-		perror("Erreur de AddrInfo\n");
+		perror("Erreur de AddrInfo");
 		close(fd);
 		return -1;
 	}
@@ -42,7 +42,8 @@ int ServerSocket(int port)
 
 	if(bind(fd, Result->ai_addr, Result->ai_addrlen) < 0)
 	{
-		perror("Erreur de bind()\n");
+		perror("Erreur de bind()");
+		close(fd);
 		return -1;
 	}
 
@@ -51,7 +52,8 @@ int ServerSocket(int port)
 
 	if(listen(fd, SOMAXCONN))
 	{
-		perror("Error de listen()\n");
+		perror("Error de listen()");
+		close(fd);
 		return -1;
 	}
 
@@ -60,6 +62,7 @@ int ServerSocket(int port)
 	return fd;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int Accept(int sEcoute,char *ipClient)
 {
@@ -67,7 +70,7 @@ int Accept(int sEcoute,char *ipClient)
 
 	if((fd = accept(sEcoute, NULL, NULL)) == -1)
 	{
-		perror("Erreur de accept()\n");
+		perror("Erreur de accept()");
 		return -1;
 	}
 
@@ -90,17 +93,94 @@ int Accept(int sEcoute,char *ipClient)
 	return fd;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 int ClientSocket(char* ipServeur,int portServeur)
 {
-	return 0;
+	int fdClient;
+
+	// Création de la socket
+
+	printf("Creation d'un Socket Client\n");
+
+	if ((fdClient = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+	{
+		perror("Erreur de socket()");
+		return -1;
+	}
+
+	printf("Socket cree = %d\n", fdClient);
+
+	// Construction de l'adresse du serveur
+
+	struct addrinfo hints;
+	struct addrinfo *results;
+	memset(&hints, 0, sizeof(struct addrinfo));
+
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_NUMERICSERV;
+
+	char portStr[10];
+	sprintf(portStr, "%d", portServeur);
+
+	if (getaddrinfo(ipServeur, portStr, &hints, &results) != 0)
+	{
+		perror("Erreur de getaddrinfo()");
+		close(fdClient);
+		return -1;
+	}
+
+	// Demande de connexion
+
+	if (connect(fdClient, results->ai_addr, results->ai_addrlen) == -1)
+	{
+		perror("Erreur de connect()");
+		close(fdClient);
+		return -1;
+	}
+
+	printf("connect() reussi !\n");
+
+	return fdClient;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int Send(int sSocket,char* data,int taille)
 {
-	return 0;
+	// Ecriture sur la socket
+
+	int nb;
+
+	data[taille] = '\0';
+
+	if ((nb = write(sSocket, data, taille)) == -1)
+	{
+		perror("Erreur de write()");
+		return -1;
+	}
+
+	printf("Nombre ecrits = %d - Ecrit : --%s--\n", nb, data);
+
+	return nb;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int Receive(int sSocket,char* data)
 {
-	return 0;
+	// Lecture sur la socket
+	int nb;
+
+	// Taille temporaire
+	if ((nb = read(sSocket, data, /*strlen(data)*/ 100)) == -1)
+	{
+		perror("Erreur de read()");
+		return -1;
+	}
+
+	printf("Nombre lu = %d - Lu : --%s--\n", nb, data);
+
+	return nb;
 }
