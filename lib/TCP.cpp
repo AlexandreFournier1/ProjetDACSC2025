@@ -110,7 +110,7 @@ int ClientSocket(char* ipServeur,int portServeur)
 	}
 
 	printf("Socket cree = %d\n", fdClient);
-
+	
 	// Construction de l'adresse du serveur
 
 	struct addrinfo hints;
