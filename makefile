@@ -7,9 +7,9 @@ LIB = lib
 SOURCES = $(DOSSIER)/main.cpp $(DOSSIER)/mainwindowclientconsultationbooker.cpp $(DOSSIER)/moc_mainwindowclientconsultationbooker.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
-SERVER_SOURCES = Server1.cpp $(LIB)/TCP.cpp
+SERVER_SOURCES = ServerTest.cpp $(LIB)/TCP.cpp
 SERVER_OBJECTS = $(SERVER_SOURCES:.cpp=.o)
-SERVER_EXEC = Server1
+SERVER_EXEC = ServerTest
 
 CLIENT_SOURCES = Client1.cpp $(LIB)/TCP.cpp
 CLIENT_OBJECTS = $(CLIENT_SOURCES:.cpp=.o)

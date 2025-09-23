@@ -153,9 +153,10 @@ int Send(int sSocket,char* data,int taille)
 
 	int nb;
 
-	data[taille] = '\0';
+	data[taille] = '/';
+	data[taille + 1] = '!';
 
-	if ((nb = write(sSocket, data, taille)) == -1)
+	if ((nb = write(sSocket, data, taille + 1)) == -1)
 	{
 		perror("Erreur de write()");
 		return -1;
