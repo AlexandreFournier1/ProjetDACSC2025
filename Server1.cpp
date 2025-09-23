@@ -3,7 +3,7 @@
 #include <unistd.h> 
 #include <string.h> 
 #include "./lib/TCP.h"
-#include "./lib/CONFIGURATION.h"
+#include "./lib/SCP.h"
 
 int main(int argc,char* argv[]) 
 {

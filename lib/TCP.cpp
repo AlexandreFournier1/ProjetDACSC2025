@@ -155,8 +155,9 @@ int Send(int sSocket,char* data,int taille)
 
 	data[taille] = '/';
 	data[taille + 1] = '!';
+	data[taille + 2] = '\0';
 
-	if ((nb = write(sSocket, data, taille + 1)) == -1)
+	if ((nb = write(sSocket, data, taille + 2)) == -1)
 	{
 		perror("Erreur de write()");
 		return -1;
@@ -172,15 +173,47 @@ int Send(int sSocket,char* data,int taille)
 int Receive(int sSocket,char* data)
 {
 	// Lecture sur la socket
-	int nb;
+	int nb = 0, end = 0, firstCarac = 0, firstCaracPos = 0;
+	char tmp;
 
-	// Taille temporaire
-	if ((nb = read(sSocket, data, /*strlen(data)*/ 100)) == -1)
+	// Lecture caractère par caractère
+	while(end == 0)
 	{
-		perror("Erreur de read()");
-		return -1;
-	}
+		if (read(sSocket, &tmp, 1) == -1)
+		{
+			perror("Erreur de read()");
+			return -1;
+		}
 
+		// On vérifie si on est potentiellement en fin de chaine
+		if (tmp == '/')
+		{
+			firstCarac = 1;
+			firstCaracPos = nb;
+		}
+
+		// Si on soupsonne une fin de chaine on vérifie la suite
+		if (firstCarac == 1 && firstCaracPos != nb)
+		{
+			if (tmp == '!')
+			{
+				// On enlève le "/" de la chaine de caractères
+				if (nb > 0) // On vérifie que nb > 0 au cas où que ce soit le début de la chaine de caractères
+					nb--;
+
+				data[nb] = '\0';
+				end = 1;
+			}
+			else // Si on passe dans le else -> fausse alerte
+				firstCarac = 0;
+		}
+		else
+		{
+			data[nb] = tmp;
+			nb++;
+		}
+	}
+	
 	printf("Nombre lu = %d - Lu : --%s--\n", nb, data);
 
 	return nb;
