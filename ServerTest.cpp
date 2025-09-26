@@ -3,6 +3,7 @@
 #include <unistd.h> 
 #include <string.h> 
 #include "./lib/TCP.h" 
+#include "./lib/SCP.h" 
 typedef struct 
 { 
 char nom[20]; 
