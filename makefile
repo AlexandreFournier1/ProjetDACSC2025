@@ -7,7 +7,7 @@ LIB = lib
 SOURCES = $(DOSSIER)/main.cpp $(DOSSIER)/mainwindowclientconsultationbooker.cpp $(DOSSIER)/moc_mainwindowclientconsultationbooker.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
-SERVER_SOURCES = Server1.cpp $(LIB)/TCP.cpp $(LIB)/SCP.cpp
+SERVER_SOURCES = Server1.cpp $(LIB)/TCP.cpp $(LIB)/SCP.cpp 
 SERVER_OBJECTS = $(SERVER_SOURCES:.cpp=.o)
 SERVER_EXEC = Server1
 
@@ -34,7 +34,7 @@ $(LIB)/SCP.o: $(LIB)/SCP.cpp
 
 $(SERVER_EXEC): $(SERVER_OBJECTS)
 	echo $(ECHO) $(SERVER_EXEC)
-	g++ -Wall $(SERVER_OBJECTS) -o $(SERVER_EXEC)
+	g++ -Wall $(SERVER_OBJECTS) -o $(SERVER_EXEC) -pthread
 
 $(CLIENT_EXEC): $(CLIENT_OBJECTS)
 	echo $(ECHO) $(CLIENT_EXEC)

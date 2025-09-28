@@ -88,6 +88,8 @@ bool SCP(char* requete, char* reponse, int socket)
             }
             catch (int)
             {
+
+
                 sprintf(reponse, "OPER#ko#Division par zéro !");
             }
         }
@@ -101,8 +103,9 @@ bool SCP(char* requete, char* reponse, int socket)
 //*****************************************************************
 bool SCP_Login(const char* user, const char* password)
 {
-    if (strcmp(user, "wagner") == 0 && strcmp(password, "abc123") == 0) return true;
-    if (strcmp(user, "charlet") == 0 && strcmp(password, "xyz456") == 0) return true;
+    if (strcmp(user, "alex") == 0 && strcmp(password, "1234") == 0) return true;
+    if (strcmp(user, "noah") == 0 && strcmp(password, "1234") == 0) return true;
+    if (strcmp(user, "francois") == 0 && strcmp(password, "1234") == 0) return true;
     return false;
 }
 
