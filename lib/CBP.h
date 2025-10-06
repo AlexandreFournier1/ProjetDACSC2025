@@ -2,33 +2,16 @@
 #define CBP_H
 // CBP = Consultation Booking Protocol
 
-// Pas du tout sûr des structures
-typedef struct {
-    int id;
-    char* name;
-} Specialite;
+#define NB_MAX_CLIENTS 100
+#define MAX_SIZE_REQUETE 255
+#define MAX_SIZE_REPONSE 255
 
-typedef struct {
-    int id;
-    char* lastName;
-    char* firstName;
-} Docteur;
-
-typedef struct {
-	int id;
-	Docteur medecin;
-	Specialite specialite;
-	char* date;
-	char* heure;
-} Consultation;
-
+bool CBP(char* requete, char* reponse, int socket);
 char* CBP_Login(char* nom, char* prenom, int numPatient);
-char* CBP_Logout();
-
-// Pas du tout sûr des prototypes des fonctions à partir d'ici (en tout cas la valeur de retour)
-Specialite* CBP_GetSpecialites();
-Docteur* CBP_GetDoctors();
-Consultation* CBP_SearchConsultations(Specialite specialite, Docteur medecin, char* dateDebut, char* dateFin);
-bool CBP_BookConsultation(int consulationId, char* reason);
+char* CBP_Logout(char* nom, char* prenom, int numPatient);
+char* CBP_GetSpecialites();
+char* CBP_GetDoctors();
+char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, char* dateFin);
+char* CBP_BookConsultation(int consulationId, char* reason);
 
 #endif
