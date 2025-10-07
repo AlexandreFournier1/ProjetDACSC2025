@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/Server_Reservation.dir/Server_Reservation_autogen/mocs_compilation.cpp.o CMakeFiles/Server_Reservation.dir/Server_Reservation.cpp.o CMakeFiles/Server_Reservation.dir/lib/TCP.cpp.o CMakeFiles/Server_Reservation.dir/lib/SCP.cpp.o -o bin/Server_Reservation  -lpthread 

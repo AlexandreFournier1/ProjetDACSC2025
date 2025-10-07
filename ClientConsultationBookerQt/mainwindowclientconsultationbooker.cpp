@@ -3,6 +3,11 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <iostream>
+
+#include "../lib/TCP.h"
+#include "../lib/SCP.h"
+#include "../lib/CBP.h"
+
 using namespace std;
 
 MainWindowClientConsultationBooker::MainWindowClientConsultationBooker(QWidget *parent)
@@ -248,6 +253,20 @@ int MainWindowClientConsultationBooker::dialogInputInt(const string& title,const
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 {
+    int sClient;
+
+    char ip[] = "192.168.150.129";
+
+    // Connexion sur le serveur
+    if ((sClient = ClientSocket( ip, 50000)) == -1)
+    {
+        perror("Erreur de ClientSocket");
+        exit(1);
+    }
+    printf("Connecte sur le serveur.\n");
+
+
+
     string lastName = this->getLastName();
     string firstName = this->getFirstName();
     int patientId = this->getPatientId();
@@ -293,7 +312,7 @@ void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
 {
     int selectedTow = this->getSelectionIndexTableConsultations();
 
-    if(selectedTow == NULL) return;
+    if(selectedTow == -1) return;
 
     cout << "selectedRow = " << selectedTow << endl;
 }

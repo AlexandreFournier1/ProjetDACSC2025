@@ -13,6 +13,10 @@ int nbClients = 0;
 // Mutex de protection
 pthread_mutex_t mutexClients = PTHREAD_MUTEX_INITIALIZER;
 
+// erreur potentiel si en meme temps
+// Solution mutex
+char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
+
 // Prototypes internes
 char* AccesBD(char* requete);
 int  isPresent(int socket);
@@ -87,7 +91,6 @@ void RemoveClient(int socket);
 // Pas encore tester
 char* CBP_Login(char* nom, char* prenom, int numPatient) // numPatient = -1 si nouveau Patient
 {
-  	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
 
   	if (numPatient == -1)
   	{
@@ -97,7 +100,7 @@ char* CBP_Login(char* nom, char* prenom, int numPatient) // numPatient = -1 si n
 
   	sprintf(requete,"select id from patients where last_name = '%s' and first_name = '%s' and id = '%d';", nom, prenom, numPatient);
 
-  	char* reponse = AccesBD(requete);
+  	char* resultat = AccesBD(requete);
 	
 	if (resultat)
 		if (numPatient == -1)
@@ -116,8 +119,6 @@ char* CBP_Login(char* nom, char* prenom, int numPatient) // numPatient = -1 si n
 // Pas encore tester
 char* CBP_Logout(char* nom, char* prenom, int numPatient)
 {
-	char requete[MAX_SIZE_REQUETE];
-
     sprintf(requete, "LOGOUT#%s#%s#%s", nom, prenom, numPatient);
 
 	return requete;
@@ -128,8 +129,6 @@ char* CBP_Logout(char* nom, char* prenom, int numPatient)
 // Pas encore tester
 char* CBP_GetSpecialites()
 {
-	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
-
 	sprintf(requete, "select * from specialties;");
 
 	char *reponse = AccesBD(requete);
@@ -153,8 +152,6 @@ char* CBP_GetDoctors()
 
 char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, char* dateFin)
 {
-	char requete[MAX_SIZE_REQUETE];
-
 	sprintf(requete, "select c.id, m.last_name, m.first_name, s.name, c.date, c.hour from consultations c inner join doctors m on doctors.id = consulations.doctor_id inner join specialties s on specialties.id = consulations.specialty_id where s.id = '%s' and m.id = '%s' and ...", idSpecialite, idMedecin);
 
 	return 0;
@@ -188,7 +185,7 @@ char* AccesBD(char* requete)
         MYSQL_ROW row;
         int nbCols = mysql_num_fields(resultat);
 
-        reponse = malloc(4096);
+        reponse = (char*)malloc(4096);
         reponse[0] = '\0';
 
         while ((row = mysql_fetch_row(resultat))) 
@@ -244,11 +241,11 @@ void AddClient(int socket)
     pthread_mutex_unlock(&mutexClients);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////²/////////////////////////////////////////////////////
 
 void RemoveClient(int socket)
 {
-    int pos = estPresent(socket);
+    int pos = isPresent(socket);
     if (pos == -1) return;
 
     pthread_mutex_lock(&mutexClients);
