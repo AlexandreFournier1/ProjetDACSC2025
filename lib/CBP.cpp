@@ -27,7 +27,7 @@ void RemoveClient(int socket);
 
 // J'ai mis en commentaire parce qu'après réflexion, je pense que c'est useless de passé par ça parce que les fonctions font déjà tout le travail
 // A voir ce que t'en penses
-/*bool CBP(char* requete, char* reponse, int socket)
+bool CBP(char* requete, char* reponse, int socket)
 {
 	char *ptr = strtok(requete, "#");
 
@@ -40,6 +40,8 @@ void RemoveClient(int socket);
             return false;
 		}
 
+		AddClient(socket);
+
 		char nom[50], prenom[50], numPatient[50];
 		strcpy(nom, strtok(NULL, "#"));
         strcpy(prenom, strtok(NULL, "#"));
@@ -47,7 +49,7 @@ void RemoveClient(int socket);
 
         printf("\t[THREAD %lu] LOGIN de %s %s\n", pthread_self(), nom, prenom);
 
-        char rep[100] = CBP_Login(nom, prenom, atoi(numPatient));
+        char rep[MAX_SIZE_REPONSE] = CBP_Login(nom, prenom, atoi(numPatient));
 
         if (rep != NULL)
         	sprintf(reponse, rep);
@@ -84,7 +86,7 @@ void RemoveClient(int socket);
 	}
 
 	return true;
-}*/
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +147,16 @@ char* CBP_GetSpecialites()
 
 char* CBP_GetDoctors()
 {
-	return 0;
+	sprintf(requete, "select id, last_name, first_name from doctors;");
+
+	char *reponse = AccesBD(requete);
+
+	if (reponse)
+		sprintf(rep, "GETDOCTORS#%s", reponse);
+	else
+		sprintf(rep, "GETDOCTORS#Pas de Doctors trouvees !");
+
+	return rep;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,9 +170,18 @@ char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* CBP_BookConsultation(int consulationId, char* reason)
+char* CBP_BookConsultation(int consultationId, char* reason, )
 {
-	return 0;
+	sprintf(requete, "select patient_id from consultations where id = consultationId")
+
+	char *reponse = AccesBD(requete);
+
+	if(reponse == NULL)
+		sprintf(rep, "BOOK_CONSULTATION#Dispo");
+  		// sprintf(requete,"update ");
+  		// AccesBD(requete);
+
+	return rep;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +261,7 @@ void AddClient(int socket)
     pthread_mutex_unlock(&mutexClients);
 }
 
-///////////////////////////////////////////////²/////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void RemoveClient(int socket)
 {
