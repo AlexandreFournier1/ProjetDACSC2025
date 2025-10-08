@@ -6,3 +6,23 @@
 
 #IncludeRegexTransform: 
 
+/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Client_Reservation_autogen/mocs_compilation.cpp
+
+/home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.cpp
+CBP.h
+/home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.h
+mysql/mysql.h
+-
+string.h
+-
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+pthread.h
+-
+
+/home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.h
+

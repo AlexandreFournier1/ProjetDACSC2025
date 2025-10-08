@@ -6,7 +6,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/Consultationbooker.dir/ClientConsultationBookerQt/mainwindowclientconsultationbooker.cpp.o"
   "CMakeFiles/Consultationbooker.dir/Consultationbooker_autogen/mocs_compilation.cpp.o"
   "CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.o"
-  "CMakeFiles/Consultationbooker.dir/lib/SCP.cpp.o"
   "CMakeFiles/Consultationbooker.dir/lib/TCP.cpp.o"
   "bin/Consultationbooker"
   "bin/Consultationbooker.pdb"

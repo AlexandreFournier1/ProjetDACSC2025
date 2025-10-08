@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/student/Bureau/DASC/ProjetDACSC
+CMAKE_SOURCE_DIR = /home/student/Bureau/DACSC/ProjetDACSC
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/student/Bureau/DASC/ProjetDACSC/Compilation
+CMAKE_BINARY_DIR = /home/student/Bureau/DACSC/ProjetDACSC/Compilation
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DASC/ProjetDACSC/Compilation/CMakeFiles /home/student/Bureau/DASC/ProjetDACSC/Compilation//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles /home/student/Bureau/DACSC/ProjetDACSC/Compilation//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DASC/ProjetDACSC/Compilation/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -432,7 +432,6 @@ lib/SCP.o: lib/SCP.cpp.o
 
 # target to build an object file
 lib/SCP.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/SCP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/SCP.cpp.o
 .PHONY : lib/SCP.cpp.o
 
@@ -442,7 +441,6 @@ lib/SCP.i: lib/SCP.cpp.i
 
 # target to preprocess a source file
 lib/SCP.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/SCP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/SCP.cpp.i
 .PHONY : lib/SCP.cpp.i
 
@@ -452,7 +450,6 @@ lib/SCP.s: lib/SCP.cpp.s
 
 # target to generate assembly for a file
 lib/SCP.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/SCP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/SCP.cpp.s
 .PHONY : lib/SCP.cpp.s
 

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB
 
-CXX_INCLUDES = -I/home/student/Bureau/DASC/ProjetDACSC/Compilation/Consultationbooker_autogen/include -I/home/student/Bureau/DASC/ProjetDACSC -I/home/student/Bureau/DASC/ProjetDACSC/ClientConsultationBookerQt -I/home/student/Bureau/DASC/ProjetDACSC/lib -I/usr/include/mysql -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtCore -isystem /usr/lib64/qt5/mkspecs/linux-g++
+CXX_INCLUDES = -I/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Consultationbooker_autogen/include -I/home/student/Bureau/DACSC/ProjetDACSC -I/home/student/Bureau/DACSC/ProjetDACSC/ClientConsultationBookerQt -I/home/student/Bureau/DACSC/ProjetDACSC/lib -I/usr/include/mysql -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtCore -isystem /usr/lib64/qt5/mkspecs/linux-g++
 
 CXX_FLAGS = -Wall -Wextra -Wpedantic -fPIC -std=gnu++17
 

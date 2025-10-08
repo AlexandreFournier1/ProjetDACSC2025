@@ -5,7 +5,6 @@
 #include <iostream>
 
 #include "../lib/TCP.h"
-#include "../lib/SCP.h"
 #include "../lib/CBP.h"
 
 using namespace std;
