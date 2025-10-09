@@ -89,6 +89,7 @@ bool CBP(char* requete, char* reponse, int socket)
 	}
 
 	// SEARCHCONSULTATIONS
+	// Compile juste prob avec getDoctorId nom prenom
 	if (strcmp(ptr, "SEARCHCONSULTATIONS") == 0)
 	{
 		char specialiteName[50], medecinName[50], dateDebut[50], dateFin[50];
@@ -223,15 +224,15 @@ char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* CBP_BookConsultation(int consultationId, char* reason, )
+char* CBP_BookConsultation(int consultationId, char* reason )
 {
 	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
 
-	sprintf(requete, "SELECT patient_id FROM consultations WHERE id = consultationId")
+	sprintf(requete, "SELECT patient_id FROM consultations WHERE id = consultationId");
 
 	char *reponse = AccesBD(requete);
 
-	if(reponse == NULL)
+	// if(reponse == NULL)
 		sprintf(rep, "BOOK_CONSULTATION#Dispo");
   		// sprintf(requete,"update ");
   		// AccesBD(requete);

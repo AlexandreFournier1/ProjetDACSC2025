@@ -3,11 +3,14 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <iostream>
+#include <unistd.h>
 
 #include "../lib/TCP.h"
 #include "../lib/CBP.h"
 
 using namespace std;
+
+void Echange(char* requete, char* reponse);
 
 MainWindowClientConsultationBooker::MainWindowClientConsultationBooker(QWidget *parent)
     : QMainWindow(parent)
@@ -250,12 +253,12 @@ int MainWindowClientConsultationBooker::dialogInputInt(const string& title,const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// Fonctions gestion des boutons (TO DO) //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int sClient;
+
 void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 {
-    int sClient;
-
-    char ip[] = "192.168.150.129";
-    char* requete, reponse;
+    char ip[] = "192.168.150.131";
+    char* requete, *reponse;
 
     // Connexion sur le serveur
     if ((sClient = ClientSocket( ip, 50000)) == -1)
@@ -304,7 +307,7 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 // Aucune idée si ça fonctionne
 void MainWindowClientConsultationBooker::on_pushButtonLogout_clicked()
 {
-    char* requete, reponse;
+    char* requete, *reponse;
 
     string lastName = this->getLastName();
     string firstName = this->getFirstName();
@@ -322,7 +325,7 @@ void MainWindowClientConsultationBooker::on_pushButtonLogout_clicked()
 
 void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 {
-    char* requete, reponse;
+    char* requete, *reponse;
 
     string specialty = this->getSelectionSpecialty();
     string doctor = this->getSelectionDoctor();
@@ -347,8 +350,8 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 
     if (strcmp(strtok(NULL, "#"), "Pas de Consultations trouvees !"))
         dialogError("Erreur", "Pas de Consultations trouvées !");
-    else
-        // Dans le cas où c'est trouvé
+    // else
+    //     // Dans le cas où c'est trouvé
 }
 
 void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()

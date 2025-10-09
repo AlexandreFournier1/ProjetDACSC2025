@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/mocs_compilation.cpp
+/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/mocs_compilation.cpp
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Server_Reservation.cpp
+/home/student/Bureau/DACSC/ProjetDACSC/Server_Reservation.cpp
 stdio.h
 -
 stdlib.h
@@ -22,13 +22,13 @@ signal.h
 pthread.h
 -
 ./lib/TCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
+/home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.h
 ./lib/SCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/SCP.h
+/home/student/Bureau/DACSC/ProjetDACSC/lib/SCP.h
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/SCP.cpp
+/home/student/Bureau/DACSC/ProjetDACSC/lib/SCP.cpp
 SCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/SCP.h
+/home/student/Bureau/DACSC/ProjetDACSC/lib/SCP.h
 string.h
 -
 stdio.h
@@ -40,11 +40,11 @@ unistd.h
 pthread.h
 -
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/SCP.h
+/home/student/Bureau/DACSC/ProjetDACSC/lib/SCP.h
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.cpp
+/home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.cpp
 TCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
+/home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.h
 stdio.h
 -
 unistd.h
@@ -60,5 +60,5 @@ sys/socket.h
 netdb.h
 -
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
+/home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.h
 

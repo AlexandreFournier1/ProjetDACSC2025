@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC
+CMAKE_SOURCE_DIR = /home/student/Bureau/DACSC/ProjetDACSC
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation
+CMAKE_BINARY_DIR = /home/student/Bureau/DACSC/ProjetDACSC/Compilation
 
 # Include any dependencies generated for this target.
 include CMakeFiles/Client_Reservation.dir/depend.make
@@ -78,55 +78,55 @@ include CMakeFiles/Client_Reservation.dir/flags.make
 
 CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.o: CMakeFiles/Client_Reservation.dir/flags.make
 CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.o: Client_Reservation_autogen/mocs_compilation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.o -c /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Client_Reservation_autogen/mocs_compilation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.o -c /home/student/Bureau/DACSC/ProjetDACSC/Compilation/Client_Reservation_autogen/mocs_compilation.cpp
 
 CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Client_Reservation_autogen/mocs_compilation.cpp > CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/Bureau/DACSC/ProjetDACSC/Compilation/Client_Reservation_autogen/mocs_compilation.cpp > CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.i
 
 CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Client_Reservation_autogen/mocs_compilation.cpp -o CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/Bureau/DACSC/ProjetDACSC/Compilation/Client_Reservation_autogen/mocs_compilation.cpp -o CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.s
 
 CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.o: CMakeFiles/Client_Reservation.dir/flags.make
 CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.o: ../Client_Reservation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.o -c /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Client_Reservation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.o -c /home/student/Bureau/DACSC/ProjetDACSC/Client_Reservation.cpp
 
 CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Client_Reservation.cpp > CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/Bureau/DACSC/ProjetDACSC/Client_Reservation.cpp > CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.i
 
 CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Client_Reservation.cpp -o CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/Bureau/DACSC/ProjetDACSC/Client_Reservation.cpp -o CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.s
 
 CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.o: CMakeFiles/Client_Reservation.dir/flags.make
 CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.o: ../lib/TCP.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.o -c /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.o -c /home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.cpp
 
 CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.cpp > CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.cpp > CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.i
 
 CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.cpp -o CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.cpp -o CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.s
 
 CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.o: CMakeFiles/Client_Reservation.dir/flags.make
 CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.o: ../lib/CBP.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.o -c /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.o -c /home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.cpp
 
 CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.cpp > CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.cpp > CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.i
 
 CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.cpp -o CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.cpp -o CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.s
 
 # Object files for target Client_Reservation
 Client_Reservation_OBJECTS = \
@@ -145,7 +145,7 @@ bin/Client_Reservation: CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.o
 bin/Client_Reservation: CMakeFiles/Client_Reservation.dir/build.make
 bin/Client_Reservation: /usr/lib64/mysql/libmysqlclient.so
 bin/Client_Reservation: CMakeFiles/Client_Reservation.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable bin/Client_Reservation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable bin/Client_Reservation"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Client_Reservation.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -158,6 +158,6 @@ CMakeFiles/Client_Reservation.dir/clean:
 .PHONY : CMakeFiles/Client_Reservation.dir/clean
 
 CMakeFiles/Client_Reservation.dir/depend:
-	cd /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles/Client_Reservation.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/student/Bureau/DACSC/ProjetDACSC/Compilation && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/student/Bureau/DACSC/ProjetDACSC /home/student/Bureau/DACSC/ProjetDACSC /home/student/Bureau/DACSC/ProjetDACSC/Compilation /home/student/Bureau/DACSC/ProjetDACSC/Compilation /home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles/Client_Reservation.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/Client_Reservation.dir/depend
 
