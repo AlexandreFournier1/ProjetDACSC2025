@@ -3,7 +3,7 @@
 // CBP = Consultation Booking Protocol
 
 #define NB_MAX_CLIENTS 100
-#define MAX_SIZE_REQUETE 255
+#define MAX_SIZE_REQUETE 512
 #define MAX_SIZE_REPONSE 255
 
 bool CBP(char* requete, char* reponse, int socket);

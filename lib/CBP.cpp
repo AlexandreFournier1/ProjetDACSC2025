@@ -22,14 +22,17 @@ char* AccesBD(char* requete);
 int  isPresent(int socket);
 void AddClient(int socket);
 void RemoveClient(int socket);
+int getSpecialiteId(char* requete, char* specialiteName);
+int getDoctorId(char* requete, char* doctorLastName, char* doctorFirstName);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// J'ai mis en commentaire parce qu'après réflexion, je pense que c'est useless de passé par ça parce que les fonctions font déjà tout le travail
-// A voir ce que t'en penses
 bool CBP(char* requete, char* reponse, int socket)
 {
-	char *ptr = strtok(requete, "#");
+	char temp[MAX_SIZE_REQUETE];
+	strcpy(temp, requete);
+
+	char *ptr = strtok(temp, "#");
 
 	// LOGIN
 	if (strcmp(ptr, "LOGIN") == 0)
@@ -49,34 +52,64 @@ bool CBP(char* requete, char* reponse, int socket)
 
         printf("\t[THREAD %lu] LOGIN de %s %s\n", pthread_self(), nom, prenom);
 
-        char rep[MAX_SIZE_REPONSE] = CBP_Login(nom, prenom, atoi(numPatient));
+        char* rep = CBP_Login(nom, prenom, atoi(numPatient));
 
         if (rep != NULL)
-        	sprintf(reponse, rep);
+        	sprintf(reponse, "%s", rep);
 	}
 
 	// LOGOUT
 	if (strcmp(ptr, "LOGOUT") == 0)
 	{
+		RemoveClient(socket);
 
+		char nom[50], prenom[50], numPatient[50];
+		strcpy(nom, strtok(NULL, "#"));
+        strcpy(prenom, strtok(NULL, "#"));
+        strcpy(numPatient, strtok(NULL, "#"));
+
+        printf("\t[THREAD %lu] LOGOUT de %s %s\n", pthread_self(), nom, prenom);
+
+        char* rep = CBP_Logout(nom, prenom, atoi(numPatient));
+
+        if (rep != NULL)
+        	sprintf(reponse, "%s", rep);
 	}
 
 	// GETSPECIALITES
 	if (strcmp(ptr, "GETSPECIALITES") == 0)
 	{
-
+		reponse = CBP_GetSpecialites();
 	}
 
 	// GETDOCTORS
 	if (strcmp(ptr, "GETDOCTORS") == 0)
 	{
-
+		reponse = CBP_GetDoctors();
 	}
 
 	// SEARCHCONSULTATIONS
 	if (strcmp(ptr, "SEARCHCONSULTATIONS") == 0)
 	{
+		char specialiteName[50], medecinName[50], dateDebut[50], dateFin[50];
+		strcpy(specialiteName, strtok(NULL, "#"));
+        strcpy(medecinName, strtok(NULL, "#"));
+        strcpy(dateDebut, strtok(NULL, "#"));
+        strcpy(dateFin, strtok(NULL, "#"));
 
+        char* resultSpecialite = CBP_GetSpecialites();
+        char* resultMedecin = CBP_GetDoctors();
+
+        if (resultSpecialite != NULL && resultMedecin != NULL)
+      	{
+      		int idSpecialite = getSpecialiteId(resultSpecialite, specialiteName);
+	        int idMedecin = getDoctorId(resultMedecin, medecinName);
+
+	        char* rep = CBP_SearchConsultations(idSpecialite, idMedecin, dateDebut, dateFin);
+
+	        if (rep != NULL)
+	        	sprintf(reponse, "%s", rep);
+      	}
 	}
 
 	// BOOKCONSULTATION
@@ -90,17 +123,17 @@ bool CBP(char* requete, char* reponse, int socket)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Pas encore tester
 char* CBP_Login(char* nom, char* prenom, int numPatient) // numPatient = -1 si nouveau Patient
 {
+	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
 
   	if (numPatient == -1)
   	{
-  		sprintf(requete,"insert into patients (last_name, first_name) values ('%s', '%s');", nom, prenom);
+  		sprintf(requete,"INSERT INTO patients (last_name, first_name) VALUES ('%s', '%s');", nom, prenom);
   		AccesBD(requete);
   	}
 
-  	sprintf(requete,"select id from patients where last_name = '%s' and first_name = '%s' and id = '%d';", nom, prenom, numPatient);
+  	sprintf(requete,"SELECT id FROM patients WHERE last_name = '%s' AND first_name = '%s' AND id = '%d';", nom, prenom, numPatient);
 
   	char* resultat = AccesBD(requete);
 	
@@ -118,20 +151,22 @@ char* CBP_Login(char* nom, char* prenom, int numPatient) // numPatient = -1 si n
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Pas encore tester
 char* CBP_Logout(char* nom, char* prenom, int numPatient)
 {
-    sprintf(requete, "LOGOUT#%s#%s#%s", nom, prenom, numPatient);
+	char requete[MAX_SIZE_REQUETE];
+
+    sprintf(requete, "LOGOUT#ok#%s#%s#%s", nom, prenom, numPatient);
 
 	return requete;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Pas encore tester
 char* CBP_GetSpecialites()
 {
-	sprintf(requete, "select * from specialties;");
+	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
+
+	sprintf(requete, "SELECT * FROM specialties;");
 
 	char *reponse = AccesBD(requete);
 
@@ -147,7 +182,9 @@ char* CBP_GetSpecialites()
 
 char* CBP_GetDoctors()
 {
-	sprintf(requete, "select id, last_name, first_name from doctors;");
+	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
+
+	sprintf(requete, "SELECT id, last_name, first_name FROM doctors;");
 
 	char *reponse = AccesBD(requete);
 
@@ -163,16 +200,34 @@ char* CBP_GetDoctors()
 
 char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, char* dateFin)
 {
-	sprintf(requete, "select c.id, m.last_name, m.first_name, s.name, c.date, c.hour from consultations c inner join doctors m on doctors.id = consulations.doctor_id inner join specialties s on specialties.id = consulations.specialty_id where s.id = '%s' and m.id = '%s' and ...", idSpecialite, idMedecin);
+	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
 
-	return 0;
+	sprintf(requete,
+        "SELECT c.id, m.last_name, m.first_name, s.name, c.date, c.hour "
+        "FROM consultations c "
+        "INNER JOIN doctors m ON m.id = c.doctor_id "
+        "INNER JOIN specialties s ON s.id = c.specialty_id "
+        "WHERE s.id = %d AND m.id = %d "
+        "AND CONCAT(c.date, ' ', c.hour) BETWEEN '%s' AND '%s';",
+        idSpecialite, idMedecin, dateDebut, dateFin);
+
+	char* reponse = AccesBD(requete);
+
+	if (reponse)
+		sprintf(rep, "SEARCHCONSULTATIONS#%s", reponse);
+	else
+		sprintf(rep, "SEARCHCONSULTATIONS#Pas de Consultations trouvees !");
+
+	return rep;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 char* CBP_BookConsultation(int consultationId, char* reason, )
 {
-	sprintf(requete, "select patient_id from consultations where id = consultationId")
+	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
+
+	sprintf(requete, "SELECT patient_id FROM consultations WHERE id = consultationId")
 
 	char *reponse = AccesBD(requete);
 
@@ -276,4 +331,54 @@ void RemoveClient(int socket)
     nbClients--;
 
     pthread_mutex_unlock(&mutexClients);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int getSpecialiteId(char* requete, char* specialiteName)
+{
+    char temp[1024];
+    strcpy(temp, requete);
+
+    char* entry = strtok(temp, "#"); // première entrée : "1;Cardiologie"
+
+    while (entry != NULL)
+    {
+        char* id = strtok(entry, ";");     // partie avant le ';'
+        char* name  = strtok(NULL, ";");      // partie après le ';'
+
+        if (name != NULL && strcmp(name, specialiteName) == 0)
+            return atoi(id);
+
+        entry = strtok(NULL, "#"); // entrée suivante
+    }
+
+    return -1; // si non trouvé
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int getDoctorId(char* requete, char* doctorLastName, char* doctorFirstName)
+{
+    char temp[1024];
+    strcpy(temp, requete);
+
+    char* entry = strtok(temp, "#"); 
+
+    while (entry != NULL)
+    {
+        char* id = strtok(entry, ";");     
+        char* lastName  = strtok(NULL, ";"); 
+        char* firstName  = strtok(NULL, ";");     
+
+        if (lastName != NULL && firstName != NULL)
+        {
+        	if ((strcmp(doctorLastName, lastName) == 0) && (strcmp(doctorFirstName, firstName) == 0))
+            	return atoi(id);
+        }
+
+        entry = strtok(NULL, "#");
+    }
+
+    return -1;
 }

@@ -255,6 +255,7 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
     int sClient;
 
     char ip[] = "192.168.150.129";
+    char* requete, reponse;
 
     // Connexion sur le serveur
     if ((sClient = ClientSocket( ip, 50000)) == -1)
@@ -263,8 +264,6 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
         exit(1);
     }
     printf("Connecte sur le serveur.\n");
-
-
 
     string lastName = this->getLastName();
     string firstName = this->getFirstName();
@@ -281,16 +280,50 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
     cout << "patientId = " << patientId << endl;
     cout << "newPatient = " << newPatient << endl;
 
-    loginOk();
+    // Send vers le Serveur puis dans le serveur on appelle CBP qui appelle la bonne fonction puis le CBP envoie la réponse au serveur qui envoie la réponse au Client qui fait un Receive
+    if (newPatient)
+        patientId = -1;
+
+    sprintf(requete, "LOGIN#%s#%s#%s", lastName, firstName, patientId);
+
+    Echange(requete, reponse);
+
+    char *ptr = strtok(requete, "#");
+
+    if (strcmp(strtok(NULL, "#"), "ok"))
+        loginOk();
+    else
+    {
+        if (strcmp(strtok(NULL, "#"), "Client déjà loggé !"))
+            dialogError("Erreur", "Client déjà loggé !");
+        else
+            dialogError("Erreur", "Identifiants invalides !");
+    }
 }
 
+// Aucune idée si ça fonctionne
 void MainWindowClientConsultationBooker::on_pushButtonLogout_clicked()
 {
-    logoutOk();
+    char* requete, reponse;
+
+    string lastName = this->getLastName();
+    string firstName = this->getFirstName();
+    int patientId = this->getPatientId();
+
+    sprintf(requete, "LOGOUT#%s#%s#%s", lastName, firstName, patientId);
+
+    Echange(requete, reponse);
+
+    char *ptr = strtok(requete, "#");
+
+    if (strcmp(strtok(NULL, "#"), "ok"))
+        logoutOk();
 }
 
 void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 {
+    char* requete, reponse;
+
     string specialty = this->getSelectionSpecialty();
     string doctor = this->getSelectionDoctor();
     string startDate = this->getStartDate();
@@ -305,6 +338,17 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
     cout << "doctor = " << doctor << endl;
     cout << "startDate = " << startDate << endl;
     cout << "endDate = " << endDate << endl;
+
+    sprintf(requete, "SEARCHCONSULTATIONS#%s#%s#%s#%s", specialty, doctor, startDate, endDate);
+
+    Echange(requete, reponse);
+
+    char *ptr = strtok(requete, "#");
+
+    if (strcmp(strtok(NULL, "#"), "Pas de Consultations trouvees !"))
+        dialogError("Erreur", "Pas de Consultations trouvées !");
+    else
+        // Dans le cas où c'est trouvé
 }
 
 void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
@@ -314,4 +358,39 @@ void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
     if(selectedTow == -1) return;
 
     cout << "selectedRow = " << selectedTow << endl;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////// Fonctions supplémentaires //////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//***** Echange de données entre client et serveur ******************
+void Echange(char* requete, char* reponse)
+{
+    int nbEcrits, nbLus;
+
+    // Envoi de la requete
+    if ((nbEcrits = Send(sClient, requete, strlen(requete))) == -1)
+    {
+        perror("Erreur de Send");
+        close(sClient);
+        exit(1);
+    }
+
+    // Attente de la reponse
+    if ((nbLus = Receive(sClient, reponse)) < 0)
+    {
+        perror("Erreur de Receive");
+        close(sClient);
+        exit(1);
+    }
+
+    if (nbLus == 0)
+    {
+        printf("Serveur arrete, pas de reponse reçue...\n");
+        close(sClient);
+        exit(1);
+    }
+
+    reponse[nbLus] = 0;
 }

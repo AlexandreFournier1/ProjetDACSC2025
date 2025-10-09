@@ -6,22 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Client_Reservation.cpp
-stdio.h
--
-stdlib.h
--
-unistd.h
--
-string.h
--
-signal.h
--
-./lib/TCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Client_Reservation_autogen/mocs_compilation.cpp
-
 /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.cpp
 CBP.h
 /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
@@ -39,24 +23,4 @@ pthread.h
 -
 
 /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.cpp
-TCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
-stdio.h
--
-unistd.h
--
-stdlib.h
--
-string.h
--
-sys/types.h
--
-sys/socket.h
--
-netdb.h
--
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
 
