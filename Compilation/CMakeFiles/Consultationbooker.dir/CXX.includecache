@@ -64,22 +64,6 @@ QtWidgets/QTableWidget
 QtWidgets/QWidget
 -
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.cpp
-CBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
-mysql/mysql.h
--
-string.h
--
-stdio.h
--
-stdlib.h
--
-unistd.h
--
-pthread.h
--
-
 /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
 
 /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h

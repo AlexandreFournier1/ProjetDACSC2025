@@ -48,6 +48,63 @@ MainWindowClientConsultationBooker::MainWindowClientConsultationBooker(QWidget *
     //this->addComboBoxDoctors("--- TOUS ---");
     this->addComboBoxDoctors("Martin Claire");
     this->addComboBoxDoctors("Maboul Paul");
+
+    //this->addComboBoxSpecialties("--- TOUTES ---");
+
+    // char* requete = (char*)malloc(512), *reponse = (char*)malloc(512);
+
+    // sprintf(requete, "GETSPECIALITES");
+
+    // Echange(requete, reponse);
+
+    // char *ptr = strtok(requete, "#");
+
+    // if (strcmp(strtok(NULL, "#"), "Pas de Specialites trouvees !"))
+    //     this->addComboBoxSpecialties("Pas de Specialites trouvees");
+    // else
+    // {
+    //     while (ptr != NULL)
+    //     {
+    //         char* id = strtok(ptr, ";");
+    //         char* specialty = strtok(NULL, ";");
+
+    //         this->addComboBoxSpecialties(specialty);
+
+    //         ptr = strtok(NULL, "#"); // entrée suivante
+    //     }
+    // }
+
+    // free(ptr);
+
+    // //this->addComboBoxDoctors("--- TOUS ---");
+
+    // sprintf(requete, "GETDOCTORS");
+
+    // Echange(requete, reponse);
+
+    // char *ptr2 = strtok(requete, "#");
+
+    // if (strcmp(strtok(NULL, "#"), "Pas de Doctors trouvees !"))
+    //     this->addComboBoxSpecialties("Pas de Doctors trouves");
+    // else
+    // {
+    //     while (ptr2 != NULL)
+    //     {
+    //         char* id = strtok(ptr, ";");
+    //         char* lastName = strtok(NULL, ";");
+    //         char* firstName = strtok(NULL, ";");
+
+    //         char nomComplet[50];
+
+    //         sprintf(nomComplet, "%s %s", lastName, firstName);
+
+    //         this->addComboBoxDoctors(nomComplet);
+
+    //         ptr2 = strtok(NULL, "#"); // entrée suivante
+    //     }
+    // }
+
+    // free(ptr);
 }
 
 MainWindowClientConsultationBooker::~MainWindowClientConsultationBooker()
@@ -307,11 +364,12 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
             dialogError("Erreur", "Identifiants invalides !");
     }
 
+    printf("Checkpoint 4\n");
+
     free(requete);
     free(reponse);
 }
 
-// Aucune idée si ça fonctionne
 void MainWindowClientConsultationBooker::on_pushButtonLogout_clicked()
 {
     char* requete, *reponse;
@@ -357,8 +415,31 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 
     if (strcmp(strtok(NULL, "#"), "Pas de Consultations trouvees !"))
         dialogError("Erreur", "Pas de Consultations trouvées !");
-    // else
-    //     // Dans le cas où c'est trouvé
+    else
+    {
+        dialogMessage("Success", "Consultations trouvées !");
+        clearTableConsultations();
+
+        while (ptr != NULL)
+        {
+            char* id = strtok(ptr, ";");
+            char* lastNameMedecin = strtok(NULL, ";");
+            char* firstNameMedecin = strtok(NULL, ";");
+            char* nameSpeciality = strtok(NULL, ";");
+            char* date = strtok(NULL, ";");
+            char* hour = strtok(NULL, ";");
+
+            char nomComplet[100];
+
+            sprintf(nomComplet, "%s %s", firstNameMedecin, lastNameMedecin);
+
+            addTupleTableConsultations(atoi(id), nameSpeciality, nomComplet, date, hour);
+
+            ptr = strtok(NULL, "#"); // entrée suivante
+        }
+
+        // void addTupleTableConsultations(int id, string specialty, string doctor, string date, string hour);
+    }
 }
 
 void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
