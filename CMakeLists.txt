@@ -38,12 +38,13 @@ target_link_libraries(Consultationbooker PRIVATE Qt5::Widgets pthread /usr/lib64
 add_executable(Server_Reservation
     Server_Reservation.cpp
     lib/TCP.cpp
-    lib/SCP.cpp
+    lib/CBP.cpp
     lib/TCP.h
-    lib/SCP.h
+    lib/CBP.h
 )
 target_include_directories(Server_Reservation PRIVATE lib)
 target_link_libraries(Server_Reservation PRIVATE pthread)
+target_link_libraries(Server_Reservation PRIVATE pthread /usr/lib64/mysql/libmysqlclient.so)
 
 # ---------- Client ----------
 add_executable(Client_Reservation

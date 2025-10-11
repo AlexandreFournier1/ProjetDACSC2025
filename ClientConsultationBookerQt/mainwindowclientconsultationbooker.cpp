@@ -257,8 +257,9 @@ int sClient;
 
 void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 {
-    char ip[] = "192.168.150.131";
-    char* requete, *reponse;
+    //char ip[] = "192.168.150.131";
+    char ip[] = "0.0.0.0";
+    char* requete = (char*)malloc(512), *reponse = (char*)malloc(512);
 
     // Connexion sur le serveur
     if ((sClient = ClientSocket( ip, 50000)) == -1)
@@ -276,7 +277,7 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
     if(lastName.empty()) return;
     if(firstName.empty()) return;
     if(patientId == 0) return;
-    if(!newPatient) return;
+    //if(!newPatient) return;
 
     cout << "lastName = " << lastName << endl;
     cout << "FirstName = " << firstName << endl;
@@ -287,14 +288,17 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
     if (newPatient)
         patientId = -1;
 
-    sprintf(requete, "LOGIN#%s#%s#%s", lastName, firstName, patientId);
+    sprintf(requete, "LOGIN#%s#%s#%d", lastName.c_str(), firstName.c_str(), patientId);
 
     Echange(requete, reponse);
 
     char *ptr = strtok(requete, "#");
 
     if (strcmp(strtok(NULL, "#"), "ok"))
+    {
+        dialogMessage("Success", "Login réussi !");
         loginOk();
+    }
     else
     {
         if (strcmp(strtok(NULL, "#"), "Client déjà loggé !"))
@@ -302,6 +306,9 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
         else
             dialogError("Erreur", "Identifiants invalides !");
     }
+
+    free(requete);
+    free(reponse);
 }
 
 // Aucune idée si ça fonctionne

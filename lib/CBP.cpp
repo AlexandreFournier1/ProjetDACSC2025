@@ -54,6 +54,9 @@ bool CBP(char* requete, char* reponse, int socket)
 
         char* rep = CBP_Login(nom, prenom, atoi(numPatient));
 
+        if (strcmp(rep, "") == 0)
+        	printf("\t[THREAD %lu] Erreur de CBP_Login\n", pthread_self());
+
         if (rep != NULL)
         	sprintf(reponse, "%s", rep);
 	}
@@ -72,6 +75,9 @@ bool CBP(char* requete, char* reponse, int socket)
 
         char* rep = CBP_Logout(nom, prenom, atoi(numPatient));
 
+        if (strcmp(rep, "") == 0)
+        	printf("\t[THREAD %lu] Erreur de CBP_Logout\n", pthread_self());
+
         if (rep != NULL)
         	sprintf(reponse, "%s", rep);
 	}
@@ -80,21 +86,27 @@ bool CBP(char* requete, char* reponse, int socket)
 	if (strcmp(ptr, "GETSPECIALITES") == 0)
 	{
 		reponse = CBP_GetSpecialites();
+
+		if (strcmp(reponse, "") == 0)
+        	printf("\t[THREAD %lu] Erreur de CBP_GetSpecialites\n", pthread_self());
 	}
 
 	// GETDOCTORS
 	if (strcmp(ptr, "GETDOCTORS") == 0)
 	{
 		reponse = CBP_GetDoctors();
+
+		if (strcmp(reponse, "") == 0)
+        	printf("\t[THREAD %lu] Erreur de CBP_GetDoctors\n", pthread_self());
 	}
 
 	// SEARCHCONSULTATIONS
-	// Compile juste prob avec getDoctorId nom prenom
 	if (strcmp(ptr, "SEARCHCONSULTATIONS") == 0)
 	{
-		char specialiteName[50], medecinName[50], dateDebut[50], dateFin[50];
+		char specialiteName[50], medecinLastName[50], medecinFirstName[50], dateDebut[50], dateFin[50];
 		strcpy(specialiteName, strtok(NULL, "#"));
-        strcpy(medecinName, strtok(NULL, "#"));
+        strcpy(medecinLastName, strtok(NULL, "#"));
+        strcpy(medecinFirstName, strtok(NULL, "#"));
         strcpy(dateDebut, strtok(NULL, "#"));
         strcpy(dateFin, strtok(NULL, "#"));
 
@@ -104,9 +116,12 @@ bool CBP(char* requete, char* reponse, int socket)
         if (resultSpecialite != NULL && resultMedecin != NULL)
       	{
       		int idSpecialite = getSpecialiteId(resultSpecialite, specialiteName);
-	        int idMedecin = getDoctorId(resultMedecin, medecinName);
+	        int idMedecin = getDoctorId(resultMedecin, medecinLastName, medecinFirstName);
 
 	        char* rep = CBP_SearchConsultations(idSpecialite, idMedecin, dateDebut, dateFin);
+
+	        if (strcmp(rep, "") == 0)
+        		printf("\t[THREAD %lu] Erreur de CBP_SearchConsultations\n", pthread_self());
 
 	        if (rep != NULL)
 	        	sprintf(reponse, "%s", rep);
@@ -126,7 +141,8 @@ bool CBP(char* requete, char* reponse, int socket)
 
 char* CBP_Login(char* nom, char* prenom, int numPatient) // numPatient = -1 si nouveau Patient
 {
-	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
+	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
+	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
 
   	if (numPatient == -1)
   	{
@@ -154,18 +170,19 @@ char* CBP_Login(char* nom, char* prenom, int numPatient) // numPatient = -1 si n
 
 char* CBP_Logout(char* nom, char* prenom, int numPatient)
 {
-	char requete[MAX_SIZE_REQUETE];
+	char* reponse = (char*)malloc(MAX_SIZE_REPONSE);
 
-    sprintf(requete, "LOGOUT#ok#%s#%s#%s", nom, prenom, numPatient);
+    sprintf(reponse, "LOGOUT#ok#%s#%s#%d", nom, prenom, numPatient);
 
-	return requete;
+	return reponse;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 char* CBP_GetSpecialites()
 {
-	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
+	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
+	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
 
 	sprintf(requete, "SELECT * FROM specialties;");
 
@@ -183,7 +200,8 @@ char* CBP_GetSpecialites()
 
 char* CBP_GetDoctors()
 {
-	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
+	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
+	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
 
 	sprintf(requete, "SELECT id, last_name, first_name FROM doctors;");
 
@@ -201,7 +219,8 @@ char* CBP_GetDoctors()
 
 char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, char* dateFin)
 {
-	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
+	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
+	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
 
 	sprintf(requete,
         "SELECT c.id, m.last_name, m.first_name, s.name, c.date, c.hour "
@@ -226,7 +245,8 @@ char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, 
 
 char* CBP_BookConsultation(int consultationId, char* reason )
 {
-	char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
+	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
+	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
 
 	sprintf(requete, "SELECT patient_id FROM consultations WHERE id = consultationId");
 
@@ -238,6 +258,18 @@ char* CBP_BookConsultation(int consultationId, char* reason )
   		// AccesBD(requete);
 
 	return rep;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CBP_Close()
+{
+    pthread_mutex_lock(&mutexClients);
+
+    for (int i = 0; i < nbClients; i++)
+        close(clients[i]);
+
+    pthread_mutex_unlock(&mutexClients);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

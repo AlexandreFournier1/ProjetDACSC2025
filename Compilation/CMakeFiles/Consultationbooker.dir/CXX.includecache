@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/student/Bureau/DACSC/ProjetDACSC/ClientConsultationBookerQt/mainwindowclientconsultationbooker.cpp
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/ClientConsultationBookerQt/mainwindowclientconsultationbooker.cpp
 mainwindowclientconsultationbooker.h
-/home/student/Bureau/DACSC/ProjetDACSC/ClientConsultationBookerQt/mainwindowclientconsultationbooker.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/ClientConsultationBookerQt/mainwindowclientconsultationbooker.h
 ui_mainwindowclientconsultationbooker.h
-/home/student/Bureau/DACSC/ProjetDACSC/ClientConsultationBookerQt/ui_mainwindowclientconsultationbooker.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/ClientConsultationBookerQt/ui_mainwindowclientconsultationbooker.h
 QInputDialog
 -
 QMessageBox
@@ -20,17 +20,17 @@ iostream
 unistd.h
 -
 ../lib/TCP.h
-/home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
 ../lib/CBP.h
-/home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
 
-/home/student/Bureau/DACSC/ProjetDACSC/ClientConsultationBookerQt/mainwindowclientconsultationbooker.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/ClientConsultationBookerQt/mainwindowclientconsultationbooker.h
 QMainWindow
 -
 string
 -
 
-/home/student/Bureau/DACSC/ProjetDACSC/ClientConsultationBookerQt/ui_mainwindowclientconsultationbooker.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/ClientConsultationBookerQt/ui_mainwindowclientconsultationbooker.h
 QtCore/QDate
 -
 QtCore/QVariant
@@ -64,9 +64,25 @@ QtWidgets/QTableWidget
 QtWidgets/QWidget
 -
 
-/home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.cpp
+CBP.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
+mysql/mysql.h
+-
+string.h
+-
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+pthread.h
+-
 
-/home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
+
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
 
 /usr/include/qt5/QtCore/QDate
 qdatetime.h

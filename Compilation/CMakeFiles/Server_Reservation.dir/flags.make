@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/include -I/home/student/Bureau/DACSC/ProjetDACSC -I/home/student/Bureau/DACSC/ProjetDACSC/ClientConsultationBookerQt -I/home/student/Bureau/DACSC/ProjetDACSC/lib -I/usr/include/mysql
+CXX_INCLUDES = -I/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/include -I/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC -I/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/ClientConsultationBookerQt -I/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib -I/usr/include/mysql
 
 CXX_FLAGS = -std=gnu++17
 

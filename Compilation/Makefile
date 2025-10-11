@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/student/Bureau/DACSC/ProjetDACSC
+CMAKE_SOURCE_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/student/Bureau/DACSC/ProjetDACSC/Compilation
+CMAKE_BINARY_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles /home/student/Bureau/DACSC/ProjetDACSC/Compilation//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -404,6 +404,7 @@ lib/CBP.o: lib/CBP.cpp.o
 lib/CBP.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.o
 .PHONY : lib/CBP.cpp.o
 
 lib/CBP.i: lib/CBP.cpp.i
@@ -414,6 +415,7 @@ lib/CBP.i: lib/CBP.cpp.i
 lib/CBP.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.i
 .PHONY : lib/CBP.cpp.i
 
 lib/CBP.s: lib/CBP.cpp.s
@@ -424,34 +426,8 @@ lib/CBP.s: lib/CBP.cpp.s
 lib/CBP.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.s
 .PHONY : lib/CBP.cpp.s
-
-lib/SCP.o: lib/SCP.cpp.o
-
-.PHONY : lib/SCP.o
-
-# target to build an object file
-lib/SCP.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/SCP.cpp.o
-.PHONY : lib/SCP.cpp.o
-
-lib/SCP.i: lib/SCP.cpp.i
-
-.PHONY : lib/SCP.i
-
-# target to preprocess a source file
-lib/SCP.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/SCP.cpp.i
-.PHONY : lib/SCP.cpp.i
-
-lib/SCP.s: lib/SCP.cpp.s
-
-.PHONY : lib/SCP.s
-
-# target to generate assembly for a file
-lib/SCP.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/SCP.cpp.s
-.PHONY : lib/SCP.cpp.s
 
 lib/TCP.o: lib/TCP.cpp.o
 
@@ -524,9 +500,6 @@ help:
 	@echo "... lib/CBP.o"
 	@echo "... lib/CBP.i"
 	@echo "... lib/CBP.s"
-	@echo "... lib/SCP.o"
-	@echo "... lib/SCP.i"
-	@echo "... lib/SCP.s"
 	@echo "... lib/TCP.o"
 	@echo "... lib/TCP.i"
 	@echo "... lib/TCP.s"

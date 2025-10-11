@@ -6,7 +6,8 @@
 #include <pthread.h>
 
 #include "./lib/TCP.h"
-#include "./lib/SCP.h"
+//#include "./lib/SCP.h"
+#include "./lib/CBP.h"
 
 // Prototypes
 void HandlerSIGINT(int s);
@@ -77,7 +78,7 @@ int main(int argc, char* argv[])
         {
             perror("Erreur de Accept");
             close(sEcoute);
-            SCP_Close();
+            CBP_Close();
             exit(1);
         }
 
@@ -139,7 +140,7 @@ void HandlerSIGINT(int s)
             close(socketsAcceptees[i]);
     pthread_mutex_unlock(&mutexSocketsAcceptees);
 
-    SCP_Close();
+    CBP_Close();
     exit(0);
 }
 
@@ -174,7 +175,7 @@ void TraitementConnexion(int sService)
         printf("\t[THREAD %lu] Requete recue = %s\n", pthread_self(), requete);
 
         // Traitement de la requête
-        onContinue = SCP(requete, reponse, sService);
+        onContinue = CBP(requete, reponse, sService);
 
         // Envoi de la réponse
         if ((nbEcrits = Send(sService, reponse, strlen(reponse))) < 0)
