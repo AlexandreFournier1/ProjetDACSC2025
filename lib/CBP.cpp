@@ -94,10 +94,13 @@ bool CBP(char* requete, char* reponse, int socket)
 	// GETDOCTORS
 	if (strcmp(ptr, "GETDOCTORS") == 0)
 	{
-		reponse = CBP_GetDoctors();
+	    char* rep = CBP_GetDoctors();  // alloue dynamiquement
+	    if (rep == NULL || strcmp(rep, "") == 0)
+	        printf("\t[THREAD %lu] Erreur de CBP_GetDoctors\n", pthread_self());
+	    else
+	        sprintf(reponse, "%s", rep); // copie dans le buffer passé en argument
 
-		if (strcmp(reponse, "") == 0)
-        	printf("\t[THREAD %lu] Erreur de CBP_GetDoctors\n", pthread_self());
+	    free(rep);
 	}
 
 	// SEARCHCONSULTATIONS
@@ -200,19 +203,23 @@ char* CBP_GetSpecialites()
 
 char* CBP_GetDoctors()
 {
-	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
-	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
+    char requete[MAX_SIZE_REQUETE];
+    char* rep = (char*)malloc(MAX_SIZE_REPONSE);
 
-	sprintf(requete, "SELECT id, last_name, first_name FROM doctors;");
+    sprintf(requete, "SELECT id, last_name, first_name FROM doctors;");
 
-	char *reponse = AccesBD(requete);
+    char *reponse = AccesBD(requete);
 
-	if (reponse)
-		sprintf(rep, "GETDOCTORS#%s", reponse);
-	else
-		sprintf(rep, "GETDOCTORS#Pas de Doctors trouvees !");
+    if (reponse && strlen(reponse) > 0)
+    {
+        sprintf(rep, "GETDOCTORS#%s", reponse);
+    }
+    else
+    {
+        sprintf(rep, "GETDOCTORS#Pas de docteurs trouvés !");
+    }
 
-	return rep;
+    return rep;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

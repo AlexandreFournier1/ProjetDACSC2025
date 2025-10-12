@@ -3,7 +3,7 @@
 // CBP = Consultation Booking Protocol
 
 #define MAX_SIZE_REQUETE 512
-#define MAX_SIZE_REPONSE 255
+#define MAX_SIZE_REPONSE 4096
 
 #define PORT_RESERVATION 50000
 #define PORT_ADMIN 60000

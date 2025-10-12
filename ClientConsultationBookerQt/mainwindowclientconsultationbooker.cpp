@@ -46,8 +46,8 @@ MainWindowClientConsultationBooker::MainWindowClientConsultationBooker(QWidget *
     this->addComboBoxSpecialties("Cardiologie");
 
     //this->addComboBoxDoctors("--- TOUS ---");
-    this->addComboBoxDoctors("Martin Claire");
-    this->addComboBoxDoctors("Maboul Paul");
+    // this->addComboBoxDoctors("Martin Claire");
+    // this->addComboBoxDoctors("Maboul Paul");
 
     //this->addComboBoxSpecialties("--- TOUTES ---");
 
@@ -316,7 +316,7 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 {
     //char ip[] = "192.168.150.131";
     char ip[] = "0.0.0.0";
-    char* requete = (char*)malloc(512), *reponse = (char*)malloc(512);
+    char* requete = (char*)malloc(512), *reponse = (char*)malloc(4096);
 
     // Connexion sur le serveur
     if ((sClient = ClientSocket( ip, 50000)) == -1)
@@ -349,22 +349,67 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 
     Echange(requete, reponse);
 
-    char *ptr = strtok(requete, "#");
+    // Ici tu avais mis requete mais c'est la reponse qu'il nous faut non ?
+    char *ptr = strtok(reponse, "#");
 
-    if (strcmp(strtok(NULL, "#"), "ok"))
+    if (ptr && strcmp(ptr, "LOGIN") == 0)
     {
-        dialogMessage("Success", "Login réussi !");
-        loginOk();
-    }
-    else
-    {
-        if (strcmp(strtok(NULL, "#"), "Client déjà loggé !"))
-            dialogError("Erreur", "Client déjà loggé !");
+        char *status = strtok(NULL, "#");
+        if (status && strcmp(status, "ok") == 0)
+        {
+            dialogMessage("Success", "Login réussi !");
+            loginOk();
+        }
         else
-            dialogError("Erreur", "Identifiants invalides !");
+        {
+            char *msg = strtok(NULL, "#");
+            if (msg && strcmp(msg, "Client déjà loggé !") == 0)
+                dialogError("Erreur", "Client déjà loggé !");
+            else
+                dialogError("Erreur", "Identifiants invalides !");
+        }
     }
+
 
     printf("Checkpoint 4\n");
+
+    memset(requete, 0, 512);
+    memset(reponse, 0, 4096);
+
+    sprintf(requete, "GETDOCTORS");
+    Echange(requete, reponse);
+
+    // GETDOCTORS#1;Nom;Prenom#2;Nom;Prenom#3;Dubois;Lea#
+    char *saveptr1, *saveptr2;
+
+    ptr = strtok_r(reponse, "#", &saveptr1);  
+    printf("DEBUG: Premier token = '%s'\n", ptr ? ptr : "NULL");
+
+    if (ptr != NULL && strcmp(ptr, "GETDOCTORS") == 0)
+    {   
+        printf("DEBUG: Début parsing GETDOCTORS\n");
+        char *ligne = strtok_r(NULL, "#", &saveptr1);  
+        int count = 0;
+        while (ligne != NULL)
+        {
+            if (strlen(ligne) > 0)
+            {
+                printf("DEBUG: Ligne = '%s'\n", ligne);
+                char *id = strtok_r(ligne, ";", &saveptr2);  
+                char *lastName = strtok_r(NULL, ";", &saveptr2);
+                char *firstName = strtok_r(NULL, ";", &saveptr2);
+                if (id && lastName && firstName)
+                {
+                    printf("DEBUG: Ajout docteur #%d: %s %s\n", count+1, lastName, firstName);
+                    string doc = string(lastName) + " " + string(firstName);
+                    addComboBoxDoctors(doc);
+                    count++;
+                }
+            }
+            ligne = strtok_r(NULL, "#", &saveptr1);
+        }
+        printf("DEBUG: Fin parsing - %d docteurs ajoutés\n", count);
+    }
 
     free(requete);
     free(reponse);
@@ -386,6 +431,8 @@ void MainWindowClientConsultationBooker::on_pushButtonLogout_clicked()
 
     if (strcmp(strtok(NULL, "#"), "ok"))
         logoutOk();
+
+    clearComboBoxDoctors();
 }
 
 void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()

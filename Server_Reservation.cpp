@@ -145,18 +145,24 @@ void HandlerSIGINT(int s)
 }
 
 // Traitement d'une connexion client
+#define MAX_TAILLE 4096
+
 void TraitementConnexion(int sService)
 {
-    char requete[200], reponse[200];
+    char requete[MAX_TAILLE], reponse[MAX_TAILLE];
     int nbLus, nbEcrits;
     bool onContinue = true;
 
     while (onContinue)
     {
-        printf("\t[THREAD %lu] Attente requete...\n", pthread_self());
+        memset(requete, 0, sizeof(requete));
+        memset(reponse, 0, sizeof(reponse));
+
+        printf("\t[THREAD %lu] Attente requête...\n", pthread_self());
 
         // Réception de la requête
-        if ((nbLus = Receive(sService, requete)) < 0)
+        nbLus = Receive(sService, requete);
+        if (nbLus < 0)
         {
             perror("Erreur de Receive");
             close(sService);
@@ -171,25 +177,31 @@ void TraitementConnexion(int sService)
             return;
         }
 
-        requete[nbLus] = 0;
-        printf("\t[THREAD %lu] Requete recue = %s\n", pthread_self(), requete);
+        requete[nbLus] = '\0';
+        printf("\t[THREAD %lu] Requête reçue = %s\n", pthread_self(), requete);
 
         // Traitement de la requête
         onContinue = CBP(requete, reponse, sService);
 
+        if (strlen(reponse) == 0)
+            strcpy(reponse, "ERREUR#Réponse vide du serveur");
+
         // Envoi de la réponse
-        if ((nbEcrits = Send(sService, reponse, strlen(reponse))) < 0)
+        nbEcrits = Send(sService, reponse, strlen(reponse));
+        if (nbEcrits < 0)
         {
             perror("Erreur de Send");
             close(sService);
             HandlerSIGINT(0);
         }
 
-        printf("\t[THREAD %lu] Reponse envoyee = %s\n", pthread_self(), reponse);
+        printf("\t[THREAD %lu] Réponse envoyée = %s\n", pthread_self(), reponse);
 
         if (!onContinue)
         {
             printf("\t[THREAD %lu] Fin de connexion de la socket %d\n", pthread_self(), sService);
+            close(sService);
+            return;
         }
     }
 }
