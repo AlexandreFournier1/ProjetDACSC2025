@@ -50,7 +50,9 @@ public:
     string dialogInputText(const string& title,const string& question);
     int dialogInputInt(const string& title,const string& question);
 
-
+    // Fonction supplémentaire :
+    void doctorsInitialisation();
+    void specialitiesInitialisation();
 private slots:
     void on_pushButtonLogin_clicked();
     void on_pushButtonLogout_clicked();

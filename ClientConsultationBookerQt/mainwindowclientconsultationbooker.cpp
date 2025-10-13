@@ -373,47 +373,14 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 
     printf("Checkpoint 4\n");
 
-    memset(requete, 0, 512);
-    memset(reponse, 0, 4096);
-
-    sprintf(requete, "GETDOCTORS");
-    Echange(requete, reponse);
-
-    // GETDOCTORS#1;Nom;Prenom#2;Nom;Prenom#3;Dubois;Lea#
-    char *saveptr1, *saveptr2;
-
-    ptr = strtok_r(reponse, "#", &saveptr1);  
-    printf("DEBUG: Premier token = '%s'\n", ptr ? ptr : "NULL");
-
-    if (ptr != NULL && strcmp(ptr, "GETDOCTORS") == 0)
-    {   
-        printf("DEBUG: Début parsing GETDOCTORS\n");
-        char *ligne = strtok_r(NULL, "#", &saveptr1);  
-        int count = 0;
-        while (ligne != NULL)
-        {
-            if (strlen(ligne) > 0)
-            {
-                printf("DEBUG: Ligne = '%s'\n", ligne);
-                char *id = strtok_r(ligne, ";", &saveptr2);  
-                char *lastName = strtok_r(NULL, ";", &saveptr2);
-                char *firstName = strtok_r(NULL, ";", &saveptr2);
-                if (id && lastName && firstName)
-                {
-                    printf("DEBUG: Ajout docteur #%d: %s %s\n", count+1, lastName, firstName);
-                    string doc = string(lastName) + " " + string(firstName);
-                    addComboBoxDoctors(doc);
-                    count++;
-                }
-            }
-            ligne = strtok_r(NULL, "#", &saveptr1);
-        }
-        printf("DEBUG: Fin parsing - %d docteurs ajoutés\n", count);
-    }
+    doctorsInitialisation();
+    specialitiesInitialisation();
 
     free(requete);
     free(reponse);
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MainWindowClientConsultationBooker::on_pushButtonLogout_clicked()
 {
@@ -434,6 +401,8 @@ void MainWindowClientConsultationBooker::on_pushButtonLogout_clicked()
 
     clearComboBoxDoctors();
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 {
@@ -489,6 +458,8 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
 {
     int selectedTow = this->getSelectionIndexTableConsultations();
@@ -531,4 +502,81 @@ void Echange(char* requete, char* reponse)
     }
 
     reponse[nbLus] = 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void MainWindowClientConsultationBooker::doctorsInitialisation()
+{
+    char* req = (char*)malloc(MAX_SIZE_REQUETE), *rep = (char*)malloc(MAX_SIZE_REPONSE);
+
+    sprintf(req, "GETDOCTORS");
+    Echange(req, rep);
+
+    // GETDOCTORS#1;Nom;Prenom#2;Nom;Prenom#3;Dubois;Lea#
+    char *saveptr1, *saveptr2;
+
+    char* ptr = strtok_r(rep, "#", &saveptr1);  
+    printf("DEBUG: Premier token = '%s'\n", ptr ? ptr : "NULL");
+
+    if (ptr != NULL && strcmp(ptr, "GETDOCTORS") == 0)
+    {   
+        printf("DEBUG: Début parsing GETDOCTORS\n");
+        char *ligne = strtok_r(NULL, "#", &saveptr1);  
+        int count = 0;
+        while (ligne != NULL)
+        {
+            if (strlen(ligne) > 0)
+            {
+                printf("DEBUG: Ligne = '%s'\n", ligne);
+                char *id = strtok_r(ligne, ";", &saveptr2);  
+                char *lastName = strtok_r(NULL, ";", &saveptr2);
+                char *firstName = strtok_r(NULL, ";", &saveptr2);
+                if (id && lastName && firstName)
+                {
+                    printf("DEBUG: Ajout docteur #%d: %s %s\n", count+1, lastName, firstName);
+                    string doc = string(lastName) + " " + string(firstName);
+                    addComboBoxDoctors(doc);
+                    count++;
+                }
+            }
+            ligne = strtok_r(NULL, "#", &saveptr1);
+        }
+        printf("DEBUG: Fin parsing - %d docteurs ajoutés\n", count);
+    }
+
+    free(req);
+    free(rep);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void MainWindowClientConsultationBooker::specialitiesInitialisation()
+{
+    char* req = (char*)malloc(MAX_SIZE_REQUETE), *rep = (char*)malloc(MAX_SIZE_REPONSE);
+
+    sprintf(req, "GETSPECIALITES");
+    Echange(req, rep);
+
+    // GETSPECIALITES#1;Cardiologie
+
+    char *ptr = strtok(req, "#");
+
+    if (strcmp(strtok(NULL, "#"), "Pas de Specialites trouvees !"))
+        this->addComboBoxSpecialties("Pas de Specialites trouvees");
+    else
+    {
+        while (ptr != NULL)
+        {
+            char* id = strtok(ptr, ";");
+            char* specialty = strtok(NULL, ";");
+
+            this->addComboBoxSpecialties(specialty);
+
+            ptr = strtok(NULL, "#"); // entrée suivante
+        }
+    }
+
+    free(req);
+    free(rep);
 }
