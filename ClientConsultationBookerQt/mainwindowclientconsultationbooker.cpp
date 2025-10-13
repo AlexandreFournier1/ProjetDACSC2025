@@ -259,7 +259,7 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 {
     //char ip[] = "192.168.150.131";
     char ip[] = "0.0.0.0";
-    char* requete = (char*)malloc(512), *reponse = (char*)malloc(4096);
+    char* requete = (char*)malloc(MAX_SIZE_REQUETE), *reponse = (char*)malloc(MAX_SIZE_REPONSE);
 
     // Connexion sur le serveur
     if ((sClient = ClientSocket( ip, 50000)) == -1)
@@ -292,7 +292,6 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 
     Echange(requete, reponse);
 
-    // Ici tu avais mis requete mais c'est la reponse qu'il nous faut non ?
     char *ptr = strtok(reponse, "#");
 
     if (ptr && strcmp(ptr, "LOGIN") == 0)
@@ -319,7 +318,6 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
     specialitiesInitialisation();
     doctorsInitialisation();
     
-
     free(requete);
     free(reponse);
 }
@@ -328,13 +326,13 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 
 void MainWindowClientConsultationBooker::on_pushButtonLogout_clicked()
 {
-    char* requete, *reponse;
+    char* requete = (char*)malloc(MAX_SIZE_REQUETE), *reponse = (char*)malloc(MAX_SIZE_REPONSE);
 
     string lastName = this->getLastName();
     string firstName = this->getFirstName();
     int patientId = this->getPatientId();
 
-    sprintf(requete, "LOGOUT#%s#%s#%s", lastName, firstName, patientId);
+    sprintf(requete, "LOGOUT#%s#%s#%d", lastName.c_str(), firstName.c_str(), patientId);
 
     Echange(requete, reponse);
 
@@ -344,13 +342,16 @@ void MainWindowClientConsultationBooker::on_pushButtonLogout_clicked()
         logoutOk();
 
     clearComboBoxDoctors();
+
+    free(requete);
+    free(reponse);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 {
-    char* requete, *reponse;
+    char* requete = (char*)malloc(MAX_SIZE_REQUETE), *reponse = (char*)malloc(MAX_SIZE_REPONSE);
 
     string specialty = this->getSelectionSpecialty();
     string doctor = this->getSelectionDoctor();
@@ -367,39 +368,60 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
     cout << "startDate = " << startDate << endl;
     cout << "endDate = " << endDate << endl;
 
-    sprintf(requete, "SEARCHCONSULTATIONS#%s#%s#%s#%s", specialty, doctor, startDate, endDate);
+    sprintf(requete, "SEARCHCONSULTATIONS#%s#%s#%s#%s", specialty.c_str(), doctor.c_str(), startDate.c_str(), endDate.c_str());
+
+    printf("DEBUG : Requete = %s\n", requete);
 
     Echange(requete, reponse);
 
-    char *ptr = strtok(requete, "#");
+    printf("DEBUG : Reponse = %s\n", reponse);
 
-    if (strcmp(strtok(NULL, "#"), "Pas de Consultations trouvees !"))
+    char *saveptr1, *saveptr2;
+
+    char *ligne = strtok_r(reponse, "#", &saveptr1);
+    char *suivant = strtok_r(NULL, "#", &saveptr1);
+
+    if (strcmp(suivant, "Pas de Consultations trouvees !") == 0)
         dialogError("Erreur", "Pas de Consultations trouvées !");
     else
     {
         dialogMessage("Success", "Consultations trouvées !");
+
+        printf("Checkpoint 1\n");
+
         clearTableConsultations();
 
-        while (ptr != NULL)
+        printf("Checkpoint 2\n");
+
+        ligne = strtok_r(NULL, "#", &saveptr1); // passer au premier vrai enregistrement
+
+        while (ligne != NULL)
         {
-            char* id = strtok(ptr, ";");
-            char* lastNameMedecin = strtok(NULL, ";");
-            char* firstNameMedecin = strtok(NULL, ";");
-            char* nameSpeciality = strtok(NULL, ";");
-            char* date = strtok(NULL, ";");
-            char* hour = strtok(NULL, ";");
+            if (strlen(ligne) > 0)
+            {
+                char *id = strtok_r(ligne, ";", &saveptr2);  
+                char *lastNameMedecin = strtok_r(NULL, ";", &saveptr2);
+                char *firstNameMedecin = strtok_r(NULL, ";", &saveptr2);
+                char *nameSpeciality = strtok_r(NULL, ";", &saveptr2);
+                char *date = strtok_r(NULL, ";", &saveptr2);
+                char *hour = strtok_r(NULL, ";", &saveptr2);
 
-            char nomComplet[100];
+                char nomComplet[100];
+                sprintf(nomComplet, "%s %s", firstNameMedecin, lastNameMedecin);
 
-            sprintf(nomComplet, "%s %s", firstNameMedecin, lastNameMedecin);
+                addTupleTableConsultations(atoi(id), nameSpeciality, nomComplet, date, hour);
+            }
 
-            addTupleTableConsultations(atoi(id), nameSpeciality, nomComplet, date, hour);
-
-            ptr = strtok(NULL, "#"); // entrée suivante
+            ligne = strtok_r(NULL, "#", &saveptr1);
         }
 
         // void addTupleTableConsultations(int id, string specialty, string doctor, string date, string hour);
     }
+
+    printf("Checkpoint 4\n");
+
+    free(requete);
+    free(reponse);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
