@@ -1,4 +1,4 @@
-# Install script for directory: /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC
+# Install script for directory: /home/student/Bureau/DACSC/ProjetDACSC
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

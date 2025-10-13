@@ -374,7 +374,7 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
     printf("Checkpoint 4\n");
 
     doctorsInitialisation();
-    specialitiesInitialisation();
+    //specialitiesInitialisation();
 
     free(requete);
     free(reponse);
@@ -462,9 +462,24 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 
 void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
 {
+    char* requete, *reponse;
+
     int selectedTow = this->getSelectionIndexTableConsultations();
+    string nom = this->getLastName();
+    string prenom = this->getFirstName();
+    string reason = dialogInputText("Raison", "Quel est votre raison ?");
 
     if(selectedTow == -1) return;
+
+    sprintf(requete, "BOOKCONSULTATION#%d#%s#%s#%s", selectedTow, nom, prenom, reason);
+
+
+    Echange(requete, reponse);
+
+    char *ptr = strtok(requete, "#");
+
+    if (strcmp(strtok(NULL, "#"), "ok"))
+        dialogMessage("Success", "Réservation effectuer avec Success !");
 
     cout << "selectedRow = " << selectedTow << endl;
 }

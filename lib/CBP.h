@@ -19,6 +19,7 @@ char* CBP_GetSpecialites();
 char* CBP_GetDoctors();
 char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, char* dateFin);
 char* CBP_BookConsultation(int consulationId, char* reason);
+char* CBP_BookConsultation(int consultationId, char* nom, char* prenom, char* reason);
 void CBP_Close();
 
 #endif

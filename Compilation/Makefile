@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC
+CMAKE_SOURCE_DIR = /home/student/Bureau/DACSC/ProjetDACSC
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation
+CMAKE_BINARY_DIR = /home/student/Bureau/DACSC/ProjetDACSC/Compilation
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles /home/student/Bureau/DACSC/ProjetDACSC/Compilation//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

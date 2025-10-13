@@ -24,6 +24,7 @@ void AddClient(int socket);
 void RemoveClient(int socket);
 int getSpecialiteId(char* requete, char* specialiteName);
 int getDoctorId(char* requete, char* doctorLastName, char* doctorFirstName);
+int getPatientId(char* nom, char* prenom);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,7 +135,21 @@ bool CBP(char* requete, char* reponse, int socket)
 	// BOOKCONSULTATION
 	if (strcmp(ptr, "BOOKCONSULTATION") == 0)
 	{
+		char idconsult[10], nom[50], prenom[50], reason[100];
+		strcpy(idconsult, strtok(NULL, "#"));
+        strcpy(nom, strtok(NULL, "#"));
+        strcpy(prenom, strtok(NULL, "#"));
+        strcpy(reason, strtok(NULL, "#"));
 
+        int id = atoi(idconsult);
+
+	    char* rep = CBP_BookConsultation(id, nom, prenom, reason);
+
+        if(strcmp(rep, "") == 0)
+           	printf("\t[THREAD %lu] Erreur de CBP_BookConsultation\n", pthread_self());
+
+        if (rep != NULL)
+        	sprintf(reponse, "%s", rep);
 	}
 
 	return true;
@@ -250,19 +265,23 @@ char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* CBP_BookConsultation(int consultationId, char* reason )
+char* CBP_BookConsultation(int consultationId, char* nom, char* prenom, char* reason)
 {
 	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
 	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
 
-	sprintf(requete, "SELECT patient_id FROM consultations WHERE id = consultationId");
+    int idpatient = getPatientId(nom, prenom);
+
+	sprintf(requete, "update consultations set reason = %s, set patient_id = %d where id = %d", reason, idpatient, consultationId);
 
 	char *reponse = AccesBD(requete);
 
-	// if(reponse == NULL)
-		sprintf(rep, "BOOK_CONSULTATION#Dispo");
-  		// sprintf(requete,"update ");
-  		// AccesBD(requete);
+	if (reponse)
+		sprintf(rep, "BOOK_CONSULTATION#ok");
+	else
+		sprintf(rep, "BOOK_CONSULTATION#ko");
+
+    sprintf(rep, "BOOK_CONSULTATION#ok");
 
 	return rep;
 }
@@ -421,4 +440,17 @@ int getDoctorId(char* requete, char* doctorLastName, char* doctorFirstName)
     }
 
     return -1;
+}
+
+int getPatientId(char* nom, char* prenom)
+{
+	sprintf(requete, "SELECT id FROM patients WHERE last_name = %s and first_name = %s;", nom, prenom);
+
+	char *reponse = AccesBD(requete);
+
+	int id = atoi(reponse);
+
+	// printf("id : %d", id);
+	return id;
+
 }
