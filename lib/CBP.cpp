@@ -86,10 +86,13 @@ bool CBP(char* requete, char* reponse, int socket)
 	// GETSPECIALITES
 	if (strcmp(ptr, "GETSPECIALITES") == 0)
 	{
-		reponse = CBP_GetSpecialites();
+		char* rep = CBP_GetSpecialites();
+		if (rep == NULL || strcmp(rep, "") == 0)
+			printf("\t[THREAD %lu] Erreur de CBP_GetSpecialites\n", pthread_self());
+		else
+			sprintf(reponse, "%s", rep);
 
-		if (strcmp(reponse, "") == 0)
-        	printf("\t[THREAD %lu] Erreur de CBP_GetSpecialites\n", pthread_self());
+		free(rep);
 	}
 
 	// GETDOCTORS
@@ -199,7 +202,7 @@ char* CBP_Logout(char* nom, char* prenom, int numPatient)
 
 char* CBP_GetSpecialites()
 {
-	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
+	char requete[MAX_SIZE_REQUETE];
 	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
 
 	sprintf(requete, "SELECT * FROM specialties;");

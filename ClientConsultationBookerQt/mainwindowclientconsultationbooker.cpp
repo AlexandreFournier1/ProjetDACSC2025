@@ -42,69 +42,12 @@ MainWindowClientConsultationBooker::MainWindowClientConsultationBooker(QWidget *
     this->addTupleTableConsultations(3,"Dermatologie","Maboul Paul","2025-10-23", "14:30");
 
     //this->addComboBoxSpecialties("--- TOUTES ---");
-    this->addComboBoxSpecialties("Dermatologie");
-    this->addComboBoxSpecialties("Cardiologie");
+    // this->addComboBoxSpecialties("Dermatologie");
+    // this->addComboBoxSpecialties("Cardiologie");
 
     //this->addComboBoxDoctors("--- TOUS ---");
     // this->addComboBoxDoctors("Martin Claire");
     // this->addComboBoxDoctors("Maboul Paul");
-
-    //this->addComboBoxSpecialties("--- TOUTES ---");
-
-    // char* requete = (char*)malloc(512), *reponse = (char*)malloc(512);
-
-    // sprintf(requete, "GETSPECIALITES");
-
-    // Echange(requete, reponse);
-
-    // char *ptr = strtok(requete, "#");
-
-    // if (strcmp(strtok(NULL, "#"), "Pas de Specialites trouvees !"))
-    //     this->addComboBoxSpecialties("Pas de Specialites trouvees");
-    // else
-    // {
-    //     while (ptr != NULL)
-    //     {
-    //         char* id = strtok(ptr, ";");
-    //         char* specialty = strtok(NULL, ";");
-
-    //         this->addComboBoxSpecialties(specialty);
-
-    //         ptr = strtok(NULL, "#"); // entrée suivante
-    //     }
-    // }
-
-    // free(ptr);
-
-    // //this->addComboBoxDoctors("--- TOUS ---");
-
-    // sprintf(requete, "GETDOCTORS");
-
-    // Echange(requete, reponse);
-
-    // char *ptr2 = strtok(requete, "#");
-
-    // if (strcmp(strtok(NULL, "#"), "Pas de Doctors trouvees !"))
-    //     this->addComboBoxSpecialties("Pas de Doctors trouves");
-    // else
-    // {
-    //     while (ptr2 != NULL)
-    //     {
-    //         char* id = strtok(ptr, ";");
-    //         char* lastName = strtok(NULL, ";");
-    //         char* firstName = strtok(NULL, ";");
-
-    //         char nomComplet[50];
-
-    //         sprintf(nomComplet, "%s %s", lastName, firstName);
-
-    //         this->addComboBoxDoctors(nomComplet);
-
-    //         ptr2 = strtok(NULL, "#"); // entrée suivante
-    //     }
-    // }
-
-    // free(ptr);
 }
 
 MainWindowClientConsultationBooker::~MainWindowClientConsultationBooker()
@@ -373,8 +316,9 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 
     printf("Checkpoint 4\n");
 
+    specialitiesInitialisation();
     doctorsInitialisation();
-    //specialitiesInitialisation();
+    
 
     free(requete);
     free(reponse);
@@ -575,21 +519,33 @@ void MainWindowClientConsultationBooker::specialitiesInitialisation()
 
     // GETSPECIALITES#1;Cardiologie
 
-    char *ptr = strtok(req, "#");
+    char *saveptr1, *saveptr2;
 
-    if (strcmp(strtok(NULL, "#"), "Pas de Specialites trouvees !"))
-        this->addComboBoxSpecialties("Pas de Specialites trouvees");
-    else
-    {
-        while (ptr != NULL)
+    char* ptr = strtok_r(rep, "#", &saveptr1);  
+    printf("DEBUG: Premier token = '%s'\n", ptr ? ptr : "NULL");
+
+    if (ptr != NULL && strcmp(ptr, "GETSPECIALITES") == 0)
+    {   
+        printf("DEBUG: Début parsing GETSPECIALITES\n");
+        char *ligne = strtok_r(NULL, "#", &saveptr1);  
+        int count = 0;
+        while (ligne != NULL)
         {
-            char* id = strtok(ptr, ";");
-            char* specialty = strtok(NULL, ";");
-
-            this->addComboBoxSpecialties(specialty);
-
-            ptr = strtok(NULL, "#"); // entrée suivante
+            if (strlen(ligne) > 0)
+            {
+                printf("DEBUG: Ligne = '%s'\n", ligne);
+                char *id = strtok_r(ligne, ";", &saveptr2);  
+                char *specialty = strtok_r(NULL, ";", &saveptr2);
+                if (id && specialty)
+                {
+                    printf("DEBUG: Ajout specialitee #%d: %s\n", count+1, specialty);
+                    addComboBoxSpecialties(specialty);
+                    count++;
+                }
+            }
+            ligne = strtok_r(NULL, "#", &saveptr1);
         }
+        printf("DEBUG: Fin parsing - %d specialitee ajoutés\n", count);
     }
 
     free(req);
