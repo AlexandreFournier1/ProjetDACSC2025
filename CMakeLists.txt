@@ -46,19 +46,8 @@ target_include_directories(Server_Reservation PRIVATE lib)
 target_link_libraries(Server_Reservation PRIVATE pthread)
 target_link_libraries(Server_Reservation PRIVATE pthread /usr/lib64/mysql/libmysqlclient.so)
 
-# ---------- Client ----------
-add_executable(Client_Reservation
-    Client_Reservation.cpp
-    lib/TCP.cpp
-    lib/CBP.cpp
-    lib/TCP.h
-    lib/CBP.h
-)
-target_include_directories(Client_Reservation PRIVATE lib)
-target_link_libraries(Client_Reservation PRIVATE pthread /usr/lib64/mysql/libmysqlclient.so)
-
 # ---------- Output directory ----------
-set_target_properties(Consultationbooker Server_Reservation Client_Reservation
+set_target_properties(Consultationbooker Server_Reservation
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )

@@ -130,19 +130,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Client_Reservation
-
-# Build rule for target.
-Client_Reservation: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Client_Reservation
-.PHONY : Client_Reservation
-
-# fast build rule for target.
-Client_Reservation/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/build
-.PHONY : Client_Reservation/fast
-
-#=============================================================================
 # Target rules for targets named Consultationbooker
 
 # Build rule for target.
@@ -167,19 +154,6 @@ Server_Reservation: cmake_check_build_system
 Server_Reservation/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/build
 .PHONY : Server_Reservation/fast
-
-#=============================================================================
-# Target rules for targets named Client_Reservation_autogen
-
-# Build rule for target.
-Client_Reservation_autogen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Client_Reservation_autogen
-.PHONY : Client_Reservation_autogen
-
-# fast build rule for target.
-Client_Reservation_autogen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation_autogen.dir/build.make CMakeFiles/Client_Reservation_autogen.dir/build
-.PHONY : Client_Reservation_autogen/fast
 
 #=============================================================================
 # Target rules for targets named Consultationbooker_autogen
@@ -260,60 +234,6 @@ ClientConsultationBookerQt/mainwindowclientconsultationbooker.s: ClientConsultat
 ClientConsultationBookerQt/mainwindowclientconsultationbooker.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/ClientConsultationBookerQt/mainwindowclientconsultationbooker.cpp.s
 .PHONY : ClientConsultationBookerQt/mainwindowclientconsultationbooker.cpp.s
-
-Client_Reservation.o: Client_Reservation.cpp.o
-
-.PHONY : Client_Reservation.o
-
-# target to build an object file
-Client_Reservation.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.o
-.PHONY : Client_Reservation.cpp.o
-
-Client_Reservation.i: Client_Reservation.cpp.i
-
-.PHONY : Client_Reservation.i
-
-# target to preprocess a source file
-Client_Reservation.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.i
-.PHONY : Client_Reservation.cpp.i
-
-Client_Reservation.s: Client_Reservation.cpp.s
-
-.PHONY : Client_Reservation.s
-
-# target to generate assembly for a file
-Client_Reservation.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/Client_Reservation.cpp.s
-.PHONY : Client_Reservation.cpp.s
-
-Client_Reservation_autogen/mocs_compilation.o: Client_Reservation_autogen/mocs_compilation.cpp.o
-
-.PHONY : Client_Reservation_autogen/mocs_compilation.o
-
-# target to build an object file
-Client_Reservation_autogen/mocs_compilation.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.o
-.PHONY : Client_Reservation_autogen/mocs_compilation.cpp.o
-
-Client_Reservation_autogen/mocs_compilation.i: Client_Reservation_autogen/mocs_compilation.cpp.i
-
-.PHONY : Client_Reservation_autogen/mocs_compilation.i
-
-# target to preprocess a source file
-Client_Reservation_autogen/mocs_compilation.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.i
-.PHONY : Client_Reservation_autogen/mocs_compilation.cpp.i
-
-Client_Reservation_autogen/mocs_compilation.s: Client_Reservation_autogen/mocs_compilation.cpp.s
-
-.PHONY : Client_Reservation_autogen/mocs_compilation.s
-
-# target to generate assembly for a file
-Client_Reservation_autogen/mocs_compilation.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/Client_Reservation_autogen/mocs_compilation.cpp.s
-.PHONY : Client_Reservation_autogen/mocs_compilation.cpp.s
 
 Consultationbooker_autogen/mocs_compilation.o: Consultationbooker_autogen/mocs_compilation.cpp.o
 
@@ -402,7 +322,6 @@ lib/CBP.o: lib/CBP.cpp.o
 
 # target to build an object file
 lib/CBP.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.o
 .PHONY : lib/CBP.cpp.o
@@ -413,7 +332,6 @@ lib/CBP.i: lib/CBP.cpp.i
 
 # target to preprocess a source file
 lib/CBP.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.i
 .PHONY : lib/CBP.cpp.i
@@ -424,7 +342,6 @@ lib/CBP.s: lib/CBP.cpp.s
 
 # target to generate assembly for a file
 lib/CBP.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/lib/CBP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.s
 .PHONY : lib/CBP.cpp.s
@@ -435,7 +352,6 @@ lib/TCP.o: lib/TCP.cpp.o
 
 # target to build an object file
 lib/TCP.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/TCP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/TCP.cpp.o
 .PHONY : lib/TCP.cpp.o
@@ -446,7 +362,6 @@ lib/TCP.i: lib/TCP.cpp.i
 
 # target to preprocess a source file
 lib/TCP.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/TCP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/TCP.cpp.i
 .PHONY : lib/TCP.cpp.i
@@ -457,7 +372,6 @@ lib/TCP.s: lib/TCP.cpp.s
 
 # target to generate assembly for a file
 lib/TCP.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/lib/TCP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/TCP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/TCP.cpp.s
 .PHONY : lib/TCP.cpp.s
@@ -470,10 +384,8 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... Client_Reservation_autogen"
 	@echo "... Consultationbooker_autogen"
 	@echo "... Server_Reservation_autogen"
-	@echo "... Client_Reservation"
 	@echo "... Consultationbooker"
 	@echo "... Server_Reservation"
 	@echo "... ClientConsultationBookerQt/main.o"
@@ -482,12 +394,6 @@ help:
 	@echo "... ClientConsultationBookerQt/mainwindowclientconsultationbooker.o"
 	@echo "... ClientConsultationBookerQt/mainwindowclientconsultationbooker.i"
 	@echo "... ClientConsultationBookerQt/mainwindowclientconsultationbooker.s"
-	@echo "... Client_Reservation.o"
-	@echo "... Client_Reservation.i"
-	@echo "... Client_Reservation.s"
-	@echo "... Client_Reservation_autogen/mocs_compilation.o"
-	@echo "... Client_Reservation_autogen/mocs_compilation.i"
-	@echo "... Client_Reservation_autogen/mocs_compilation.s"
 	@echo "... Consultationbooker_autogen/mocs_compilation.o"
 	@echo "... Consultationbooker_autogen/mocs_compilation.i"
 	@echo "... Consultationbooker_autogen/mocs_compilation.s"

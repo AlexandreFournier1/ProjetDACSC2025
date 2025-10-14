@@ -78,7 +78,6 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CMakeFiles/Client_Reservation_autogen.dir/AutogenInfo.json"
   "CMakeFiles/Consultationbooker_autogen.dir/AutogenInfo.json"
   "CMakeFiles/Server_Reservation_autogen.dir/AutogenInfo.json"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
@@ -86,10 +85,8 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/Client_Reservation.dir/DependInfo.cmake"
   "CMakeFiles/Consultationbooker.dir/DependInfo.cmake"
   "CMakeFiles/Server_Reservation.dir/DependInfo.cmake"
-  "CMakeFiles/Client_Reservation_autogen.dir/DependInfo.cmake"
   "CMakeFiles/Consultationbooker_autogen.dir/DependInfo.cmake"
   "CMakeFiles/Server_Reservation_autogen.dir/DependInfo.cmake"
   )

@@ -6,6 +6,24 @@
 
 #IncludeRegexTransform: 
 
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Server_Reservation.cpp
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+string.h
+-
+signal.h
+-
+pthread.h
+-
+./lib/TCP.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
+./lib/CBP.h
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
+
 /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.cpp
 CBP.h
 /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
@@ -23,4 +41,6 @@ pthread.h
 -
 
 /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h
+
+/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h
 

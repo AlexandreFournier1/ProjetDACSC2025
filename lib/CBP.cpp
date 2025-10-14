@@ -110,8 +110,6 @@ bool CBP(char* requete, char* reponse, int socket)
 	// SEARCHCONSULTATIONS
 	if (strcmp(ptr, "SEARCHCONSULTATIONS") == 0)
 	{
-		printf("CBP DEBUG : Checkpoint 1 - requete = %s\n", requete);
-
 		char specialiteName[50], medecinFullName[50], medecinLastName[50], medecinFirstName[50], dateDebut[50], dateFin[50];
 		strcpy(specialiteName, strtok(NULL, "#"));
         strcpy(medecinFullName, strtok(NULL, "#"));
@@ -125,36 +123,18 @@ bool CBP(char* requete, char* reponse, int socket)
 		    strcpy(medecinFirstName, space + 1);
 		}
 
-		printf("CBP DEBUG : medecinLastName = %s\n", medecinLastName);
-		printf("CBP DEBUG : medecinFirstName = %s\n", medecinFirstName);
-
-		printf("CBP DEBUG : Checkpoint 3\n");
-
 		char *tmp = strtok(NULL, "#");
 		if (tmp != NULL) 
 			strcpy(dateDebut, tmp);
-
-		printf("CBP DEBUG : dateDebut = %s\n", dateDebut);
 
 		tmp = strtok(NULL, "#");
 		if (tmp != NULL) 
 			strcpy(dateFin, tmp);
 
-        printf("CBP DEBUG : dateFin = %s\n", dateFin);
-
-        printf("CBP DEBUG : Checkpoint 4\n");
-
         int idSpecialite = getSpecialiteId(specialiteName);
-
-        printf("CBP DEBUG : Checkpoint 5 - idSpecialite = %d\n", idSpecialite);
-
        	int idMedecin = getDoctorId(medecinLastName, medecinFirstName);
 
-       	printf("CBP DEBUG : Checkpoint 6 - idMedecin = %d\n", idMedecin);
-
         char* rep = CBP_SearchConsultations(idSpecialite, idMedecin, dateDebut, dateFin);
-
-        printf("CBP DEBUG : Checkpoint 7\n");
 
         if (strcmp(rep, "") == 0)
     		printf("\t[THREAD %lu] Erreur de CBP_SearchConsultations\n", pthread_self());
@@ -192,25 +172,33 @@ char* CBP_Login(char* nom, char* prenom, int numPatient) // numPatient = -1 si n
 {
 	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
 	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
+	char* id = (char*)malloc(MAX_SIZE_REPONSE);
 
   	if (numPatient == -1)
   	{
   		sprintf(requete,"INSERT INTO patients (last_name, first_name) VALUES ('%s', '%s');", nom, prenom);
-  		AccesBD(requete);
-  	}
 
-  	sprintf(requete,"SELECT id FROM patients WHERE last_name = '%s' AND first_name = '%s' AND id = '%d';", nom, prenom, numPatient);
+  		AccesBD(requete);
+
+  		sprintf(requete,"SELECT id FROM patients WHERE last_name = '%s' AND first_name = '%s';", nom, prenom);
+
+  		id = AccesBD(requete);
+  	}
+  	else
+  		sprintf(id, "%d", numPatient);
+
+  	sprintf(requete,"SELECT id FROM patients WHERE last_name = '%s' AND first_name = '%s' AND id = '%s';", nom, prenom, id);
 
   	char* resultat = AccesBD(requete);
 	
-	if (resultat)
+	if (resultat != NULL && strcmp(resultat, "") != 0)
 		if (numPatient == -1)
 			sprintf(rep, "LOGIN#ok#%s", resultat);
 		else
 			sprintf(rep, "LOGIN#ok");
-		
 	else
 		sprintf(rep, "LOGIN#ko");
+
 
 	return rep;
 }
@@ -237,7 +225,7 @@ char* CBP_GetSpecialites()
 
 	char *reponse = AccesBD(requete);
 
-	if (reponse)
+	if (reponse && strlen(reponse) > 0)
 		sprintf(rep, "GETSPECIALITES#%s", reponse);
 	else
 		sprintf(rep, "GETSPECIALITES#Pas de Specialites trouvees !");
@@ -284,13 +272,9 @@ char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, 
 	    "AND c.date BETWEEN '%s' AND '%s';",
 	    idSpecialite, idMedecin, dateDebut, dateFin);
 
-	printf("Avant AccesBD : %s\n", requete);
-
 	char* reponse = AccesBD(requete);
 
-	printf("Apres AccesBD : %s\n", reponse);
-
-	if (reponse)
+	if (reponse != NULL && strcmp(reponse, "") != 0)
 		sprintf(rep, "SEARCHCONSULTATIONS#%s", reponse);
 	else
 		sprintf(rep, "SEARCHCONSULTATIONS#Pas de Consultations trouvees !");
@@ -311,7 +295,7 @@ char* CBP_BookConsultation(int consultationId, char* nom, char* prenom, char* re
 
 	char *reponse = AccesBD(requete);
 
-	if (reponse)
+	if (reponse != NULL && strcmp(reponse, "") != 0)
 		sprintf(rep, "BOOK_CONSULTATION#ok");
 	else
 		sprintf(rep, "BOOK_CONSULTATION#ko");
@@ -431,19 +415,11 @@ void RemoveClient(int socket)
 
 int getSpecialiteId(char* specialiteName)
 {
-	printf("CBP DEBUG : getSpecialiteId Checkpoint 1\n");
-
 	char* requete = (char*)malloc(MAX_SIZE_REQUETE);
 
-	printf("CBP DEBUG : getSpecialiteId Checkpoint 2\n");
-
 	sprintf(requete, "SELECT id FROM specialties WHERE name = '%s';", specialiteName);
-
-	printf("CBP DEBUG : getSpecialiteId Checkpoint 3 - requete = %s\n", requete);
     
     char *reponse = AccesBD(requete);
-
-    printf("CBP DEBUG : getSpecialiteId Checkpoint 4 - reponse = %s\n", reponse);
 
     int id = atoi(reponse);
 
@@ -479,6 +455,5 @@ int getPatientId(char* nom, char* prenom)
 
 	int id = atoi(reponse);
 
-	// printf("id : %d", id);
 	return id;
 }

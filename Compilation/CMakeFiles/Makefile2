@@ -72,7 +72,6 @@ CMAKE_BINARY_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilatio
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/Client_Reservation.dir/all
 all: CMakeFiles/Consultationbooker.dir/all
 all: CMakeFiles/Server_Reservation.dir/all
 
@@ -84,41 +83,12 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/Client_Reservation.dir/clean
 clean: CMakeFiles/Consultationbooker.dir/clean
 clean: CMakeFiles/Server_Reservation.dir/clean
-clean: CMakeFiles/Client_Reservation_autogen.dir/clean
 clean: CMakeFiles/Consultationbooker_autogen.dir/clean
 clean: CMakeFiles/Server_Reservation_autogen.dir/clean
 
 .PHONY : clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/Client_Reservation.dir
-
-# All Build rule for target.
-CMakeFiles/Client_Reservation.dir/all: CMakeFiles/Client_Reservation_autogen.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=1,2,3,4,5 "Built target Client_Reservation"
-.PHONY : CMakeFiles/Client_Reservation.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/Client_Reservation.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles 6
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Client_Reservation.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles 0
-.PHONY : CMakeFiles/Client_Reservation.dir/rule
-
-# Convenience name for target.
-Client_Reservation: CMakeFiles/Client_Reservation.dir/rule
-
-.PHONY : Client_Reservation
-
-# clean rule for target.
-CMakeFiles/Client_Reservation.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation.dir/build.make CMakeFiles/Client_Reservation.dir/clean
-.PHONY : CMakeFiles/Client_Reservation.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/Consultationbooker.dir
@@ -127,7 +97,7 @@ CMakeFiles/Client_Reservation.dir/clean:
 CMakeFiles/Consultationbooker.dir/all: CMakeFiles/Consultationbooker_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=7,8,9,10,11,12 "Built target Consultationbooker"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target Consultationbooker"
 .PHONY : CMakeFiles/Consultationbooker.dir/all
 
 # Build rule for subdir invocation for target.
@@ -154,7 +124,7 @@ CMakeFiles/Consultationbooker.dir/clean:
 CMakeFiles/Server_Reservation.dir/all: CMakeFiles/Server_Reservation_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=14,15,16,17,18 "Built target Server_Reservation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=8,9,10,11,12 "Built target Server_Reservation"
 .PHONY : CMakeFiles/Server_Reservation.dir/all
 
 # Build rule for subdir invocation for target.
@@ -175,40 +145,13 @@ CMakeFiles/Server_Reservation.dir/clean:
 .PHONY : CMakeFiles/Server_Reservation.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/Client_Reservation_autogen.dir
-
-# All Build rule for target.
-CMakeFiles/Client_Reservation_autogen.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation_autogen.dir/build.make CMakeFiles/Client_Reservation_autogen.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation_autogen.dir/build.make CMakeFiles/Client_Reservation_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=6 "Built target Client_Reservation_autogen"
-.PHONY : CMakeFiles/Client_Reservation_autogen.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/Client_Reservation_autogen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles 1
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Client_Reservation_autogen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles 0
-.PHONY : CMakeFiles/Client_Reservation_autogen.dir/rule
-
-# Convenience name for target.
-Client_Reservation_autogen: CMakeFiles/Client_Reservation_autogen.dir/rule
-
-.PHONY : Client_Reservation_autogen
-
-# clean rule for target.
-CMakeFiles/Client_Reservation_autogen.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client_Reservation_autogen.dir/build.make CMakeFiles/Client_Reservation_autogen.dir/clean
-.PHONY : CMakeFiles/Client_Reservation_autogen.dir/clean
-
-#=============================================================================
 # Target rules for target CMakeFiles/Consultationbooker_autogen.dir
 
 # All Build rule for target.
 CMakeFiles/Consultationbooker_autogen.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker_autogen.dir/build.make CMakeFiles/Consultationbooker_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker_autogen.dir/build.make CMakeFiles/Consultationbooker_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=13 "Built target Consultationbooker_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=7 "Built target Consultationbooker_autogen"
 .PHONY : CMakeFiles/Consultationbooker_autogen.dir/all
 
 # Build rule for subdir invocation for target.
@@ -235,7 +178,7 @@ CMakeFiles/Consultationbooker_autogen.dir/clean:
 CMakeFiles/Server_Reservation_autogen.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation_autogen.dir/build.make CMakeFiles/Server_Reservation_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation_autogen.dir/build.make CMakeFiles/Server_Reservation_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=19 "Built target Server_Reservation_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles --progress-num=13 "Built target Server_Reservation_autogen"
 .PHONY : CMakeFiles/Server_Reservation_autogen.dir/all
 
 # Build rule for subdir invocation for target.

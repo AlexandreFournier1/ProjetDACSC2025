@@ -37,9 +37,9 @@ MainWindowClientConsultationBooker::MainWindowClientConsultationBooker(QWidget *
         ui->tableWidgetConsultations->setColumnWidth(col, columnWidths[col]);
 
     // Exemples d'utilisation (à supprimer)
-    this->addTupleTableConsultations(1,"Neurologie","Martin Claire","2025-10-01", "09:00");
-    this->addTupleTableConsultations(2,"Cardiologie","Lemoine Bernard","2025-10-06", "10:15");
-    this->addTupleTableConsultations(3,"Dermatologie","Maboul Paul","2025-10-23", "14:30");
+    // this->addTupleTableConsultations(1,"Neurologie","Martin Claire","2025-10-01", "09:00");
+    // this->addTupleTableConsultations(2,"Cardiologie","Lemoine Bernard","2025-10-06", "10:15");
+    // this->addTupleTableConsultations(3,"Dermatologie","Maboul Paul","2025-10-23", "14:30");
 
     //this->addComboBoxSpecialties("--- TOUTES ---");
     // this->addComboBoxSpecialties("Dermatologie");
@@ -284,7 +284,6 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
     cout << "patientId = " << patientId << endl;
     cout << "newPatient = " << newPatient << endl;
 
-    // Send vers le Serveur puis dans le serveur on appelle CBP qui appelle la bonne fonction puis le CBP envoie la réponse au serveur qui envoie la réponse au Client qui fait un Receive
     if (newPatient)
         patientId = -1;
 
@@ -301,6 +300,10 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
         {
             dialogMessage("Success", "Login réussi !");
             loginOk();
+
+            specialitiesInitialisation();
+            doctorsInitialisation();
+            clearTableConsultations();
         }
         else
         {
@@ -311,12 +314,6 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
                 dialogError("Erreur", "Identifiants invalides !");
         }
     }
-
-
-    printf("Checkpoint 4\n");
-
-    specialitiesInitialisation();
-    doctorsInitialisation();
     
     free(requete);
     free(reponse);
@@ -370,28 +367,24 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 
     sprintf(requete, "SEARCHCONSULTATIONS#%s#%s#%s#%s", specialty.c_str(), doctor.c_str(), startDate.c_str(), endDate.c_str());
 
-    printf("DEBUG : Requete = %s\n", requete);
-
     Echange(requete, reponse);
-
-    printf("DEBUG : Reponse = %s\n", reponse);
 
     char *saveptr1, *saveptr2;
 
     char *ligne = strtok_r(reponse, "#", &saveptr1);
+
     char *suivant = strtok_r(NULL, "#", &saveptr1);
 
     if (strcmp(suivant, "Pas de Consultations trouvees !") == 0)
+    {
         dialogError("Erreur", "Pas de Consultations trouvées !");
+        clearTableConsultations();
+    }
     else
     {
         dialogMessage("Success", "Consultations trouvées !");
 
-        printf("Checkpoint 1\n");
-
         clearTableConsultations();
-
-        printf("Checkpoint 2\n");
 
         ligne = strtok_r(NULL, "#", &saveptr1); // passer au premier vrai enregistrement
 
@@ -414,11 +407,7 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 
             ligne = strtok_r(NULL, "#", &saveptr1);
         }
-
-        // void addTupleTableConsultations(int id, string specialty, string doctor, string date, string hour);
     }
-
-    printf("Checkpoint 4\n");
 
     free(requete);
     free(reponse);
@@ -438,7 +427,6 @@ void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
     if(selectedTow == -1) return;
 
     sprintf(requete, "BOOKCONSULTATION#%d#%s#%s#%s", selectedTow, nom, prenom, reason);
-
 
     Echange(requete, reponse);
 
@@ -498,24 +486,20 @@ void MainWindowClientConsultationBooker::doctorsInitialisation()
     char *saveptr1, *saveptr2;
 
     char* ptr = strtok_r(rep, "#", &saveptr1);  
-    printf("DEBUG: Premier token = '%s'\n", ptr ? ptr : "NULL");
 
     if (ptr != NULL && strcmp(ptr, "GETDOCTORS") == 0)
     {   
-        printf("DEBUG: Début parsing GETDOCTORS\n");
         char *ligne = strtok_r(NULL, "#", &saveptr1);  
         int count = 0;
         while (ligne != NULL)
         {
             if (strlen(ligne) > 0)
             {
-                printf("DEBUG: Ligne = '%s'\n", ligne);
                 char *id = strtok_r(ligne, ";", &saveptr2);  
                 char *lastName = strtok_r(NULL, ";", &saveptr2);
                 char *firstName = strtok_r(NULL, ";", &saveptr2);
                 if (id && lastName && firstName)
                 {
-                    printf("DEBUG: Ajout docteur #%d: %s %s\n", count+1, lastName, firstName);
                     string doc = string(lastName) + " " + string(firstName);
                     addComboBoxDoctors(doc);
                     count++;
@@ -523,7 +507,6 @@ void MainWindowClientConsultationBooker::doctorsInitialisation()
             }
             ligne = strtok_r(NULL, "#", &saveptr1);
         }
-        printf("DEBUG: Fin parsing - %d docteurs ajoutés\n", count);
     }
 
     free(req);
@@ -544,30 +527,25 @@ void MainWindowClientConsultationBooker::specialitiesInitialisation()
     char *saveptr1, *saveptr2;
 
     char* ptr = strtok_r(rep, "#", &saveptr1);  
-    printf("DEBUG: Premier token = '%s'\n", ptr ? ptr : "NULL");
 
     if (ptr != NULL && strcmp(ptr, "GETSPECIALITES") == 0)
     {   
-        printf("DEBUG: Début parsing GETSPECIALITES\n");
         char *ligne = strtok_r(NULL, "#", &saveptr1);  
         int count = 0;
         while (ligne != NULL)
         {
             if (strlen(ligne) > 0)
             {
-                printf("DEBUG: Ligne = '%s'\n", ligne);
                 char *id = strtok_r(ligne, ";", &saveptr2);  
                 char *specialty = strtok_r(NULL, ";", &saveptr2);
                 if (id && specialty)
                 {
-                    printf("DEBUG: Ajout specialitee #%d: %s\n", count+1, specialty);
                     addComboBoxSpecialties(specialty);
                     count++;
                 }
             }
             ligne = strtok_r(NULL, "#", &saveptr1);
         }
-        printf("DEBUG: Fin parsing - %d specialitee ajoutés\n", count);
     }
 
     free(req);
