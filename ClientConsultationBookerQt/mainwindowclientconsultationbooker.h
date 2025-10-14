@@ -53,6 +53,7 @@ public:
     // Fonction supplémentaire :
     void doctorsInitialisation();
     void specialitiesInitialisation();
+    int getSelectedConsultationId();
 private slots:
     void on_pushButtonLogin_clicked();
     void on_pushButtonLogout_clicked();

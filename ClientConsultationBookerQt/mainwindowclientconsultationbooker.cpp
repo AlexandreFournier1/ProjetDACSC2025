@@ -417,28 +417,48 @@ void MainWindowClientConsultationBooker::on_pushButtonRechercher_clicked()
 
 void MainWindowClientConsultationBooker::on_pushButtonReserver_clicked()
 {
-    char* requete, *reponse;
+    char* requete = (char*)malloc(MAX_SIZE_REQUETE), *reponse = (char*)malloc(MAX_SIZE_REPONSE);
 
-    int selectedTow = this->getSelectionIndexTableConsultations();
+    int selectedID = this->getSelectedConsultationId();
     string nom = this->getLastName();
     string prenom = this->getFirstName();
     string reason = dialogInputText("Raison", "Quel est votre raison ?");
 
-    if(selectedTow == -1) return;
+    cout << "selectedID= " << selectedID << endl;
+    
 
-    sprintf(requete, "BOOKCONSULTATION#%d#%s#%s#%s", selectedTow, nom, prenom, reason);
+    if(selectedID == -1) return;
+
+    sprintf(requete, "BOOKCONSULTATION#%d#%s#%s#%s", selectedID, nom.c_str(), prenom.c_str(), reason.c_str());
+
+    printf("Avant : Echange\n");
 
     Echange(requete, reponse);
 
-    char *ptr = strtok(requete, "#");
+    printf("Après : Echange\n");
 
-    if (strcmp(strtok(NULL, "#"), "ok"))
-        dialogMessage("Success", "Réservation effectuer avec Success !");
+    char *ptr = strtok(reponse, "#");
+    char *status = strtok(NULL, "#");
 
-    cout << "selectedRow = " << selectedTow << endl;
+    if (ptr && status && strcmp(ptr, "BOOKCONSULTATION") == 0)
+    {
+        if (strcmp(status, "ok") == 0)
+            dialogMessage("Succès", "Réservation effectuée avec succès !");
+        else
+            dialogError("Erreur", "Réponse inconnue du serveur !");
+    }
+    else
+    {
+        dialogError("Erreur", "Réponse invalide du serveur !");
+    }
+
+    cout << "selectedRow = " << selectedID << endl;
+
+    free(requete);
+    free(reponse);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 ///////////////// Fonctions supplémentaires //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -550,4 +570,15 @@ void MainWindowClientConsultationBooker::specialitiesInitialisation()
 
     free(req);
     free(rep);
+}
+
+int MainWindowClientConsultationBooker::getSelectedConsultationId()
+{
+    int row = getSelectionIndexTableConsultations();
+    if (row == -1) return -1;
+
+    QTableWidgetItem *item = ui->tableWidgetConsultations->item(row, 0);
+    if (!item) return -1;
+
+    return item->text().toInt();
 }

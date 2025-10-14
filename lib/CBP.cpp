@@ -152,9 +152,13 @@ bool CBP(char* requete, char* reponse, int socket)
         strcpy(prenom, strtok(NULL, "#"));
         strcpy(reason, strtok(NULL, "#"));
 
+        printf("Après : strcpy\n");
+
         int id = atoi(idconsult);
+	    printf("Avant : CBP_BookConsultation\n");
 
 	    char* rep = CBP_BookConsultation(id, nom, prenom, reason);
+	    printf("Après : CBP_BookConsultation\n");
 
         if(strcmp(rep, "") == 0)
            	printf("\t[THREAD %lu] Erreur de CBP_BookConsultation\n", pthread_self());
@@ -268,7 +272,7 @@ char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, 
 	    "FROM consultations c "
 	    "INNER JOIN doctors m ON m.id = c.doctor_id "
 	    "INNER JOIN specialties s ON s.id = m.specialty_id "
-	    "WHERE s.id = %d AND m.id = %d "
+	    "WHERE s.id = %d AND m.id = %d AND c.patient_id != 'NULL'"
 	    "AND c.date BETWEEN '%s' AND '%s';",
 	    idSpecialite, idMedecin, dateDebut, dateFin);
 
@@ -286,21 +290,21 @@ char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, 
 
 char* CBP_BookConsultation(int consultationId, char* nom, char* prenom, char* reason)
 {
+	printf("Debut : CBP_BookConsultationn");
 	char requete[MAX_SIZE_REQUETE]/*, rep[MAX_SIZE_REPONSE]*/;
 	char* rep = (char*)malloc(MAX_SIZE_REPONSE);
 
     int idpatient = getPatientId(nom, prenom);
+	printf("Après : CBP_BookConsultationidpatient\n");
 
-	sprintf(requete, "update consultations set reason = %s, set patient_id = %d where id = %d", reason, idpatient, consultationId);
+	sprintf(requete, "UPDATE consultations SET reason = '%s', patient_id = '%d' WHERE id = '%d';", reason, idpatient, consultationId);
 
-	char *reponse = AccesBD(requete);
+	AccesBD(requete);
+    printf("Après : CBP_BookConsultationreponse\n");
 
-	if (reponse != NULL && strcmp(reponse, "") != 0)
-		sprintf(rep, "BOOK_CONSULTATION#ok");
-	else
-		sprintf(rep, "BOOK_CONSULTATION#ko");
+	sprintf(rep, "BOOKCONSULTATION#ok");
+	printf("Après : CBP_BookConsultation#OK\n");
 
-    sprintf(rep, "BOOK_CONSULTATION#ok");
 
 	return rep;
 }
@@ -449,7 +453,9 @@ int getDoctorId(char* doctorLastName, char* doctorFirstName)
 
 int getPatientId(char* nom, char* prenom)
 {
-	sprintf(requete, "SELECT id FROM patients WHERE last_name = %s and first_name = %s;", nom, prenom);
+    char* requete= (char*)malloc(MAX_SIZE_REQUETE);
+
+	sprintf(requete, "SELECT id FROM patients WHERE last_name = '%s' and first_name = '%s';", nom, prenom);
 
 	char *reponse = AccesBD(requete);
 

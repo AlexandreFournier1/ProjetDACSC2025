@@ -1,28 +1,28 @@
 {
-	"BUILD_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen",
-	"CMAKE_BINARY_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation",
-	"CMAKE_CURRENT_BINARY_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation",
-	"CMAKE_CURRENT_SOURCE_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC",
+	"BUILD_DIR" : "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen",
+	"CMAKE_BINARY_DIR" : "/home/student/Bureau/DACSC/ProjetDACSC/Compilation",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/student/Bureau/DACSC/ProjetDACSC/Compilation",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/student/Bureau/DACSC/ProjetDACSC",
 	"CMAKE_EXECUTABLE" : "/usr/bin/cmake",
-	"CMAKE_SOURCE_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC",
+	"CMAKE_SOURCE_DIR" : "/home/student/Bureau/DACSC/ProjetDACSC",
 	"DEP_FILE" : "",
 	"DEP_FILE_RULE_NAME" : "",
 	"HEADERS" : 
 	[
 		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.h",
+			"/home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.h",
 			"Mu",
 			"ZJOKMXDKB7/moc_CBP.cpp"
 		],
 		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.h",
+			"/home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.h",
 			"Mu",
 			"ZJOKMXDKB7/moc_TCP.cpp"
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/include",
-	"MOC_COMPILATION_FILE" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/mocs_compilation.cpp",
+	"INCLUDE_DIR" : "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/include",
+	"MOC_COMPILATION_FILE" : "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : [],
 	"MOC_DEPEND_FILTERS" : 
 	[
@@ -33,9 +33,9 @@
 	],
 	"MOC_INCLUDES" : 
 	[
-		"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC",
-		"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/ClientConsultationBookerQt",
-		"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib",
+		"/home/student/Bureau/DACSC/ProjetDACSC",
+		"/home/student/Bureau/DACSC/ProjetDACSC/ClientConsultationBookerQt",
+		"/home/student/Bureau/DACSC/ProjetDACSC/lib",
 		"/usr/include/mysql",
 		"/usr/include/c++/8",
 		"/usr/include/c++/8/x86_64-redhat-linux",
@@ -55,34 +55,25 @@
 		"-c",
 		"/usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp"
 	],
-	"MOC_PREDEFS_FILE" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/moc_predefs.h",
+	"MOC_PREDEFS_FILE" : "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : 
 	[
-		"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/Consultationbooker_autogen/mocs_compilation.cpp"
+		"/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Consultationbooker_autogen/mocs_compilation.cpp"
 	],
 	"MULTI_CONFIG" : false,
 	"PARALLEL" : 1,
-	"PARSE_CACHE_FILE" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles/Server_Reservation_autogen.dir/ParseCache.txt",
+	"PARSE_CACHE_FILE" : "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles/Server_Reservation_autogen.dir/ParseCache.txt",
 	"QT_MOC_EXECUTABLE" : "/usr/lib64/qt5/bin/moc",
 	"QT_UIC_EXECUTABLE" : "",
 	"QT_VERSION_MAJOR" : 5,
 	"QT_VERSION_MINOR" : 12,
-	"SETTINGS_FILE" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Compilation/CMakeFiles/Server_Reservation_autogen.dir/AutogenUsed.txt",
+	"SETTINGS_FILE" : "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles/Server_Reservation_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
-		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Server_Reservation.cpp",
-			"Mu"
-		],
-		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/CBP.cpp",
-			"Mu"
-		],
-		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/lib/TCP.cpp",
-			"Mu"
-		]
+		[ "/home/student/Bureau/DACSC/ProjetDACSC/Server_Reservation.cpp", "Mu" ],
+		[ "/home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.cpp", "Mu" ],
+		[ "/home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.cpp", "Mu" ]
 	],
 	"VERBOSITY" : 0
 }
