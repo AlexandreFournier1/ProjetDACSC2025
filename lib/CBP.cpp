@@ -272,7 +272,7 @@ char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, 
 	    "FROM consultations c "
 	    "INNER JOIN doctors m ON m.id = c.doctor_id "
 	    "INNER JOIN specialties s ON s.id = m.specialty_id "
-	    "WHERE s.id = %d AND m.id = %d AND c.patient_id != 'NULL'"
+	    "WHERE s.id = %d AND m.id = %d AND c.patient_id == NULL "
 	    "AND c.date BETWEEN '%s' AND '%s';",
 	    idSpecialite, idMedecin, dateDebut, dateFin);
 
