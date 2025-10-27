@@ -16,6 +16,7 @@ void* FctThreadClient(void* p);
 
 // Variables globales
 int sEcoute;
+int sEcouteAdmin;
 
 // Gestion du pool de threads
 int socketsAcceptees[TAILLE_FILE_ATTENTE];
@@ -50,6 +51,22 @@ int main(int argc, char* argv[])
         perror("Erreur de sigaction");
         exit(1);
     }
+
+    ///////////////////////////////////////////////////////////
+
+    if (atoi(argv[1]) == PORT_RESERVATION)
+    {
+        printf("Modèle en pool\n");
+    }
+    else
+    {
+        if (atoi(argv[1]) == PORT_ADMIN)
+        {
+            printf("Modèle à la demande\n");
+        }
+    }
+
+    ///////////////////////////////////////////////////////////
 
     // Création de la socket d'écoute
     if ((sEcoute = ServerSocket(atoi(argv[1]))) == -1)
