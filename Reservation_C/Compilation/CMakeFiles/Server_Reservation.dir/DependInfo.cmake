@@ -4,10 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/student/Bureau/DACSC/ProjetDACSC/Server_Reservation.cpp" "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles/Server_Reservation.dir/Server_Reservation.cpp.o"
-  "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/Server_Reservation_autogen/mocs_compilation.cpp" "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles/Server_Reservation.dir/Server_Reservation_autogen/mocs_compilation.cpp.o"
-  "/home/student/Bureau/DACSC/ProjetDACSC/lib/CBP.cpp" "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.o"
-  "/home/student/Bureau/DACSC/ProjetDACSC/lib/TCP.cpp" "/home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles/Server_Reservation.dir/lib/TCP.cpp.o"
+  "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Server_Reservation.cpp" "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/Server_Reservation.dir/Server_Reservation.cpp.o"
+  "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/Server_Reservation_autogen/mocs_compilation.cpp" "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/Server_Reservation.dir/Server_Reservation_autogen/mocs_compilation.cpp.o"
+  "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/ACBP.cpp" "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/Server_Reservation.dir/lib/ACBP.cpp.o"
+  "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.cpp" "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.o"
+  "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/TCP.cpp" "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/Server_Reservation.dir/lib/TCP.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

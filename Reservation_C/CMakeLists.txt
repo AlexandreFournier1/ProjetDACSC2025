@@ -38,8 +38,10 @@ target_link_libraries(Consultationbooker PRIVATE Qt5::Widgets pthread /usr/lib64
 add_executable(Server_Reservation
     Server_Reservation.cpp
     lib/TCP.cpp
+    lib/ACBP.cpp
     lib/CBP.cpp
     lib/TCP.h
+    lib/ACBP.h
     lib/CBP.h
 )
 target_include_directories(Server_Reservation PRIVATE lib)

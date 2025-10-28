@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/student/Bureau/DACSC/ProjetDACSC
+CMAKE_SOURCE_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/student/Bureau/DACSC/ProjetDACSC/Compilation
+CMAKE_BINARY_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles /home/student/Bureau/DACSC/ProjetDACSC/Compilation//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Bureau/DACSC/ProjetDACSC/Compilation/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -316,6 +316,33 @@ Server_Reservation_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/Server_Reservation_autogen/mocs_compilation.cpp.s
 .PHONY : Server_Reservation_autogen/mocs_compilation.cpp.s
 
+lib/ACBP.o: lib/ACBP.cpp.o
+
+.PHONY : lib/ACBP.o
+
+# target to build an object file
+lib/ACBP.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/ACBP.cpp.o
+.PHONY : lib/ACBP.cpp.o
+
+lib/ACBP.i: lib/ACBP.cpp.i
+
+.PHONY : lib/ACBP.i
+
+# target to preprocess a source file
+lib/ACBP.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/ACBP.cpp.i
+.PHONY : lib/ACBP.cpp.i
+
+lib/ACBP.s: lib/ACBP.cpp.s
+
+.PHONY : lib/ACBP.s
+
+# target to generate assembly for a file
+lib/ACBP.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/ACBP.cpp.s
+.PHONY : lib/ACBP.cpp.s
+
 lib/CBP.o: lib/CBP.cpp.o
 
 .PHONY : lib/CBP.o
@@ -403,6 +430,9 @@ help:
 	@echo "... Server_Reservation_autogen/mocs_compilation.o"
 	@echo "... Server_Reservation_autogen/mocs_compilation.i"
 	@echo "... Server_Reservation_autogen/mocs_compilation.s"
+	@echo "... lib/ACBP.o"
+	@echo "... lib/ACBP.i"
+	@echo "... lib/ACBP.s"
 	@echo "... lib/CBP.o"
 	@echo "... lib/CBP.i"
 	@echo "... lib/CBP.s"

@@ -6,13 +6,18 @@
 #include <pthread.h>
 
 #include "./lib/TCP.h"
-//#include "./lib/SCP.h"
 #include "./lib/CBP.h"
+#include "./lib/ACBP.h"
 
 // Prototypes
 void HandlerSIGINT(int s);
 void TraitementConnexion(int sService);
+void TraitementConnexionAdmin(int sService);
 void* FctThreadClient(void* p);
+void* FctThreadClientALaDemande(void* p);
+
+void* FctThreadEcouteClient(void* p);
+void* FctThreadEcouteAdmin(void* p);
 
 // Variables globales
 int sEcoute;
@@ -26,13 +31,6 @@ pthread_cond_t  condSocketsAcceptees;
 
 int main(int argc, char* argv[])
 {
-    if (argc != 2)
-    {
-        printf("Erreur...\n");
-        printf("USAGE : Serveur portServeur\n");
-        exit(1);
-    }
-
     // Initialisation socketsAcceptees
     pthread_mutex_init(&mutexSocketsAcceptees, NULL);
     pthread_cond_init(&condSocketsAcceptees, NULL);
@@ -52,44 +50,50 @@ int main(int argc, char* argv[])
         exit(1);
     }
 
-    ///////////////////////////////////////////////////////////
-
-    if (atoi(argv[1]) == PORT_RESERVATION)
-    {
-        printf("Modèle en pool\n");
-    }
-    else
-    {
-        if (atoi(argv[1]) == PORT_ADMIN)
-        {
-            printf("Modèle à la demande\n");
-        }
-    }
-
-    ///////////////////////////////////////////////////////////
-
-    // Création de la socket d'écoute
-    if ((sEcoute = ServerSocket(atoi(argv[1]))) == -1)
+    // Création des deux sockets
+    if ((sEcoute = ServerSocket(PORT_RESERVATION)) == -1)
     {
         perror("Erreur de ServeurSocket");
         exit(1);
     }
 
+    if ((sEcouteAdmin = ServerSocket(PORT_ADMIN)) == -1)
+    {
+        perror("Erreur de ServeurSocket");
+        exit(1);
+    }
+
+    // Création des threads d'écoutes
+    pthread_t threadsClient, threadsAdmin;
+    pthread_create(&threadsClient, NULL, FctThreadEcouteClient, NULL);
+    pthread_create(&threadsAdmin, NULL, FctThreadEcouteAdmin, NULL);
+
+    printf("Démarrage du serveur.\n");
+    printf("  - Port client : %d\n", PORT_RESERVATION);
+    printf("  - Port admin  : %d\n", PORT_ADMIN);
+
+    pthread_join(threadsClient, NULL);
+    pthread_join(threadsAdmin, NULL);
+
+    return 0;
+}
+
+
+// Thread qui gère le port client (50000)
+void* FctThreadEcouteClient(void* p)
+{
     // Création du pool de threads
     printf("Création du pool de threads.\n");
     pthread_t th;
     for (int i = 0; i < NB_THREADS_POOL; i++)
         pthread_create(&th, NULL, FctThreadClient, NULL);
 
-    // Mise en boucle du serveur
     int sService;
     char ipClient[50];
 
-    printf("Démarrage du serveur.\n");
-
     while (1)
     {
-        printf("Attente d'une connexion...\n");
+        printf("Attente d'une connexion CLIENT...\n");
 
         if ((sService = Accept(sEcoute, ipClient)) == -1)
         {
@@ -99,7 +103,7 @@ int main(int argc, char* argv[])
             exit(1);
         }
 
-        printf("Connexion acceptée : IP=%s socket=%d\n", ipClient, sService);
+        printf("Connexion CLIENT acceptée : IP=%s socket=%d\n", ipClient, sService);
 
         // Insertion en liste d'attente et réveil d'un thread du pool
         pthread_mutex_lock(&mutexSocketsAcceptees);
@@ -111,6 +115,37 @@ int main(int argc, char* argv[])
 
         pthread_mutex_unlock(&mutexSocketsAcceptees);
         pthread_cond_signal(&condSocketsAcceptees);
+    }
+}
+
+// Thread qui gère le port admin (60000)
+void* FctThreadEcouteAdmin(void* p)
+{
+    int sService; 
+    pthread_t th; 
+    char ipClient[50];
+
+    while (1)
+    {
+        printf("Attente d'une connexion ADMIN...\n");
+
+        if ((sService = Accept(sEcouteAdmin, ipClient)) == -1)
+        {
+            perror("Erreur de Accept");
+            close(sEcouteAdmin);
+            CBP_Close();
+            exit(1);
+        }
+
+        printf("Connexion ADMIN acceptée : IP=%s socket=%d\n", ipClient, sService);
+
+        // Creation d'un thread "client" s'occupant du client connecté 
+        int *p = (int*)malloc(sizeof(int)); 
+        *p = sService;
+
+        pthread_create(&th,NULL,FctThreadClientALaDemande,(void*)p);
+
+        pthread_detach(th);
     }
 }
 
@@ -144,12 +179,25 @@ void* FctThreadClient(void* p)
     }
 }
 
+// Fonction exécutée par les threads à la demande
+void* FctThreadClientALaDemande(void* p)
+{  
+    int sService = *((int*)p); 
+    free(p); 
+    printf("\t[THREAD %p] Je m'occupe de la socket %d\n",pthread_self(),sService);
+
+    TraitementConnexion(sService); 
+
+    pthread_exit(NULL);
+}
+
 // Gestion du signal SIGINT (CTRL+C)
 void HandlerSIGINT(int s)
 {
     printf("\nArrêt du serveur.\n");
 
     close(sEcoute);
+    close(sEcouteAdmin);
 
     pthread_mutex_lock(&mutexSocketsAcceptees);
     for (int i = 0; i < TAILLE_FILE_ATTENTE; i++)
@@ -220,5 +268,53 @@ void TraitementConnexion(int sService)
             close(sService);
             return;
         }
+    }
+}
+
+void TraitementConnexionAdmin(int sService)
+{
+    char requete[200], reponse[200]; 
+    int nbLus, nbEcrits; 
+    bool onContinue = true;
+
+    while (onContinue) 
+    { 
+        printf("\t[THREAD %p] Attente requete...\n",pthread_self()); 
+
+        // Réception de la requête
+        if ((nbLus = Receive(sService,requete)) < 0) 
+        { 
+            perror("Erreur de Receive"); 
+            close(sService); 
+            HandlerSIGINT(0); 
+        }
+
+        // Fin de connexion ?
+        if (nbLus == 0) 
+        { 
+            printf("\t[THREAD %p] Fin de connexion du client.\n",pthread_self()); 
+            close(sService); 
+            return; 
+        }
+
+        requete[nbLus] = 0;
+
+        printf("\t[THREAD %p] Requete recue = %s\n",pthread_self(),requete);
+
+        // Traitement de la requete
+        onContinue = ACBP(requete,reponse,sService);
+
+        // Envoi de la reponse
+        if ((nbEcrits = Send(sService,reponse,strlen(reponse))) < 0) 
+        { 
+            perror("Erreur de Send"); 
+            close(sService); 
+            HandlerSIGINT(0); 
+        }
+
+        printf("\t[THREAD %p] Reponse envoyee = %s\n",pthread_self(),reponse);
+
+        if (!onContinue)  
+            printf("\t[THREAD %p] Fin de connexion de la socket %d\n",pthread_self(),sService); 
     }
 }
