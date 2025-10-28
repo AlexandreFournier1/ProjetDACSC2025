@@ -7,7 +7,7 @@
 #include <pthread.h>
 
 // Liste des clients connectés
-int clients[NB_MAX_CLIENTS];
+char* clients[NB_MAX_CLIENTS];
 int nbClients = 0;
 
 // Mutex de protection
@@ -44,12 +44,16 @@ bool CBP(char* requete, char* reponse, int socket)
             return false;
 		}
 
-		AddClient(socket);
-
 		char nom[50], prenom[50], numPatient[50];
 		strcpy(nom, strtok(NULL, "#"));
         strcpy(prenom, strtok(NULL, "#"));
         strcpy(numPatient, strtok(NULL, "#"));
+
+        char infoClient[MAX_SIZE_REQUETE];
+
+		sprintf(infoClient, "%d;%s;%s;%d", socket, nom, prenom, atoi(numPatient));
+
+		AddClient(infoClient);
 
         printf("\t[THREAD %lu] LOGIN de %s %s\n", pthread_self(), nom, prenom);
 
@@ -65,12 +69,16 @@ bool CBP(char* requete, char* reponse, int socket)
 	// LOGOUT
 	if (strcmp(ptr, "LOGOUT") == 0)
 	{
-		RemoveClient(socket);
-
 		char nom[50], prenom[50], numPatient[50];
 		strcpy(nom, strtok(NULL, "#"));
         strcpy(prenom, strtok(NULL, "#"));
         strcpy(numPatient, strtok(NULL, "#"));
+
+        char infoClient[MAX_SIZE_REQUETE];
+
+		sprintf(infoClient, "%d;%s;%s;%d", socket, nom, prenom, atoi(numPatient));
+
+		RemoveClient(infoClient);
 
         printf("\t[THREAD %lu] LOGOUT de %s %s\n", pthread_self(), nom, prenom);
 
@@ -165,6 +173,14 @@ bool CBP(char* requete, char* reponse, int socket)
 
         if (rep != NULL)
         	sprintf(reponse, "%s", rep);
+	}
+
+	// GETPATIENTCONNECTE
+	if (strcmp(ptr, "GETPATIENTCONNECTE") == 0)
+	{
+		char* rep = getPatientConnecte();
+		
+		sprintf(reponse, "%s", rep);
 	}
 
 	return true;
@@ -374,7 +390,12 @@ int isPresent(int socket)
 
     for (int i = 0; i < nbClients; i++)
     {
-        if (clients[i] == socket)
+    	char temp[MAX_SIZE_REQUETE];
+		strcpy(temp, clients[i]);
+
+		char *ptr = strtok(temp, ";");
+
+        if (strcmp(ptr, socket) == 0)
         {
             indice = i;
             break;
@@ -388,11 +409,13 @@ int isPresent(int socket)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void AddClient(int socket)
+void AddClient(int socket, char* infoClient)
 {
     pthread_mutex_lock(&mutexClients);
 
-    clients[nbClients] = socket;
+    strcpy(clients[nbClients], infoClient)
+
+    //clients[nbClients] = socket;
     nbClients++;
 
     pthread_mutex_unlock(&mutexClients);
@@ -413,6 +436,22 @@ void RemoveClient(int socket)
     nbClients--;
 
     pthread_mutex_unlock(&mutexClients);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+char* getPatientConnecte()
+{
+	char* temp[MAX_SIZE_REPONSE];
+
+	pthread_mutex_lock(&mutexClients);
+
+	for (int i = 0; i < nbClients; i++)
+	{
+		strcat(clients[i], "#");
+	}
+
+	pthread_mutex_unlock(&mutexClients);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

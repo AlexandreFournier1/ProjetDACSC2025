@@ -17,7 +17,13 @@ bool ACBP(char* requete, char* reponse, int socket)
 	// LIST_CLIENTS
 	if (strcmp(ptr, "LIST_CLIENTS") == 0)
 	{
-		
+		char* req[512], rep[4096];
+
+		strcpy(req, "GETPATIENTCONNECTE");
+
+		CBP(req, rep, socket);
+
+		sprintf(reponse, "%s", rep);
 	}
 }
 
