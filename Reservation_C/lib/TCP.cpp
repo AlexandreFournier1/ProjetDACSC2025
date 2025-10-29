@@ -121,33 +121,44 @@ int ClientSocket(char* ipServeur,int portServeur)
 	// Construction de l'adresse du serveur
 
 	struct addrinfo hints;
-	struct addrinfo *results;
+	struct addrinfo *results = NULL;
 	memset(&hints, 0, sizeof(struct addrinfo));
+
+	printf("[DEBUG ClientSocket] Checkpoint 1\n");
 
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_NUMERICSERV;
+
+	printf("[DEBUG ClientSocket] Checkpoint 2\n");
 
 	char portStr[10];
 	sprintf(portStr, "%d", portServeur);
 
 	if (getaddrinfo(ipServeur, portStr, &hints, &results) != 0)
 	{
+		printf("[DEBUG ClientSocket] Checkpoint dans getaddrinfo\n");
 		perror("Erreur de getaddrinfo()");
 		close(fdClient);
 		return -1;
 	}
 
+	printf("[DEBUG ClientSocket] Checkpoint 3\n");
+
 	// Demande de connexion
 
-	if (connect(fdClient, results->ai_addr, results->ai_addrlen) == -1)
+	if (connect(fdClient, (struct sockaddr*) results->ai_addr, results->ai_addrlen) == -1)
 	{
 		perror("Erreur de connect()");
 		close(fdClient);
 		return -1;
 	}
 
+	printf("[DEBUG ClientSocket] Checkpoint 4\n");
+
 	printf("connect() reussi !\n");
+
+	freeaddrinfo(results);
 
 	return fdClient;
 }

@@ -2,6 +2,6 @@
 #define ACBP_H
 
 bool ACBP(char* requete, char* reponse, int socket);
-char* ACBP_LIST_CLIENTS();
+char* ACBP_LIST_CLIENTS(char* patients);
 
 #endif

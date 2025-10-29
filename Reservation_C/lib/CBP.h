@@ -22,4 +22,7 @@ char* CBP_BookConsultation(int consulationId, char* reason);
 char* CBP_BookConsultation(int consultationId, char* nom, char* prenom, char* reason);
 void CBP_Close();
 
+// Fonctions supplémentaires
+char* getPatientConnecte();
+
 #endif

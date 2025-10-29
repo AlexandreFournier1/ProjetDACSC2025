@@ -17,11 +17,18 @@ pthread_mutex_t mutexClients = PTHREAD_MUTEX_INITIALIZER;
 // Solution mutex
 char requete[MAX_SIZE_REQUETE], rep[MAX_SIZE_REPONSE];
 
+// Connexion BD
+MYSQL* connect;
+
 // Prototypes internes
-char* AccesBD(char* requete);
+char* AccesBD(char* requete, MYSQL* connexion);
+MYSQL* ConnexionBD();
+void DeconnexionBD(MYSQL* c);
+
 int  isPresent(int socket);
-void AddClient(int socket);
+void AddClient(int socket, int id);
 void RemoveClient(int socket);
+
 int getSpecialiteId(char* specialiteName);
 int getDoctorId(char* doctorLastName, char* doctorFirstName);
 int getPatientId(char* nom, char* prenom);
@@ -49,15 +56,24 @@ bool CBP(char* requete, char* reponse, int socket)
         strcpy(prenom, strtok(NULL, "#"));
         strcpy(numPatient, strtok(NULL, "#"));
 
-        char infoClient[MAX_SIZE_REQUETE];
-
-		sprintf(infoClient, "%d;%s;%s;%d", socket, nom, prenom, atoi(numPatient));
-
-		AddClient(infoClient);
+		AddClient(socket, atoi(numPatient));
 
         printf("\t[THREAD %lu] LOGIN de %s %s\n", pthread_self(), nom, prenom);
 
         char* rep = CBP_Login(nom, prenom, atoi(numPatient));
+
+        /////////////////////////////////////////////////////////////////////////
+
+        char t[MAX_SIZE_REQUETE];
+		strcpy(t, rep);
+
+        char *p = strtok(t, "#");
+        char *status = strtok(NULL, "#");
+
+        if (status && strcmp(status, "ok") == 0)
+	        connect = ConnexionBD();
+
+	    /////////////////////////////////////////////////////////////////////////
 
         if (strcmp(rep, "") == 0)
         	printf("\t[THREAD %lu] Erreur de CBP_Login\n", pthread_self());
@@ -74,15 +90,24 @@ bool CBP(char* requete, char* reponse, int socket)
         strcpy(prenom, strtok(NULL, "#"));
         strcpy(numPatient, strtok(NULL, "#"));
 
-        char infoClient[MAX_SIZE_REQUETE];
-
-		sprintf(infoClient, "%d;%s;%s;%d", socket, nom, prenom, atoi(numPatient));
-
-		RemoveClient(infoClient);
+		RemoveClient(socket);
 
         printf("\t[THREAD %lu] LOGOUT de %s %s\n", pthread_self(), nom, prenom);
 
         char* rep = CBP_Logout(nom, prenom, atoi(numPatient));
+
+        /////////////////////////////////////////////////////////////////////////
+
+        char t[MAX_SIZE_REQUETE];
+		strcpy(t, rep);
+
+        char *p = strtok(t, "#");
+        char *status = strtok(NULL, "#");
+
+        if (status && strcmp(status, "ok") == 0)
+	        DeconnexionBD(connect);
+
+	    /////////////////////////////////////////////////////////////////////////
 
         if (strcmp(rep, "") == 0)
         	printf("\t[THREAD %lu] Erreur de CBP_Logout\n", pthread_self());
@@ -175,14 +200,6 @@ bool CBP(char* requete, char* reponse, int socket)
         	sprintf(reponse, "%s", rep);
 	}
 
-	// GETPATIENTCONNECTE
-	if (strcmp(ptr, "GETPATIENTCONNECTE") == 0)
-	{
-		char* rep = getPatientConnecte();
-		
-		sprintf(reponse, "%s", rep);
-	}
-
 	return true;
 }
 
@@ -198,18 +215,18 @@ char* CBP_Login(char* nom, char* prenom, int numPatient) // numPatient = -1 si n
   	{
   		sprintf(requete,"INSERT INTO patients (last_name, first_name) VALUES ('%s', '%s');", nom, prenom);
 
-  		AccesBD(requete);
+  		AccesBD(requete, connect);
 
   		sprintf(requete,"SELECT id FROM patients WHERE last_name = '%s' AND first_name = '%s';", nom, prenom);
 
-  		id = AccesBD(requete);
+  		id = AccesBD(requete, connect);
   	}
   	else
   		sprintf(id, "%d", numPatient);
 
   	sprintf(requete,"SELECT id FROM patients WHERE last_name = '%s' AND first_name = '%s' AND id = '%s';", nom, prenom, id);
 
-  	char* resultat = AccesBD(requete);
+  	char* resultat = AccesBD(requete, connect);
 	
 	if (resultat != NULL && strcmp(resultat, "") != 0)
 		if (numPatient == -1)
@@ -243,7 +260,7 @@ char* CBP_GetSpecialites()
 
 	sprintf(requete, "SELECT * FROM specialties;");
 
-	char *reponse = AccesBD(requete);
+	char *reponse = AccesBD(requete, connect);
 
 	if (reponse && strlen(reponse) > 0)
 		sprintf(rep, "GETSPECIALITES#%s", reponse);
@@ -262,7 +279,7 @@ char* CBP_GetDoctors()
 
     sprintf(requete, "SELECT id, last_name, first_name FROM doctors;");
 
-    char *reponse = AccesBD(requete);
+    char *reponse = AccesBD(requete, connect);
 
     if (reponse && strlen(reponse) > 0)
     {
@@ -292,7 +309,7 @@ char* CBP_SearchConsultations(int idSpecialite, int idMedecin, char* dateDebut, 
 	    "AND c.date BETWEEN '%s' AND '%s';",
 	    idSpecialite, idMedecin, dateDebut, dateFin);
 
-	char* reponse = AccesBD(requete);
+	char* reponse = AccesBD(requete, connect);
 
 	if (reponse != NULL && strcmp(reponse, "") != 0)
 		sprintf(rep, "SEARCHCONSULTATIONS#%s", reponse);
@@ -315,7 +332,7 @@ char* CBP_BookConsultation(int consultationId, char* nom, char* prenom, char* re
 
 	sprintf(requete, "UPDATE consultations SET reason = '%s', patient_id = '%d' WHERE id = '%d';", reason, idpatient, consultationId);
 
-	AccesBD(requete);
+	AccesBD(requete, connect);
     printf("Après : CBP_BookConsultationreponse\n");
 
 	sprintf(rep, "BOOKCONSULTATION#ok");
@@ -332,7 +349,10 @@ void CBP_Close()
     pthread_mutex_lock(&mutexClients);
 
     for (int i = 0; i < nbClients; i++)
-        close(clients[i]);
+    {
+    	char* ptr = strtok(clients[i], ";");
+        close(atoi(ptr));
+    }
 
     pthread_mutex_unlock(&mutexClients);
 }
@@ -340,13 +360,34 @@ void CBP_Close()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-char* AccesBD(char* requete)
+MYSQL* ConnexionBD()
+{
+	printf("Connexion a la BDD...\n");
+
+	MYSQL* connexion = mysql_init(NULL);
+	mysql_real_connect(connexion,"localhost","Student","PassStudent1_","PourStudent",0,0,0);
+
+	return connexion;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void DeconnexionBD(MYSQL* c)
+{
+	printf("Deconnexion de la BDD...\n");
+
+	mysql_close(c);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+char* AccesBD(char* requete, MYSQL* connexion)
 {
 	char* reponse = NULL;
 
 	// Connection à la BD
-  	MYSQL* connexion = mysql_init(NULL);
-  	mysql_real_connect(connexion,"localhost","Student","PassStudent1_","PourStudent",0,0,0);
+  	// MYSQL* connexion = mysql_init(NULL);
+  	// mysql_real_connect(connexion,"localhost","Student","PassStudent1_","PourStudent",0,0,0);
 
   	mysql_query(connexion,requete);
 
@@ -375,7 +416,7 @@ char* AccesBD(char* requete)
         mysql_free_result(resultat);
     }
 
-    mysql_close(connexion);
+    // mysql_close(connexion);
 
     return reponse;
 }
@@ -395,7 +436,7 @@ int isPresent(int socket)
 
 		char *ptr = strtok(temp, ";");
 
-        if (strcmp(ptr, socket) == 0)
+        if (atoi(ptr) == socket)
         {
             indice = i;
             break;
@@ -409,11 +450,11 @@ int isPresent(int socket)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void AddClient(int socket, char* infoClient)
+void AddClient(int socket, int id)
 {
     pthread_mutex_lock(&mutexClients);
 
-    strcpy(clients[nbClients], infoClient)
+    sprintf(clients[nbClients], "%d;%d", socket, id);
 
     //clients[nbClients] = socket;
     nbClients++;
@@ -442,16 +483,20 @@ void RemoveClient(int socket)
 
 char* getPatientConnecte()
 {
-	char* temp[MAX_SIZE_REPONSE];
+    char* temp = (char*)malloc(MAX_SIZE_REPONSE);
+    temp[0] = '\0';
 
-	pthread_mutex_lock(&mutexClients);
+    pthread_mutex_lock(&mutexClients);
 
-	for (int i = 0; i < nbClients; i++)
-	{
-		strcat(clients[i], "#");
-	}
+    for (int i = 0; i < nbClients; i++)
+    {
+        strcat(temp, clients[i]);
+        strcat(temp, "#"); // séparateur entre les clients
+    }
 
-	pthread_mutex_unlock(&mutexClients);
+    pthread_mutex_unlock(&mutexClients);
+
+    return temp;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -462,7 +507,7 @@ int getSpecialiteId(char* specialiteName)
 
 	sprintf(requete, "SELECT id FROM specialties WHERE name = '%s';", specialiteName);
     
-    char *reponse = AccesBD(requete);
+    char *reponse = AccesBD(requete, connect);
 
     int id = atoi(reponse);
 
@@ -479,7 +524,7 @@ int getDoctorId(char* doctorLastName, char* doctorFirstName)
 
 	sprintf(requete, "SELECT id FROM doctors WHERE last_name = '%s' and first_name = '%s';", doctorLastName, doctorFirstName);
     
-    char *reponse = AccesBD(requete);
+    char *reponse = AccesBD(requete, connect);
 
     int id = atoi(reponse);
 
@@ -496,7 +541,7 @@ int getPatientId(char* nom, char* prenom)
 
 	sprintf(requete, "SELECT id FROM patients WHERE last_name = '%s' and first_name = '%s';", nom, prenom);
 
-	char *reponse = AccesBD(requete);
+	char *reponse = AccesBD(requete, connect);
 
 	int id = atoi(reponse);
 
