@@ -51,7 +51,7 @@ char* ACBP_LIST_CLIENTS(char* patients)
 
 	char *saveptr1, *saveptr2;
 
-    char *ligne = strtok_r(temp, "#", &saveptr1);
+    char *ligne = strtok_r(tmp, "#", &saveptr1);
 
     while (ligne != NULL)
     {

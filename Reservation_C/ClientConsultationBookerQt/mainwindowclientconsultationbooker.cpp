@@ -259,8 +259,8 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 {
     //char ip[] = "192.168.150.131";
     //char ip[] = "192.168.2.128"; // IP VM Alex
-    char ip[] = "0.0.0.0";
-    //char ip[] = "127.0.0.1";
+    //char ip[] = "0.0.0.0";
+    char ip[] = "127.0.0.1";
 
     char* requete = (char*)malloc(MAX_SIZE_REQUETE), *reponse = (char*)malloc(MAX_SIZE_REPONSE);
 

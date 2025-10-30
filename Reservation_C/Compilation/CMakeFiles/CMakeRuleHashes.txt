@@ -1,3 +1,5 @@
 # Hashes of file build rules.
 95dbbc2664c8f83a58ef0c118df366b3 CMakeFiles/Consultationbooker_autogen
+96da0322db70e1c541e44ddf54e0244f CMakeFiles/ServerAdminTest_autogen
+3dd038234563c1a414773957a03ef155 CMakeFiles/ServerPatientsTest_autogen
 79ab264408a32e09beb25fdaa8094d58 CMakeFiles/Server_Reservation_autogen
