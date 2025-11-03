@@ -7,6 +7,10 @@
 #include <sys/socket.h> 
 #include <netdb.h> 
 
+#include <arpa/inet.h>    // inet_pton
+#include <netinet/in.h>   // sockaddr_in
+#include <errno.h>
+
 int ServerSocket(int port)
 {
 	int fd;
@@ -102,54 +106,131 @@ int Accept(int sEcoute,char *ipClient)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int ClientSocket(char* ipServeur,int portServeur)
-{
-	int fdClient;
+// int ClientSocket(char* ipServeur,int portServeur)
+// {
+// 	int fdClient;
 
-	// Création de la socket
+// 	if (strcmp(ipServeur, "0.0.0.0") == 0) 
+// 	{
+// 	    fprintf(stderr, "[ERREUR] '0.0.0.0' est une adresse invalide pour un client. Utilise '127.0.0.1' à la place.\n");
+// 	    return -1;
+// 	}
 
-	printf("Creation d'un Socket Client\n");
+// 	printf("[DEBUG ClientSocket] IP Serveur = %s\n", ipServeur);
+// 	printf("[DEBUG ClientSocket] Port Serveur = %d\n", portServeur);
 
-	if ((fdClient = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-	{
-		perror("Erreur de socket()");
-		return -1;
-	}
+// 	// Création de la socket
 
-	printf("Socket cree = %d\n", fdClient);
+// 	printf("Creation d'un Socket Client\n");
+
+// 	if ((fdClient = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+// 	{
+// 		perror("Erreur de socket()");
+// 		return -1;
+// 	}
+
+// 	printf("Socket cree = %d\n", fdClient);
 	
-	// Construction de l'adresse du serveur
+// 	// Construction de l'adresse du serveur
 
-	struct addrinfo hints;
-	struct addrinfo *results;
-	memset(&hints, 0, sizeof(struct addrinfo));
+// 	struct addrinfo hints;
+// 	struct addrinfo *results = NULL;
+// 	memset(&hints, 0, sizeof(struct addrinfo));
 
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_NUMERICSERV;
+// 	printf("[DEBUG ClientSocket] Checkpoint 1\n");
 
-	char portStr[10];
-	sprintf(portStr, "%d", portServeur);
+// 	hints.ai_family = AF_INET;
+// 	hints.ai_socktype = SOCK_STREAM;
+// 	hints.ai_flags = AI_NUMERICSERV;
 
-	if (getaddrinfo(ipServeur, portStr, &hints, &results) != 0)
-	{
-		perror("Erreur de getaddrinfo()");
-		close(fdClient);
-		return -1;
-	}
+// 	printf("[DEBUG ClientSocket] Checkpoint 2\n");
 
-	// Demande de connexion
+// 	char portStr[10];
+// 	sprintf(portStr, "%d", portServeur);
 
-	if (connect(fdClient, results->ai_addr, results->ai_addrlen) == -1)
-	{
-		perror("Erreur de connect()");
-		close(fdClient);
-		return -1;
-	}
+// 	int err = getaddrinfo(ipServeur, portStr, &hints, &results);
+// 	if (err != 0)
+// 	{
+// 	    fprintf(stderr, "Erreur de getaddrinfo(): %s\n", gai_strerror(err));
+// 	    close(fdClient);
+// 	    return -1;
+// 	}
 
-	printf("connect() reussi !\n");
+// 	printf("[DEBUG ClientSocket] Résultats getaddrinfo :\n");
+//     printf("  results = %p\n", (void*)results);
 
-	return fdClient;
+// 	printf("[DEBUG ClientSocket] Checkpoint 33\n");
+
+//     printf("  ai_family = %d, ai_socktype = %d, ai_protocol = %d\n",results->ai_family, results->ai_socktype, results->ai_protocol);
+
+//    	printf("[DEBUG ClientSocket] Checkpoint 4\n");
+
+//     printf("  ai_addr = %p, ai_addrlen = %d\n", (void*)results->ai_addr, (int)results->ai_addrlen);
+
+// 	printf("[DEBUG ClientSocket] Checkpoint 5\n");
+
+// 	// Demande de connexion
+
+// 	if (connect(fdClient, results->ai_addr, results->ai_addrlen) == -1)
+// 	{
+// 		printf("[DEBUG ClientSocket] Checkpoint dans connect\n");
+// 		perror("Erreur de connect()");
+// 		close(fdClient);
+// 		return -1;
+// 	}
+
+// 	printf("[DEBUG ClientSocket] Checkpoint 6\n");
+
+// 	printf("connect() reussi !\n");
+
+// 	freeaddrinfo(results);
+
+// 	return fdClient;
+// }
+
+int ClientSocket(char* ipServeur, int portServeur)
+{
+    if (!ipServeur) return -1;
+
+    if (strcmp(ipServeur, "0.0.0.0") == 0) 
+    {
+        fprintf(stderr, "[ERREUR] '0.0.0.0' est une adresse invalide pour un client. Utilise '127.0.0.1' à la place.\n");
+        return -1;
+    }
+
+    printf("[DEBUG ClientSocket] IP Serveur = %s\n", ipServeur);
+    printf("[DEBUG ClientSocket] Port Serveur = %d\n", portServeur);
+
+    int fdClient = socket(AF_INET, SOCK_STREAM, 0);
+    if (fdClient == -1)
+    {
+        perror("Erreur de socket()");
+        return -1;
+    }
+    printf("Socket cree = %d\n", fdClient);
+
+    struct sockaddr_in srv;
+    memset(&srv, 0, sizeof(srv));
+    srv.sin_family = AF_INET;
+    srv.sin_port = htons((uint16_t)portServeur);
+
+    if (inet_pton(AF_INET, ipServeur, &srv.sin_addr) != 1)
+    {
+        fprintf(stderr, "Erreur inet_pton() pour l'adresse %s\n", ipServeur);
+        close(fdClient);
+        return -1;
+    }
+
+    // Tentative de connexion
+    if (connect(fdClient, (struct sockaddr*)&srv, sizeof(srv)) == -1)
+    {
+        perror("Erreur de connect()");
+        close(fdClient);
+        return -1;
+    }
+
+    printf("connect() reussi !\n");
+    return fdClient;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

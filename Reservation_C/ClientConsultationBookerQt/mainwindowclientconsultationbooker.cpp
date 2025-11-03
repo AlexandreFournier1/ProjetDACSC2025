@@ -258,7 +258,10 @@ int sClient;
 void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 {
     //char ip[] = "192.168.150.131";
-    char ip[] = "0.0.0.0";
+    //char ip[] = "192.168.2.128"; // IP VM Alex
+    //char ip[] = "0.0.0.0";
+    char ip[] = "127.0.0.1";
+
     char* requete = (char*)malloc(MAX_SIZE_REQUETE), *reponse = (char*)malloc(MAX_SIZE_REPONSE);
 
     // Connexion sur le serveur
@@ -289,21 +292,46 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
 
     sprintf(requete, "LOGIN#%s#%s#%d", lastName.c_str(), firstName.c_str(), patientId);
 
+    printf("[DEBUG] Checkpoint 1 : requete\n");
+
     Echange(requete, reponse);
 
     char *ptr = strtok(reponse, "#");
+
+    printf("[DEBUG] Checkpoint 2 : %s\n", ptr);
 
     if (ptr && strcmp(ptr, "LOGIN") == 0)
     {
         char *status = strtok(NULL, "#");
         if (status && strcmp(status, "ok") == 0)
         {
-            dialogMessage("Success", "Login réussi !");
+            if (newPatient)
+            {
+                char* newId = strtok(NULL, "#");
+                char message[100];
+
+                sprintf(message, "Nouveau Patient créé !\nId = %s", newId);
+
+                dialogMessage("Success", message);
+            }
+            else
+                dialogMessage("Success", "Login réussi !");
+            
             loginOk();
 
+            printf("[DEBUG] Checkpoint 3\n");
+
             specialitiesInitialisation();
+
+            printf("[DEBUG] Checkpoint 4\n");
+
             doctorsInitialisation();
+
+            printf("[DEBUG] Checkpoint 5\n");
+
             clearTableConsultations();
+
+            printf("[DEBUG] Checkpoint 6\n");
         }
         else
         {
