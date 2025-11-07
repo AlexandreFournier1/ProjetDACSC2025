@@ -1,23 +1,20 @@
-package hepl.dacsc;
+package hepl.dacsc.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.*;
 
 public class ClientAdmin extends JFrame {
     public ClientAdmin() {
-        setTitle("Client Admin");
+        super("Client Admin");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800,500);
+        setSize(300,300);
 
         JPanel panel = new JPanel();
         setContentPane(panel);
         panel.setLayout(new FlowLayout());
 
         JButton patientsButton = new JButton();
-        patientsButton.setText("Show Patients");
-        patientsButton.setHorizontalAlignment(SwingConstants.LEFT);
-        //patientsButton.setHorizontalTextPosition(SwingConstants.LEFT);
+        patientsButton.setText("Connexion");
 
         panel.add(patientsButton);
     }

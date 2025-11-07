@@ -1,9 +1,8 @@
 package hepl.dacsc;
 
-import javax.swing.*;
-import java.awt.*;
+import hepl.dacsc.view.PageConnexion;
+
 import java.io.IOException;
-import java.net.Socket;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -22,8 +21,7 @@ public class Main {
 //        socket.close();
 
 
-
-        ClientAdmin clientAdmin = new ClientAdmin();
-        clientAdmin.setVisible(true);
+        PageConnexion pageConnexion = new PageConnexion();
+        pageConnexion.setVisible(true);
     }
 }
