@@ -14,7 +14,7 @@ public class ClientAdmin extends JFrame {
         panel.setLayout(new FlowLayout());
 
         JButton patientsButton = new JButton();
-        patientsButton.setText("Connexion");
+        patientsButton.setText("Récupérer Patients");
 
         panel.add(patientsButton);
     }

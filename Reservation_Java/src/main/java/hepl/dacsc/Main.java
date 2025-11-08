@@ -20,7 +20,10 @@ public class Main {
 //
 //        socket.close();
 
-
+//        RequeteAdmin admin = new RequeteAdmin();
+//        admin.Connexion();
+//        String rep = admin.GetLoggedPatient();
+//        System.out.println(rep);
         PageConnexion pageConnexion = new PageConnexion();
         pageConnexion.setVisible(true);
     }
