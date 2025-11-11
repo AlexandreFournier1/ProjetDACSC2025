@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB
 
-CXX_INCLUDES = -I/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/Consultationbooker_autogen/include -I/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C -I/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/ClientConsultationBookerQt -I/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib -I/usr/include/mysql -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtCore -isystem /usr/lib64/qt5/mkspecs/linux-g++
+CXX_INCLUDES = -I"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/Consultationbooker_autogen/include" -I"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C" -I"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/ClientConsultationBookerQt" -I"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib" -I/usr/include/mysql -isystem /usr/include/qt5 -isystem /usr/include/qt5/QtWidgets -isystem /usr/include/qt5/QtGui -isystem /usr/include/qt5/QtCore -isystem /usr/lib64/qt5/mkspecs/linux-g++
 
 CXX_FLAGS = -Wall -Wextra -Wpedantic -fPIC -std=gnu++17
 

@@ -34,6 +34,19 @@ add_executable(Consultationbooker
 # Ajout ici du lien vers MySQL
 target_link_libraries(Consultationbooker PRIVATE Qt5::Widgets pthread /usr/lib64/mysql/libmysqlclient.so)
 
+# ---------- ClientTest ----------
+add_executable(ClientTest
+    ClientTest.cpp
+    lib/TCP.cpp
+    lib/CBP.cpp
+    lib/TCP.h
+    lib/CBP.h
+)
+
+target_include_directories(ClientTest PRIVATE lib)
+target_link_libraries(ClientTest PRIVATE pthread)
+target_link_libraries(ClientTest PRIVATE pthread /usr/lib64/mysql/libmysqlclient.so)
+
 # ---------- Serveur ----------
 add_executable(Server_Reservation
     Server_Reservation.cpp
@@ -77,7 +90,7 @@ target_link_libraries(ServerPatientsTest PRIVATE pthread)
 target_link_libraries(ServerPatientsTest PRIVATE pthread /usr/lib64/mysql/libmysqlclient.so)
 
 # ---------- Output directory ----------
-set_target_properties(Consultationbooker Server_Reservation ServerPatientsTest ServerAdminTest
+set_target_properties(Consultationbooker ClientTest Server_Reservation ServerPatientsTest ServerAdminTest
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )

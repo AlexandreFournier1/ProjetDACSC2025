@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C
+CMAKE_SOURCE_DIR = "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation
+CMAKE_BINARY_DIR = "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles" "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation//CMakeFiles/progress.marks"
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -130,30 +130,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named ServerPatientsTest
+# Target rules for targets named ClientTest
 
 # Build rule for target.
-ServerPatientsTest: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ServerPatientsTest
-.PHONY : ServerPatientsTest
+ClientTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ClientTest
+.PHONY : ClientTest
 
 # fast build rule for target.
-ServerPatientsTest/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/build
-.PHONY : ServerPatientsTest/fast
-
-#=============================================================================
-# Target rules for targets named ServerAdminTest
-
-# Build rule for target.
-ServerAdminTest: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ServerAdminTest
-.PHONY : ServerAdminTest
-
-# fast build rule for target.
-ServerAdminTest/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/build
-.PHONY : ServerAdminTest/fast
+ClientTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/build
+.PHONY : ClientTest/fast
 
 #=============================================================================
 # Target rules for targets named Consultationbooker
@@ -182,30 +169,43 @@ Server_Reservation/fast:
 .PHONY : Server_Reservation/fast
 
 #=============================================================================
-# Target rules for targets named ServerPatientsTest_autogen
+# Target rules for targets named ServerAdminTest
 
 # Build rule for target.
-ServerPatientsTest_autogen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ServerPatientsTest_autogen
-.PHONY : ServerPatientsTest_autogen
+ServerAdminTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ServerAdminTest
+.PHONY : ServerAdminTest
 
 # fast build rule for target.
-ServerPatientsTest_autogen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest_autogen.dir/build.make CMakeFiles/ServerPatientsTest_autogen.dir/build
-.PHONY : ServerPatientsTest_autogen/fast
+ServerAdminTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/build
+.PHONY : ServerAdminTest/fast
 
 #=============================================================================
-# Target rules for targets named ServerAdminTest_autogen
+# Target rules for targets named ServerPatientsTest
 
 # Build rule for target.
-ServerAdminTest_autogen: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ServerAdminTest_autogen
-.PHONY : ServerAdminTest_autogen
+ServerPatientsTest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ServerPatientsTest
+.PHONY : ServerPatientsTest
 
 # fast build rule for target.
-ServerAdminTest_autogen/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest_autogen.dir/build.make CMakeFiles/ServerAdminTest_autogen.dir/build
-.PHONY : ServerAdminTest_autogen/fast
+ServerPatientsTest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/build
+.PHONY : ServerPatientsTest/fast
+
+#=============================================================================
+# Target rules for targets named ClientTest_autogen
+
+# Build rule for target.
+ClientTest_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ClientTest_autogen
+.PHONY : ClientTest_autogen
+
+# fast build rule for target.
+ClientTest_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest_autogen.dir/build.make CMakeFiles/ClientTest_autogen.dir/build
+.PHONY : ClientTest_autogen/fast
 
 #=============================================================================
 # Target rules for targets named Consultationbooker_autogen
@@ -232,6 +232,32 @@ Server_Reservation_autogen: cmake_check_build_system
 Server_Reservation_autogen/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation_autogen.dir/build.make CMakeFiles/Server_Reservation_autogen.dir/build
 .PHONY : Server_Reservation_autogen/fast
+
+#=============================================================================
+# Target rules for targets named ServerAdminTest_autogen
+
+# Build rule for target.
+ServerAdminTest_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ServerAdminTest_autogen
+.PHONY : ServerAdminTest_autogen
+
+# fast build rule for target.
+ServerAdminTest_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest_autogen.dir/build.make CMakeFiles/ServerAdminTest_autogen.dir/build
+.PHONY : ServerAdminTest_autogen/fast
+
+#=============================================================================
+# Target rules for targets named ServerPatientsTest_autogen
+
+# Build rule for target.
+ServerPatientsTest_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ServerPatientsTest_autogen
+.PHONY : ServerPatientsTest_autogen
+
+# fast build rule for target.
+ServerPatientsTest_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest_autogen.dir/build.make CMakeFiles/ServerPatientsTest_autogen.dir/build
+.PHONY : ServerPatientsTest_autogen/fast
 
 ClientConsultationBookerQt/main.o: ClientConsultationBookerQt/main.cpp.o
 
@@ -286,6 +312,60 @@ ClientConsultationBookerQt/mainwindowclientconsultationbooker.s: ClientConsultat
 ClientConsultationBookerQt/mainwindowclientconsultationbooker.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/ClientConsultationBookerQt/mainwindowclientconsultationbooker.cpp.s
 .PHONY : ClientConsultationBookerQt/mainwindowclientconsultationbooker.cpp.s
+
+ClientTest.o: ClientTest.cpp.o
+
+.PHONY : ClientTest.o
+
+# target to build an object file
+ClientTest.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/ClientTest.cpp.o
+.PHONY : ClientTest.cpp.o
+
+ClientTest.i: ClientTest.cpp.i
+
+.PHONY : ClientTest.i
+
+# target to preprocess a source file
+ClientTest.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/ClientTest.cpp.i
+.PHONY : ClientTest.cpp.i
+
+ClientTest.s: ClientTest.cpp.s
+
+.PHONY : ClientTest.s
+
+# target to generate assembly for a file
+ClientTest.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/ClientTest.cpp.s
+.PHONY : ClientTest.cpp.s
+
+ClientTest_autogen/mocs_compilation.o: ClientTest_autogen/mocs_compilation.cpp.o
+
+.PHONY : ClientTest_autogen/mocs_compilation.o
+
+# target to build an object file
+ClientTest_autogen/mocs_compilation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/ClientTest_autogen/mocs_compilation.cpp.o
+.PHONY : ClientTest_autogen/mocs_compilation.cpp.o
+
+ClientTest_autogen/mocs_compilation.i: ClientTest_autogen/mocs_compilation.cpp.i
+
+.PHONY : ClientTest_autogen/mocs_compilation.i
+
+# target to preprocess a source file
+ClientTest_autogen/mocs_compilation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/ClientTest_autogen/mocs_compilation.cpp.i
+.PHONY : ClientTest_autogen/mocs_compilation.cpp.i
+
+ClientTest_autogen/mocs_compilation.s: ClientTest_autogen/mocs_compilation.cpp.s
+
+.PHONY : ClientTest_autogen/mocs_compilation.s
+
+# target to generate assembly for a file
+ClientTest_autogen/mocs_compilation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/ClientTest_autogen/mocs_compilation.cpp.s
+.PHONY : ClientTest_autogen/mocs_compilation.cpp.s
 
 Consultationbooker_autogen/mocs_compilation.o: Consultationbooker_autogen/mocs_compilation.cpp.o
 
@@ -482,9 +562,9 @@ lib/ACBP.o: lib/ACBP.cpp.o
 
 # target to build an object file
 lib/ACBP.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/ACBP.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/ACBP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/ACBP.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/ACBP.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/ACBP.cpp.o
 .PHONY : lib/ACBP.cpp.o
 
 lib/ACBP.i: lib/ACBP.cpp.i
@@ -493,9 +573,9 @@ lib/ACBP.i: lib/ACBP.cpp.i
 
 # target to preprocess a source file
 lib/ACBP.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/ACBP.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/ACBP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/ACBP.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/ACBP.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/ACBP.cpp.i
 .PHONY : lib/ACBP.cpp.i
 
 lib/ACBP.s: lib/ACBP.cpp.s
@@ -504,9 +584,9 @@ lib/ACBP.s: lib/ACBP.cpp.s
 
 # target to generate assembly for a file
 lib/ACBP.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/ACBP.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/ACBP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/ACBP.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/ACBP.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/ACBP.cpp.s
 .PHONY : lib/ACBP.cpp.s
 
 lib/CBP.o: lib/CBP.cpp.o
@@ -515,10 +595,11 @@ lib/CBP.o: lib/CBP.cpp.o
 
 # target to build an object file
 lib/CBP.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/CBP.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/CBP.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/lib/CBP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/CBP.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/CBP.cpp.o
 .PHONY : lib/CBP.cpp.o
 
 lib/CBP.i: lib/CBP.cpp.i
@@ -527,10 +608,11 @@ lib/CBP.i: lib/CBP.cpp.i
 
 # target to preprocess a source file
 lib/CBP.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/CBP.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/CBP.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/lib/CBP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/CBP.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/CBP.cpp.i
 .PHONY : lib/CBP.cpp.i
 
 lib/CBP.s: lib/CBP.cpp.s
@@ -539,10 +621,11 @@ lib/CBP.s: lib/CBP.cpp.s
 
 # target to generate assembly for a file
 lib/CBP.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/CBP.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/CBP.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/lib/CBP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/CBP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/CBP.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/CBP.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/CBP.cpp.s
 .PHONY : lib/CBP.cpp.s
 
 lib/TCP.o: lib/TCP.cpp.o
@@ -551,10 +634,11 @@ lib/TCP.o: lib/TCP.cpp.o
 
 # target to build an object file
 lib/TCP.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/TCP.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/TCP.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/lib/TCP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/TCP.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/TCP.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/TCP.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/TCP.cpp.o
 .PHONY : lib/TCP.cpp.o
 
 lib/TCP.i: lib/TCP.cpp.i
@@ -563,10 +647,11 @@ lib/TCP.i: lib/TCP.cpp.i
 
 # target to preprocess a source file
 lib/TCP.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/TCP.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/TCP.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/lib/TCP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/TCP.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/TCP.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/TCP.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/TCP.cpp.i
 .PHONY : lib/TCP.cpp.i
 
 lib/TCP.s: lib/TCP.cpp.s
@@ -575,10 +660,11 @@ lib/TCP.s: lib/TCP.cpp.s
 
 # target to generate assembly for a file
 lib/TCP.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/TCP.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/TCP.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ClientTest.dir/build.make CMakeFiles/ClientTest.dir/lib/TCP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Consultationbooker.dir/build.make CMakeFiles/Consultationbooker.dir/lib/TCP.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server_Reservation.dir/build.make CMakeFiles/Server_Reservation.dir/lib/TCP.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerAdminTest.dir/build.make CMakeFiles/ServerAdminTest.dir/lib/TCP.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ServerPatientsTest.dir/build.make CMakeFiles/ServerPatientsTest.dir/lib/TCP.cpp.s
 .PHONY : lib/TCP.cpp.s
 
 # Help Target
@@ -589,10 +675,12 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... ClientTest_autogen"
 	@echo "... Consultationbooker_autogen"
 	@echo "... ServerAdminTest_autogen"
 	@echo "... ServerPatientsTest_autogen"
 	@echo "... Server_Reservation_autogen"
+	@echo "... ClientTest"
 	@echo "... Consultationbooker"
 	@echo "... ServerAdminTest"
 	@echo "... ServerPatientsTest"
@@ -603,6 +691,12 @@ help:
 	@echo "... ClientConsultationBookerQt/mainwindowclientconsultationbooker.o"
 	@echo "... ClientConsultationBookerQt/mainwindowclientconsultationbooker.i"
 	@echo "... ClientConsultationBookerQt/mainwindowclientconsultationbooker.s"
+	@echo "... ClientTest.o"
+	@echo "... ClientTest.i"
+	@echo "... ClientTest.s"
+	@echo "... ClientTest_autogen/mocs_compilation.o"
+	@echo "... ClientTest_autogen/mocs_compilation.i"
+	@echo "... ClientTest_autogen/mocs_compilation.s"
 	@echo "... Consultationbooker_autogen/mocs_compilation.o"
 	@echo "... Consultationbooker_autogen/mocs_compilation.i"
 	@echo "... Consultationbooker_autogen/mocs_compilation.s"

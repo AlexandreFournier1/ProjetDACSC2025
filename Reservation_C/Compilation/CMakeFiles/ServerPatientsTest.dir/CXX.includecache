@@ -10,9 +10,9 @@
 
 ../lib/TCP.h
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/ServerPatientsTest_autogen/mocs_compilation.cpp
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/ServerPatientsTest_autogen/mocs_compilation.cpp
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/ServerPatientsTest.cpp
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/ServerPatientsTest.cpp
 stdio.h
 -
 stdlib.h
@@ -26,15 +26,15 @@ signal.h
 pthread.h
 -
 TCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/TCP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/TCP.h
 CBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/CBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/CBP.h
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/ACBP.cpp
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/ACBP.cpp
 ACBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h
 CBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
 mysql/mysql.h
 -
 string.h
@@ -48,11 +48,11 @@ unistd.h
 pthread.h
 -
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.cpp
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.cpp
 CBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
 mysql/mysql.h
 -
 string.h
@@ -66,11 +66,11 @@ unistd.h
 pthread.h
 -
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/TCP.cpp
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/TCP.cpp
 TCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/TCP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/TCP.h
 stdio.h
 -
 unistd.h
@@ -92,5 +92,5 @@ netinet/in.h
 errno.h
 -
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/TCP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/TCP.h
 
