@@ -1,0 +1,27 @@
+# =========================
+# Mini Makefile - ClientTestEnC
+# =========================
+
+# Compilateur
+CXX = g++
+
+# Flags
+CXXFLAGS = -Ilib -Wall -Wextra -std=c++17
+
+# Sources
+SRC = ClientTestEnC.c lib/TCP.cpp
+
+# Exécutable
+BIN = ClientTestEnC
+
+# Règle principale
+all: $(BIN)
+
+$(BIN): $(SRC)
+	$(CXX) $(CXXFLAGS) -o $@ $(SRC)
+
+# Nettoyage
+clean:
+	rm -f $(BIN) *.o
+
+.PHONY: all clean

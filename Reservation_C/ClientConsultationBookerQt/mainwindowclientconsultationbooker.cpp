@@ -270,6 +270,7 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
         perror("Erreur de ClientSocket");
         exit(1);
     }
+    
     printf("Connecte sur le serveur.\n");
 
     string lastName = this->getLastName();

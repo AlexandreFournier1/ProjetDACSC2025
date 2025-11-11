@@ -6,19 +6,21 @@
 
 #IncludeRegexTransform: 
 
-/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/ClientTest.cpp
-stdio.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.cpp
+CBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
+mysql/mysql.h
 -
 string.h
+-
+stdio.h
 -
 stdlib.h
 -
 unistd.h
 -
-netdb.h
+pthread.h
 -
-signal.h
--
-sys/socket.h
--
+
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
 
