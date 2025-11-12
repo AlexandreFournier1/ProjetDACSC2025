@@ -6,39 +6,9 @@
 
 #IncludeRegexTransform: 
 
-../lib/ACBP.h
-
-../lib/CBP.h
-
-../lib/TCP.h
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/ServerAdminTest_autogen/mocs_compilation.cpp
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/ServerAdminTest.cpp
-stdio.h
--
-stdlib.h
--
-unistd.h
--
-string.h
--
-signal.h
--
-pthread.h
--
-TCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/TCP.h
-ACBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/ACBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.cpp
 CBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/CBP.h
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/ACBP.cpp
-ACBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h
-CBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
 mysql/mysql.h
 -
 string.h
@@ -52,49 +22,5 @@ unistd.h
 pthread.h
 -
 
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.cpp
-CBP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
-mysql/mysql.h
--
-string.h
--
-stdio.h
--
-stdlib.h
--
-unistd.h
--
-pthread.h
--
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/TCP.cpp
-TCP.h
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/TCP.h
-stdio.h
--
-unistd.h
--
-stdlib.h
--
-string.h
--
-sys/types.h
--
-sys/socket.h
--
-netdb.h
--
-arpa/inet.h
--
-netinet/in.h
--
-errno.h
--
-
-/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/TCP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
 

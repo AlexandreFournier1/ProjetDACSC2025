@@ -1,33 +1,33 @@
 {
-	"BUILD_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/ServerAdminTest_autogen",
-	"CMAKE_BINARY_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation",
-	"CMAKE_CURRENT_BINARY_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation",
-	"CMAKE_CURRENT_SOURCE_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C",
+	"BUILD_DIR" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/ServerAdminTest_autogen",
+	"CMAKE_BINARY_DIR" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C",
 	"CMAKE_EXECUTABLE" : "/usr/bin/cmake",
-	"CMAKE_SOURCE_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C",
+	"CMAKE_SOURCE_DIR" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C",
 	"DEP_FILE" : "",
 	"DEP_FILE_RULE_NAME" : "",
 	"HEADERS" : 
 	[
 		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h",
+			"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h",
 			"Mu",
 			"ZJOKMXDKB7/moc_ACBP.cpp"
 		],
 		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.h",
+			"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h",
 			"Mu",
 			"ZJOKMXDKB7/moc_CBP.cpp"
 		],
 		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/TCP.h",
+			"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/TCP.h",
 			"Mu",
 			"ZJOKMXDKB7/moc_TCP.cpp"
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/ServerAdminTest_autogen/include",
-	"MOC_COMPILATION_FILE" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/ServerAdminTest_autogen/mocs_compilation.cpp",
+	"INCLUDE_DIR" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/ServerAdminTest_autogen/include",
+	"MOC_COMPILATION_FILE" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/ServerAdminTest_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : [],
 	"MOC_DEPEND_FILTERS" : 
 	[
@@ -38,9 +38,9 @@
 	],
 	"MOC_INCLUDES" : 
 	[
-		"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C",
-		"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/ClientConsultationBookerQt",
-		"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib",
+		"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C",
+		"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/ClientConsultationBookerQt",
+		"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib",
 		"/usr/include/mysql",
 		"/usr/include/c++/8",
 		"/usr/include/c++/8/x86_64-redhat-linux",
@@ -60,36 +60,38 @@
 		"-c",
 		"/usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp"
 	],
-	"MOC_PREDEFS_FILE" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/ServerAdminTest_autogen/moc_predefs.h",
+	"MOC_PREDEFS_FILE" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/ServerAdminTest_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : 
 	[
-		"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/ServerPatientsTest_autogen/mocs_compilation.cpp"
+		"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/ClientTest_autogen/mocs_compilation.cpp",
+		"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/Consultationbooker_autogen/mocs_compilation.cpp",
+		"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/Server_Reservation_autogen/mocs_compilation.cpp"
 	],
 	"MULTI_CONFIG" : false,
 	"PARALLEL" : 1,
-	"PARSE_CACHE_FILE" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/ServerAdminTest_autogen.dir/ParseCache.txt",
+	"PARSE_CACHE_FILE" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/ServerAdminTest_autogen.dir/ParseCache.txt",
 	"QT_MOC_EXECUTABLE" : "/usr/lib64/qt5/bin/moc",
 	"QT_UIC_EXECUTABLE" : "",
 	"QT_VERSION_MAJOR" : 5,
 	"QT_VERSION_MINOR" : 12,
-	"SETTINGS_FILE" : "/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/ServerAdminTest_autogen.dir/AutogenUsed.txt",
+	"SETTINGS_FILE" : "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/ServerAdminTest_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
 		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/ServerAdminTest.cpp",
+			"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/ServerAdminTest.cpp",
 			"Mu"
 		],
 		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/ACBP.cpp",
+			"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/ACBP.cpp",
 			"Mu"
 		],
 		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/CBP.cpp",
+			"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.cpp",
 			"Mu"
 		],
 		[
-			"/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/lib/TCP.cpp",
+			"/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/TCP.cpp",
 			"Mu"
 		]
 	],

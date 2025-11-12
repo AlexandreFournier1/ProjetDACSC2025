@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C
+CMAKE_SOURCE_DIR = "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation
+CMAKE_BINARY_DIR = "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation"
 
 # Utility rule file for ServerAdminTest_autogen.
 
@@ -73,8 +73,8 @@ CMAKE_BINARY_DIR = /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservatio
 include CMakeFiles/ServerAdminTest_autogen.dir/progress.make
 
 CMakeFiles/ServerAdminTest_autogen:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC for target ServerAdminTest"
-	/usr/bin/cmake -E cmake_autogen /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/ServerAdminTest_autogen.dir/AutogenInfo.json ""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir="/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC for target ServerAdminTest"
+	/usr/bin/cmake -E cmake_autogen "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/ServerAdminTest_autogen.dir/AutogenInfo.json" ""
 
 ServerAdminTest_autogen: CMakeFiles/ServerAdminTest_autogen
 ServerAdminTest_autogen: CMakeFiles/ServerAdminTest_autogen.dir/build.make
@@ -91,6 +91,6 @@ CMakeFiles/ServerAdminTest_autogen.dir/clean:
 .PHONY : CMakeFiles/ServerAdminTest_autogen.dir/clean
 
 CMakeFiles/ServerAdminTest_autogen.dir/depend:
-	cd /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation /home/student/Cours/2025-2026/Q1/DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/ServerAdminTest_autogen.dir/DependInfo.cmake --color=$(COLOR)
+	cd "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C" "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C" "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation" "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation" "/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Compilation/CMakeFiles/ServerAdminTest_autogen.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : CMakeFiles/ServerAdminTest_autogen.dir/depend
 
