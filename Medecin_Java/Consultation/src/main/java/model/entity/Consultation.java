@@ -8,16 +8,18 @@ public class Consultation extends Entity {
     private Integer patient_id;
     private LocalDate date;
     private LocalTime hour;
+    private Integer duree;
     private String reason;
 
     public Consultation() {}
 
-    public Consultation(int id, Integer doctor_id, Integer patient_id, LocalDate date, LocalTime hour, String reason) {
+    public Consultation(int id, Integer doctor_id, Integer patient_id, LocalDate date, LocalTime hour, Integer duree,String reason) {
         super(id);
         this.doctor_id = doctor_id;
         this.patient_id = patient_id;
         this.date = date;
         this.hour = hour;
+        this.duree = duree;
         this.reason = reason;
     }
     public Integer getDoctor_id() {
@@ -48,6 +50,14 @@ public class Consultation extends Entity {
 
     public void setHour(LocalTime hour) {
         this.hour = hour;
+    }
+
+    public Integer getDuree() {
+        return duree;
+    }
+
+    public void setDuree(Integer duree) {
+        this.duree = duree;
     }
 
     public String getReason() {

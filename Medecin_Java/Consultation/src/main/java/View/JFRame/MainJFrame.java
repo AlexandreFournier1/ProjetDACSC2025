@@ -3,6 +3,8 @@ package View.JFRame;
 import View.JDialog.AddConsultationJDialog;
 import View.JDialog.AddPatientJDialog;
 import View.JDialog.LoginJDialog;
+import View.JDialog.UpdateConsultationJDialog;
+import model.entity.Consultation;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -97,7 +99,7 @@ public class MainJFrame extends JFrame {
         searchPanel.add(btnSearch);
 
         //tableau
-        String[] columnNames = {"ID", "Doc ID", "Patient ID", "Date", "Heure", "Raison"};
+        String[] columnNames = {"ID", "Doc ID", "Patient ID", "Date", "Heure", "Durée", "Raison"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(tableModel);
         table.setFillsViewportHeight(true);
@@ -125,14 +127,18 @@ public class MainJFrame extends JFrame {
 
         btnSearch.addActionListener(e -> {
             String idPatient = txtIdPatient.getText().trim();
-            String date = txtDate.getText().trim();
+            String dateText = txtDate.getText().trim();
 
             tableModel.setRowCount(0);
-            tableModel.addRow(new Object[]{1, "D001", idPatient, date, "09:00", "Contrôle annuel du patient."});
-            tableModel.addRow(new Object[]{2, "D001", idPatient, date, "09:30", "Vaccination antigrippale et vérification tension artérielle."});
-            tableModel.addRow(new Object[]{3, "D001", idPatient, date, "10:00", "Suivi post-opératoire et renouvellement d’ordonnance du patient."});
 
+            // Vérification des champs
+
+            // Ajoute les lignes avec durée
+            tableModel.addRow(new Object[]{1, 1, idPatient, "2025-02-01", "09:00", 30, "Contrôle annuel du patient."});
+            tableModel.addRow(new Object[]{2, 1, idPatient, "2025-02-01", "09:30", 30, "Vaccination antigrippale et vérification tension artérielle."});
+            tableModel.addRow(new Object[]{3, 1, idPatient, "2025-02-01", "10:00", 30, "Suivi post-opératoire et renouvellement d’ordonnance."});
         });
+
 
         btnAddPatient.addActionListener(e ->{
             AddPatientJDialog addPatientJDialog = new AddPatientJDialog(this);
@@ -165,6 +171,54 @@ public class MainJFrame extends JFrame {
 
             }
         });
+
+        btnUpdateConsultation.addActionListener(e -> {
+
+            int row = table.getSelectedRow();
+
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this,
+                        "Veuillez sélectionner une consultation dans le tableau.",
+                        "Aucune sélection",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Récupération des données du tableau
+            int id = (int) tableModel.getValueAt(row, 0);
+            int docId = (int) tableModel.getValueAt(row, 1);
+            Object patientObj = tableModel.getValueAt(row, 2);
+            Integer patientId = null;
+
+            if (patientObj != null && !patientObj.toString().isEmpty()) {
+                patientId = Integer.parseInt(patientObj.toString());
+            }
+            LocalDate date = LocalDate.parse(tableModel.getValueAt(row, 3).toString());
+            LocalTime hour = LocalTime.parse(tableModel.getValueAt(row, 4).toString());
+            int duree = (int) tableModel.getValueAt(row, 5);
+            String reason = tableModel.getValueAt(row, 6).toString();
+
+            // Création de l'objet Consultation
+            Consultation c = new Consultation(id, docId, patientId, date, hour, duree,reason);
+
+            // Ouverture du JDialog
+            UpdateConsultationJDialog dialog = new UpdateConsultationJDialog(this, c);
+            dialog.setVisible(true);
+
+            // Si confirmé, mise à jour du tableau
+            if (dialog.isConfirmed()) {
+
+                tableModel.setValueAt(dialog.getDate().toString(), row, 3);
+                tableModel.setValueAt(dialog.getHour().toString(), row, 4);
+                Integer pid = dialog.getPatientId();
+                tableModel.setValueAt(pid == null ? "" : pid, row, 2);
+                tableModel.setValueAt(dialog.getDuration(), row, 5);
+                tableModel.setValueAt(dialog.getReason(), row, 6);
+
+                System.out.println("Consultation " + id + " mise à jour !");
+            }
+        });
+
     }
 
     public static void main(String[] args) {

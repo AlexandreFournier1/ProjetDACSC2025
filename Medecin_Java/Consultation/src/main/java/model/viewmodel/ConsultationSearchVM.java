@@ -9,6 +9,7 @@ public class ConsultationSearchVM {
     private Integer patient_id;
     private LocalDate date;
     private LocalTime hour;
+    private Integer duree;
     private String reason;
     
     public ConsultationSearchVM() {}
@@ -51,6 +52,14 @@ public class ConsultationSearchVM {
 
     public void setHour(LocalTime hour) {
         this.hour = hour;
+    }
+
+    public Integer getDuree() {
+        return duree;
+    }
+
+    public void setDuree(Integer duree) {
+        this.duree = duree;
     }
 
     public String getReason() {

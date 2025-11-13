@@ -41,6 +41,7 @@ public class ConsultationDAO {
                     "consultations.patient_id, " +
                     "consultations.date, " +
                     "consultations.hour, " +
+                    "consultations.duree, " +
                     "consultations.reason " +
                     "FROM consultations";
             if (csvm != null) {
@@ -60,6 +61,9 @@ public class ConsultationDAO {
                 }
                 if(csvm.getHour() != null) {
                     where += "AND consultations.hour = ? ";
+                }
+                if(csvm.getDuree() != null) {
+                    where += "AND consultations.duree = ? ";
                 }
                 if(csvm.getReason() != null) {
                     where += "AND consultations.reason = ? ";
@@ -91,6 +95,10 @@ public class ConsultationDAO {
                     paramNumber++;
                     stmt.setTime(paramNumber, Time.valueOf(csvm.getHour()));
                 }
+                if(csvm.getDuree() != null){
+                    paramNumber++;
+                    stmt.setInt(paramNumber, csvm.getDuree());
+                }
                 if (csvm.getReason() != null) {
                     paramNumber++;
                     stmt.setString(paramNumber, csvm.getReason());
@@ -102,13 +110,14 @@ public class ConsultationDAO {
             while (rs.next()) {
                 Integer consultationId = rs.getInt("id");
                 Integer doctorId = rs.getInt("doctor_id");
-                Integer patientId = rs.getInt("patient_id");
+                Integer patientId = rs.getObject("patient_id", Integer.class);
                 LocalDate date = rs.getDate("date").toLocalDate();
                 LocalTime hour = rs.getTime("hour").toLocalTime();
+                Integer duree = rs.getInt("duree");
                 String reason = rs.getString("reason");
 
                 Consultation consultation = new Consultation(consultationId, doctorId,
-                        patientId, date, hour, reason);
+                        patientId, date, hour, duree, reason);
 
                 consultations.add(consultation);
             }
@@ -132,16 +141,19 @@ public class ConsultationDAO {
                             + " patient_id = ?, "
                             + " date = ?, "
                             + " hour = ?, "
+                            + " duree = ?, "
                             + " reason = ? "
                             + " WHERE id = ?";
 
                     PreparedStatement pStmt = connectDB.getConn().prepareStatement(requete);
 
                     pStmt.setInt(1, c.getDoctor_id());
-                    pStmt.setInt(2, c.getPatient_id());
+                    pStmt.setObject(2, c.getPatient_id(), Types.INTEGER);
                     pStmt.setDate(3, Date.valueOf(c.getDate()));
                     pStmt.setTime(4, Time.valueOf(c.getHour()));
-                    pStmt.setString(5, c.getReason());
+                    pStmt.setInt(5, c.getDuree());
+                    pStmt.setString(6, c.getReason());
+                    pStmt.setInt(7, c.getId());
                     pStmt.executeUpdate();
                     pStmt.close();
 
@@ -151,20 +163,27 @@ public class ConsultationDAO {
                             + "patient_id, "
                             + "date, "
                             + "hour, "
+                            + "duree, "
+                            + "reason"
                             + ") VALUES ("
                             + "?, "
                             + "?, "
                             + "?, "
                             + "?, "
+                            + "?, "
+                            + "? "
                             + ")";
 
                     PreparedStatement pStmt = connectDB.getConn().prepareStatement(requete,
                             PreparedStatement.RETURN_GENERATED_KEYS);
 
                     pStmt.setInt(1, c.getDoctor_id());
-                    pStmt.setInt(2, c.getPatient_id());
+                    pStmt.setObject(2, c.getPatient_id(), Types.INTEGER);
                     pStmt.setDate(3, Date.valueOf(c.getDate()));
                     pStmt.setTime(4, Time.valueOf(c.getHour()));
+                    pStmt.setInt(5, c.getDuree());
+                    pStmt.setString(6, c.getReason());
+
                     pStmt.executeUpdate();
 
                     ResultSet rs = pStmt.getGeneratedKeys();
