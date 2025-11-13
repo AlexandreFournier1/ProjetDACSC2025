@@ -1,5 +1,6 @@
 package View.JFRame;
 
+import View.JDialog.AddConsultationJDialog;
 import View.JDialog.AddPatientJDialog;
 import View.JDialog.LoginJDialog;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 public class MainJFrame extends JFrame {
@@ -95,7 +97,7 @@ public class MainJFrame extends JFrame {
         searchPanel.add(btnSearch);
 
         //tableau
-        String[] columnNames = {"doc id", "patient id", "date", "heure", "reason"};
+        String[] columnNames = {"ID", "Doc ID", "Patient ID", "Date", "Heure", "Raison"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(tableModel);
         table.setFillsViewportHeight(true);
@@ -126,9 +128,9 @@ public class MainJFrame extends JFrame {
             String date = txtDate.getText().trim();
 
             tableModel.setRowCount(0);
-            tableModel.addRow(new Object[]{"D001", idPatient, date, "09:00", "Contrôle annuel du patient."});
-            tableModel.addRow(new Object[]{"D001", idPatient, date, "09:30", "Vaccination antigrippale et vérification tension artérielle."});
-            tableModel.addRow(new Object[]{"D001", idPatient, date, "10:00", "Suivi post-opératoire et renouvellement d’ordonnance du patient."});
+            tableModel.addRow(new Object[]{1, "D001", idPatient, date, "09:00", "Contrôle annuel du patient."});
+            tableModel.addRow(new Object[]{2, "D001", idPatient, date, "09:30", "Vaccination antigrippale et vérification tension artérielle."});
+            tableModel.addRow(new Object[]{3, "D001", idPatient, date, "10:00", "Suivi post-opératoire et renouvellement d’ordonnance du patient."});
 
         });
 
@@ -144,6 +146,23 @@ public class MainJFrame extends JFrame {
                 System.out.println(lastname + " " + firstname + " " + birthDate);
 
                 // Ajout DB
+            }
+        });
+
+        btnAddConsultation.addActionListener(e -> {
+            AddConsultationJDialog dialog = new AddConsultationJDialog(this);
+            dialog.setVisible(true);
+
+            if (dialog.isConfirmed()) {
+
+                LocalDate date = dialog.getDate();
+                LocalTime hour = dialog.getHour();
+                int duration = dialog.getDuration();
+                int count = dialog.getCount();
+
+                System.out.println("Création " + count + " consultations à partir de " +
+                        date + " " + hour + ", durée=" + duration + " min");
+
             }
         });
     }
