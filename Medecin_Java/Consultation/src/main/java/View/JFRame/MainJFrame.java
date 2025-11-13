@@ -1,10 +1,12 @@
 package View.JFRame;
 
+import View.JDialog.AddPatientJDialog;
 import View.JDialog.LoginJDialog;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.LocalDate;
 
 
 public class MainJFrame extends JFrame {
@@ -29,7 +31,6 @@ public class MainJFrame extends JFrame {
         topPanel.add(btnLogout);
         add(topPanel, BorderLayout.NORTH);
 
-        // ======= ZONE DE TRAVAIL =======
         workArea = new JPanel(new BorderLayout());
         workArea.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         add(workArea, BorderLayout.CENTER);
@@ -41,7 +42,7 @@ public class MainJFrame extends JFrame {
 
         if (loginDialog.isAuthenticated()) {
             authenticated = true;
-            btnLogin.setEnabled(false);
+            btnLogin.setVisible(false);
             btnLogout.setVisible(true);
             showWorkPanel();
         }
@@ -53,7 +54,7 @@ public class MainJFrame extends JFrame {
                 "Déconnexion", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             authenticated = false;
-            btnLogin.setEnabled(true);
+            btnLogin.setVisible(true);
             btnLogout.setVisible(false);
             workArea.removeAll();
             workArea.revalidate();
@@ -129,6 +130,21 @@ public class MainJFrame extends JFrame {
             tableModel.addRow(new Object[]{"D001", idPatient, date, "09:30", "Vaccination antigrippale et vérification tension artérielle."});
             tableModel.addRow(new Object[]{"D001", idPatient, date, "10:00", "Suivi post-opératoire et renouvellement d’ordonnance du patient."});
 
+        });
+
+        btnAddPatient.addActionListener(e ->{
+            AddPatientJDialog addPatientJDialog = new AddPatientJDialog(this);
+            addPatientJDialog.setVisible(true);
+
+            if (addPatientJDialog.isConfirmed()){
+                String lastname = addPatientJDialog.getLastName();
+                String firstname = addPatientJDialog.getFirstName();
+                LocalDate birthDate = addPatientJDialog.getBirthDate();
+
+                System.out.println(lastname + " " + firstname + " " + birthDate);
+
+                // Ajout DB
+            }
         });
     }
 
