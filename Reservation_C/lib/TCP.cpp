@@ -145,7 +145,7 @@ int ClientSocket(char* ipServeur,int portServeur)
 
 	printf("[DEBUG ClientSocket] Checkpoint 2\n");
 
-	char portStr[10];
+	char portStr[20];
 	sprintf(portStr, "%d", portServeur);
 
 	int err = getaddrinfo(ipServeur, portStr, &hints, &results);

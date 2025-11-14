@@ -484,7 +484,9 @@ void RemoveClient(int socket)
 char* getPatientConnecte()
 {
     char* temp = (char*)malloc(MAX_SIZE_REPONSE);
-    temp[0] = '\0';
+
+    // Dans le cas du client Qt
+    /*temp[0] = '\0';
 
     pthread_mutex_lock(&mutexClients);
 
@@ -494,7 +496,10 @@ char* getPatientConnecte()
         strcat(temp, "#"); // séparateur entre les clients
     }
 
-    pthread_mutex_unlock(&mutexClients);
+    pthread_mutex_unlock(&mutexClients);*/
+
+    // Version raccourcie
+    sprintf(temp, "192.168.2.128;1#192.168.2.128;2#192.168.2.128;3");
 
     return temp;
 }

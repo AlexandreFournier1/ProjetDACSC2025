@@ -12,10 +12,12 @@ bool ACBP(char* requete, char* reponse, int socket)
 	char temp[MAX_SIZE_REQUETE];
 	strcpy(temp, requete);
 
-	char *ptr = strtok(temp, "#");
+	//char *ptr = strtok(temp, "#");
+
+	//printf("\n%s\n", ptr);
 
 	// LIST_CLIENTS
-	if (strcmp(ptr, "LIST_CLIENTS") == 0)
+	if (strcmp(temp, "LIST_CLIENTS") == 0)
 	{
 		char* temp = (char*)malloc(4096);
 		char* rep;

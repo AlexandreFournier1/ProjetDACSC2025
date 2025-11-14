@@ -6,21 +6,29 @@
 
 #IncludeRegexTransform: 
 
-/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.cpp
-CBP.h
-/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
-mysql/mysql.h
--
-string.h
--
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/Server_Reservation.cpp
 stdio.h
 -
 stdlib.h
 -
 unistd.h
 -
+string.h
+-
+signal.h
+-
 pthread.h
 -
+./lib/TCP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/TCP.h
+./lib/CBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
+./lib/ACBP.h
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h
+
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/ACBP.h
 
 /home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/CBP.h
+
+/home/student/Bureau/Clone Propre DACSC/ProjetDACSC/Reservation_C/lib/TCP.h
 

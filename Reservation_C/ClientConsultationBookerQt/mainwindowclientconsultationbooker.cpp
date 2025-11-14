@@ -260,9 +260,12 @@ void MainWindowClientConsultationBooker::on_pushButtonLogin_clicked()
     //char ip[] = "192.168.150.131";
     //char ip[] = "192.168.2.128"; // IP VM Alex
     //char ip[] = "0.0.0.0";
-    char ip[] = "127.0.0.1";
+    char ip[100];
+    sprintf(ip,"%s","127.0.0.1");
+    //char ip[] = "127.0.0.1";
 
-    char* requete = (char*)malloc(MAX_SIZE_REQUETE), *reponse = (char*)malloc(MAX_SIZE_REPONSE);
+    char requete[500],reponse[500];
+    //    char* requete = (char*)malloc(MAX_SIZE_REQUETE), *reponse = (char*)malloc(MAX_SIZE_REPONSE);
 
     // Connexion sur le serveur
     if ((sClient = ClientSocket( ip, 50000)) == -1)
