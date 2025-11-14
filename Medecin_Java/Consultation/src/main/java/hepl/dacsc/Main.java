@@ -1,6 +1,6 @@
 package hepl.dacsc;
 
-import hepl.dacsc.View.JFRame.MainJFrame;
+import hepl.dacsc.View.JFrame.MainJFrame;
 
 public class Main {
     public static void main(String[] args) {
