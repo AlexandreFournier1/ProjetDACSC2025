@@ -1,10 +1,10 @@
-package View.JFRame;
+package hepl.dacsc.View.JFRame;
 
-import View.JDialog.AddConsultationJDialog;
-import View.JDialog.AddPatientJDialog;
-import View.JDialog.LoginJDialog;
-import View.JDialog.UpdateConsultationJDialog;
-import model.entity.Consultation;
+import hepl.dacsc.View.JDialog.AddConsultationJDialog;
+import hepl.dacsc.View.JDialog.AddPatientJDialog;
+import hepl.dacsc.View.JDialog.LoginJDialog;
+import hepl.dacsc.View.JDialog.UpdateConsultationJDialog;
+import hepl.dacsc.model.entity.Consultation;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

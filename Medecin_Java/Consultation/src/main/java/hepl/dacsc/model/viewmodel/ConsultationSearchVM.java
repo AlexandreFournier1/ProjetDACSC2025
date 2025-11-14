@@ -1,27 +1,27 @@
-package model.entity;
+package hepl.dacsc.model.viewmodel;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Consultation extends Entity {
+public class ConsultationSearchVM {
+    private Integer id;
     private Integer doctor_id;
     private Integer patient_id;
     private LocalDate date;
     private LocalTime hour;
     private Integer duree;
     private String reason;
+    
+    public ConsultationSearchVM() {}
 
-    public Consultation() {}
-
-    public Consultation(int id, Integer doctor_id, Integer patient_id, LocalDate date, LocalTime hour, Integer duree,String reason) {
-        super(id);
-        this.doctor_id = doctor_id;
-        this.patient_id = patient_id;
-        this.date = date;
-        this.hour = hour;
-        this.duree = duree;
-        this.reason = reason;
+    public Integer getId() {
+        return id;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getDoctor_id() {
         return doctor_id;
     }
@@ -34,7 +34,9 @@ public class Consultation extends Entity {
         return patient_id;
     }
 
-    public void setPatient_id(Integer patient_id) {this.patient_id = patient_id;}
+    public void setPatient_id(Integer patient_id) {
+        this.patient_id = patient_id;
+    }
 
     public LocalDate getDate() {
         return date;
@@ -67,5 +69,4 @@ public class Consultation extends Entity {
     public void setReason(String reason) {
         this.reason = reason;
     }
-
 }

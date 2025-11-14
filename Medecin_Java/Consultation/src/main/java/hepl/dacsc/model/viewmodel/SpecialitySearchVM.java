@@ -1,4 +1,4 @@
-package model.viewmodel;
+package hepl.dacsc.model.viewmodel;
 
 public class SpecialitySearchVM {
     private Integer id;

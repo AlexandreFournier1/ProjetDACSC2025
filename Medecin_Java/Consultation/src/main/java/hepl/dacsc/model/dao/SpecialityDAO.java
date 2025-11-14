@@ -1,14 +1,11 @@
-package model.dao;
+package hepl.dacsc.model.dao;
 
-import model.entity.Speciality;
-import model.viewmodel.SpecialitySearchVM;
+import hepl.dacsc.model.entity.Speciality;
+import hepl.dacsc.model.viewmodel.SpecialitySearchVM;
 
 import java.sql.*;
-import java.sql.Date;
-import java.time.LocalTime;
 import java.util.*;
-import java.util.logging.*;
-import java.time.LocalDate;
+
 public class SpecialityDAO {
     private ConnectDB connectDB;
     private ArrayList<Speciality> specialities;

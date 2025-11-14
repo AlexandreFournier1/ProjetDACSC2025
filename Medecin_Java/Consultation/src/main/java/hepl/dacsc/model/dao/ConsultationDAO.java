@@ -1,13 +1,12 @@
-package model.dao;
+package hepl.dacsc.model.dao;
 
-import model.entity.Consultation;
-import model.viewmodel.ConsultationSearchVM;
+import hepl.dacsc.model.entity.Consultation;
+import hepl.dacsc.model.viewmodel.ConsultationSearchVM;
 
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.logging.*;
 import java.time.LocalDate;
 public class ConsultationDAO {
     private ConnectDB connectDB;

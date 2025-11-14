@@ -1,4 +1,4 @@
-package model.viewmodel;
+package hepl.dacsc.model.viewmodel;
 
 import java.time.LocalDate;
 

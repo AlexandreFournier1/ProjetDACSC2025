@@ -1,4 +1,4 @@
-package View.JDialog;
+package hepl.dacsc.View.JDialog;
 
 import javax.swing.*;
 import java.awt.*;

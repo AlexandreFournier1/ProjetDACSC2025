@@ -1,6 +1,6 @@
-package View.JDialog;
+package hepl.dacsc.View.JDialog;
 
-import model.entity.Consultation;
+import hepl.dacsc.model.entity.Consultation;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package model.dao;
+package hepl.dacsc.model.dao;
 
 
 import java.sql.*;

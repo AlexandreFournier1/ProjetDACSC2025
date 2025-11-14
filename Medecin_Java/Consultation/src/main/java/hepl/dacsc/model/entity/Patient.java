@@ -1,4 +1,4 @@
-package model.entity;
+package hepl.dacsc.model.entity;
 
 import java.time.LocalDate;
 

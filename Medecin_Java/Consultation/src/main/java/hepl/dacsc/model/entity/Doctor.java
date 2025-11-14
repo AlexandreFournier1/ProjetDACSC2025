@@ -1,4 +1,4 @@
-package model.entity;
+package hepl.dacsc.model.entity;
 
 public class Doctor extends Entity {
     private Integer speciality_id;

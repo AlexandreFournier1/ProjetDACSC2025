@@ -1,26 +1,23 @@
-package model.dao;
+package hepl.dacsc.model.dao;
 
-import model.entity.Doctor;
-import model.viewmodel.DoctorSearchVM;
+import hepl.dacsc.model.entity.Patient;
+import hepl.dacsc.model.viewmodel.PatientSearchVM;
 
-import javax.print.Doc;
 import java.sql.*;
 import java.sql.Date;
-import java.time.LocalTime;
 import java.util.*;
-import java.util.logging.*;
 import java.time.LocalDate;
-public class DoctorDAO {
+public class PatientDAO {
     private ConnectDB connectDB;
-    private ArrayList<Doctor> doctors;
+    private ArrayList<Patient> patients;
 
-    public DoctorDAO() {
+    public PatientDAO() {
         connectDB = new ConnectDB();
-        doctors = new ArrayList<>();
+        patients = new ArrayList<>();
     }
 
-    public Doctor getDoctorsById(Integer id) {
-        for (Doctor entity : doctors) {
+    public Patient getPatientById(Integer id) {
+        for (Patient entity : patients) {
             if (Objects.equals(entity.getId(), id))
             {
                 return entity;
@@ -29,35 +26,35 @@ public class DoctorDAO {
         return null;
     }
 
-    public ArrayList<Doctor> loadDoctor() {
-        return this.loadDoctor(null);
+    public ArrayList<Patient> loadPatients() {
+        return this.loadPatients(null);
     }
 
-    public ArrayList<Doctor> loadDoctor(DoctorSearchVM csvm) {
-        doctors.clear();
+    public ArrayList<Patient> loadPatients(PatientSearchVM csvm) {
+        patients.clear();
         try {
             String requete = "SELECT " +
-                    "doctors.id, " +
-                    "doctors.speciality_id, " +
-                    "doctors.last_name, " +
-                    "doctors.first_name " +
-                    "FROM doctors";
+                    "patients.id, " +
+                    "patients.last_name, " +
+                    "patients.first_name, " +
+                    "patients.birth_date " +
+                    "FROM patients";
             if (csvm != null) {
                 String where = " WHERE 1=1 ";
 
-                if (csvm.getId() != 0) {
-                    where += "AND doctors.id = ? ";
-                }
-                if (csvm.getSpeciality_id() != null) {
-                    where += "AND doctors.speciality_id = ? ";
+                if (csvm.getId() != null) {
+                    where += "AND patients.id = ? ";
                 }
                 if (csvm.getLast_name() != null) {
-                    where += "AND doctors.last_name like ? ";
+                    where += "AND patients.last_name like ? ";
                 }
                 if (csvm.getFirst_name() != null) {
-                    where += "AND doctors.first_name like ? ";
+                    where += "AND patients.first_name like ? ";
                 }
-                requete += where + " ORDER BY doctors.id ASC";
+                if (csvm.getBirth_date() != null) {
+                    where += "AND patients.birth_date = ? ";
+                }
+                requete += where + " ORDER BY patients.id ASC";
             }
 
             PreparedStatement stmt = connectDB.getConn().prepareStatement(requete);
@@ -68,10 +65,6 @@ public class DoctorDAO {
                     paramNumber++;
                     stmt.setInt(paramNumber, csvm.getId());
                 }
-                if(csvm.getSpeciality_id() != null){
-                    paramNumber++;
-                    stmt.setInt(paramNumber, csvm.getSpeciality_id());
-                }
                 if(csvm.getLast_name() != null){
                     paramNumber++;
                     stmt.setString(paramNumber, csvm.getLast_name());
@@ -80,56 +73,60 @@ public class DoctorDAO {
                     paramNumber++;
                     stmt.setString(paramNumber, csvm.getFirst_name());
                 }
+                if(csvm.getBirth_date() != null){
+                    paramNumber++;
+                    stmt.setDate(paramNumber, Date.valueOf(csvm.getBirth_date()));
+                }
 
             }
             ResultSet rs = stmt.executeQuery();
-            doctors.clear();
+            patients.clear();
 
             while (rs.next()) {
-                Integer doctorId = rs.getInt("id");
-                Integer speciality_id = rs.getInt("speciality_id");
+                Integer patientId = rs.getInt("id");
                 String last_name = rs.getString("last_name");
                 String first_name = rs.getString("first_name");
+                LocalDate birth_date = rs.getDate("birth_date").toLocalDate();
 
-                Doctor doctor1 = new Doctor(doctorId, speciality_id, last_name, first_name);
+                Patient patient1 = new Patient(patientId, last_name, first_name, birth_date);
 
-                doctors.add(doctor1);
+                patients.add(patient1);
             }
             stmt.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }finally {
-            return doctors;
+            return patients;
         }
     }
 
-    public void save(Doctor c) {
+    public void save(Patient c) {
         try {
             String requete;
 
             if(c != null) {
                 if (c.getId() != null) { // Update
 
-                    requete = "UPDATE doctors SET "
-                            + " speciality_id = ?, "
+                    requete = "UPDATE patients SET "
                             + " last_name = ?, "
-                            + " first_name = ? "
+                            + " first_name = ?, "
+                            + " birth_date = ? "
                             + " WHERE id = ?";
 
                     PreparedStatement pStmt = connectDB.getConn().prepareStatement(requete);
 
-                    pStmt.setInt(1, c.getSpeciality_id());
-                    pStmt.setString(2, c.getLast_name());
-                    pStmt.setString(3, c.getFirst_name());
+                    pStmt.setString(1, c.getLast_name());
+                    pStmt.setString(2, c.getFirst_name());
+                    pStmt.setDate(3, Date.valueOf(c.getBirth_date()));
                     pStmt.setInt(4, c.getId());
                     pStmt.executeUpdate();
                     pStmt.close();
 
                 } else {
-                    requete = "INSERT INTO doctors ("
-                            + "speciality_id, "
+                    requete = "INSERT INTO patients ("
                             + "last_name, "
-                            + "first_name "
+                            + "first_name, "
+                            + "birth_date "
                             + ") VALUES ("
                             + "?, "
                             + "?, "
@@ -139,9 +136,9 @@ public class DoctorDAO {
                     PreparedStatement pStmt = connectDB.getConn().prepareStatement(requete,
                             PreparedStatement.RETURN_GENERATED_KEYS);
 
-                    pStmt.setInt(1, c.getSpeciality_id());
-                    pStmt.setString(2, c.getLast_name());
-                    pStmt.setString(3, c.getFirst_name());
+                    pStmt.setString(1, c.getLast_name());
+                    pStmt.setString(2, c.getFirst_name());
+                    pStmt.setDate(3, Date.valueOf(c.getBirth_date()));
                     pStmt.executeUpdate();
 
                     ResultSet rs = pStmt.getGeneratedKeys();
@@ -157,7 +154,7 @@ public class DoctorDAO {
         }
     }
 
-    public void delete(Doctor entity) {
+    public void delete(Patient entity) {
         if(entity != null && entity.getId() != null) {
             this.delete(entity.getId());
         }
@@ -168,7 +165,7 @@ public class DoctorDAO {
             try {
                 String requete;
 
-                requete = " DELETE FROM doctors WHERE id = ?";
+                requete = " DELETE FROM patients WHERE id = ?";
                 PreparedStatement stmt = connectDB.getConn().prepareStatement(requete);
                 stmt.setInt(1, id);
                 stmt.executeUpdate();

@@ -1,4 +1,4 @@
-package model.entity;
+package hepl.dacsc.model.entity;
 
 public class Speciality extends Entity {
     private String name;
