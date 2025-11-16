@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/ClientTest.dir/ClientTest_autogen/mocs_compilation.cpp.o CMakeFiles/ClientTest.dir/ClientTest.cpp.o CMakeFiles/ClientTest.dir/lib/TCP.cpp.o CMakeFiles/ClientTest.dir/lib/CBP.cpp.o -o bin/ClientTest  -Wl,-rpath,/usr/lib64/mysql -lpthread -lpthread /usr/lib64/mysql/libmysqlclient.so 

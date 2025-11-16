@@ -186,7 +186,7 @@ void* FctThreadClientALaDemande(void* p)
     free(p); 
     printf("\t[THREAD %p] Je m'occupe de la socket %d\n",pthread_self(),sService);
 
-    TraitementConnexion(sService); 
+    TraitementConnexionAdmin(sService); 
 
     pthread_exit(NULL);
 }

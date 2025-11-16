@@ -120,8 +120,13 @@ void TraitementConnexion(int sService)
 
 		printf("\t[THREAD %p] Requete recue = %s\n",pthread_self(),requete);
 
-		// ***** Traitement de la requete *********** 
+		// ***** Traitement de la requete ***********
+
+		printf("\t[THREAD %p] J'appelle ACBP\n",pthread_self());
+
 		onContinue = ACBP(requete,reponse,sService);
+
+		printf("\t[THREAD %p] Reponse ACBP = %s\n",pthread_self(),reponse);
 
 		// ***** Envoi de la reponse **************** 
 		if ((nbEcrits = Send(sService,reponse,strlen(reponse))) < 0) 
