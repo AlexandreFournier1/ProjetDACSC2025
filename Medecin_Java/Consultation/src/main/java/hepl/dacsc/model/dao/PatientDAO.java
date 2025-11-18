@@ -26,6 +26,15 @@ public class PatientDAO {
         return null;
     }
 
+    public Patient getPatientByName(String lastname, String firstname) {
+        for (Patient entity : patients) {
+            if (Objects.equals(entity.getLast_name(), lastname) && Objects.equals(entity.getFirst_name(), firstname)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Patient> loadPatients() {
         return this.loadPatients(null);
     }
