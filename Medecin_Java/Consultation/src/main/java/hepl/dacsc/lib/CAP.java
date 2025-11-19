@@ -126,7 +126,25 @@ public class CAP implements Protocol {
     // UPDATE_CONSULTATION
     private synchronized ReponseUPDATE_CONSULTATION TraiteRequeteUPDATE_CONSULTATION(RequeteUPDATE_CONSULTATION requete) {
         logger.Trace("Requete UPDATE_CONSULTATION reçue !");
-        return null;
+
+        ConsultationDAO dao = new ConsultationDAO();
+        Consultation consultation = dao.getConsultationsById(requete.getId());
+
+        // Dans le cas où la consultation n'a pas encore de Patient
+        if (consultation.getPatient_id() == null) {
+            consultation.setPatient_id(requete.getId());
+            consultation.setReason(requete.getReason());
+        }
+        // Dans le cas où on modifie la date et l'heure
+        else {
+            consultation.setDate(requete.getNewDate());
+            consultation.setHour(requete.getNewHour());
+        }
+
+        dao.save(consultation);
+        ReponseUPDATE_CONSULTATION reponse = new ReponseUPDATE_CONSULTATION(true);
+
+        return reponse;
     }
     @Override
     public String getNom() {
