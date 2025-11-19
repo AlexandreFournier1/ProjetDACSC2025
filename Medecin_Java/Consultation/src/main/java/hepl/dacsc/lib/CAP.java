@@ -146,6 +146,8 @@ public class CAP implements Protocol {
 
         return reponse;
     }
+
+    public void TestVide() {}
     @Override
     public String getNom() {
         return "CAP";
