@@ -36,6 +36,9 @@ public class CAP implements Protocol {
     private static Connection conn = null;
     private static int nbConsultation = 0;
 
+    public void testGit(){
+        System.out.println("testGit");
+    }
     @Override
     public synchronized Reponse TraiteRequete(Requete requete, Socket socket) throws FinConnexionException
     {
