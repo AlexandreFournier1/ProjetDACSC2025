@@ -22,7 +22,7 @@ public class ThreadClientPool extends ThreadClient {
     {
         logger.Trace("TH Client (Pool) démarre...");
 
-        MainJFrame mf = new MainJFrame();
+        ClientCAP mf = new ClientCAP();
         mf.setVisible(true);
 
 

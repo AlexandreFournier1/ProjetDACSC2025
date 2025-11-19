@@ -4,6 +4,7 @@ import hepl.dacsc.View.JDialog.AddConsultationJDialog;
 import hepl.dacsc.View.JDialog.AddPatientJDialog;
 import hepl.dacsc.View.JDialog.LoginJDialog;
 import hepl.dacsc.View.JDialog.UpdateConsultationJDialog;
+import hepl.dacsc.lib.reponse.ReponseLOGIN;
 import hepl.dacsc.lib.requete.RequeteLOGIN;
 import hepl.dacsc.model.entity.Consultation;
 
@@ -42,7 +43,7 @@ public class ClientCAP extends JFrame {
         JButton btnLogout = new JButton("Logout");
         btnLogout.setVisible(false);
 
-        btnLogin.addActionListener(e -> showLoginDialog(btnLogin, btnLogout));
+        btnLogin.addActionListener(e -> jButtonLoginActionPerformed(e, btnLogin, btnLogout));
         btnLogout.addActionListener(e -> jButtonLogoutActionPerformed(e, btnLogin, btnLogout));
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
@@ -152,11 +153,30 @@ public class ClientCAP extends JFrame {
 
         if(loginJDialog.isConfirmed()) {
             try {
+                Integer id = Integer.valueOf(loginJDialog.getId());
+                String last_name = loginJDialog.getLastName();
+                String first_name = loginJDialog.getFirstName();
+                String mdp = loginJDialog.getMdp();
                 //Ip PC Noah
                 socket = new Socket("10.236.64.95", 55000);
                 //Ip PC Alex
                 //socket = new Socket("10.236.64.95", 55000);
-                //RequeteLOGIN
+                RequeteLOGIN requete = new RequeteLOGIN(id, last_name, first_name, mdp);
+                oos = new ObjectOutputStream(socket.getOutputStream());
+                ois = new ObjectInputStream(socket.getInputStream());
+                oos.writeObject(requete);
+                ReponseLOGIN reponse = (ReponseLOGIN) ois.readObject();
+
+                if(reponse.isValid()){
+                    btnLogin.setVisible(false);
+                    btnLogout.setVisible(true);
+                    workArea.setVisible(true);
+                    this.login = String.valueOf(id);
+                }
+                else {
+                    JOptionPane.showMessageDialog(this, "Erreur de connexion", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    socket.close();
+                }
 
             } catch (Exception e) {
                 throw new RuntimeException(e);

@@ -96,7 +96,6 @@ public class LoginJDialog extends JDialog {
             // Ici, tu pourras appeler ton DAO / AuthService :
             // DoctorDAO dao = new DoctorDAOImpl(...);
             // boolean ok = dao.authenticate(id, nom, prenom, password);
-
             System.out.println("Tentative de connexion :");
             System.out.println("  ID = " + id);
             System.out.println("  Nom = " + nom);
@@ -111,6 +110,20 @@ public class LoginJDialog extends JDialog {
         btnAnnuler.addActionListener(e -> dispose());
     }
     public boolean isConfirmed() { return confirmed; }
+
+    public String getId(){
+        return txtId.getText().trim();
+    }
+    public String getLastName(){
+        return txtNom.getText().trim();
+    }
+    public String getFirstName(){
+        return txtPrenom.getText().trim();
+    }
+    public String getMdp(){
+        return txtPassword.getText().trim();
+    }
+
     public boolean isAuthenticated() {
         return authenticated;
     }
