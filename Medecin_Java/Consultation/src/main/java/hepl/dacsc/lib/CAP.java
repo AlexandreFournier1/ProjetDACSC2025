@@ -7,19 +7,25 @@ import hepl.dacsc.ServerGeneriqueTCP.interfaces.Reponse;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Requete;
 import hepl.dacsc.lib.reponse.ReponseADD_CONSULTATION;
 import hepl.dacsc.lib.reponse.ReponseADD_PATIENT;
+import hepl.dacsc.lib.reponse.ReponseLOGIN;
 import hepl.dacsc.lib.reponse.ReponseUPDATE_CONSULTATION;
 import hepl.dacsc.lib.requete.RequeteADD_CONSULTATION;
 import hepl.dacsc.lib.requete.RequeteADD_PATIENT;
+import hepl.dacsc.lib.requete.RequeteLOGIN;
 import hepl.dacsc.lib.requete.RequeteUPDATE_CONSULTATION;
 import hepl.dacsc.model.dao.ConnectDB;
 import hepl.dacsc.model.dao.ConsultationDAO;
+import hepl.dacsc.model.dao.DoctorDAO;
 import hepl.dacsc.model.dao.PatientDAO;
 import hepl.dacsc.model.entity.Consultation;
+import hepl.dacsc.model.entity.Doctor;
 import hepl.dacsc.model.entity.Patient;
+import hepl.dacsc.model.viewmodel.DoctorSearchVM;
 
 import java.net.Socket;
 import java.sql.Connection;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CAP implements Protocol {
@@ -34,6 +40,7 @@ public class CAP implements Protocol {
     public synchronized Reponse TraiteRequete(Requete requete, Socket socket) throws FinConnexionException
     {
         // LOGIN
+        if (requete instanceof RequeteLOGIN) return TraitementLOGIN((RequeteLOGIN) requete);
 
         // ADD_CONSULTATION
         if (requete instanceof RequeteADD_CONSULTATION) return TraiteRequeteADD_CONSULTATION((RequeteADD_CONSULTATION) requete);
@@ -54,6 +61,24 @@ public class CAP implements Protocol {
         return null;
     }
 
+    // LOGIN
+    private synchronized ReponseLOGIN TraitementLOGIN(RequeteLOGIN requete) {
+        logger.Trace("Requete LOGIN reçue de : " + requete.getId());
+
+        DoctorSearchVM doc = new DoctorSearchVM();
+        doc.setId(requete.getId());
+        doc.setLast_name(requete.getLastName());
+        doc.setFirst_name(requete.getFirstName());
+        doc.setMdp(requete.getMdp());
+
+        DoctorDAO dao = new DoctorDAO();
+        ArrayList<Doctor> result = dao.loadDoctor(doc);
+
+        if (result.size() > 0)
+            return new ReponseLOGIN(true);
+        else
+            return  new ReponseLOGIN(false);
+    }
     // ADD_CONSULTATION
     private synchronized ReponseADD_CONSULTATION TraiteRequeteADD_CONSULTATION(RequeteADD_CONSULTATION requete) {
         logger.Trace("Requete ADD_CONSULTATION reçue !");

@@ -2,6 +2,7 @@ package hepl.dacsc.View.JDialog;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.Socket;
 
 public class LoginJDialog extends JDialog {
     private final JTextField txtId;
@@ -9,6 +10,7 @@ public class LoginJDialog extends JDialog {
     private final JTextField txtPrenom;
     private final JPasswordField txtPassword;
     private boolean authenticated = false;
+    private boolean confirmed = false;
 
     public LoginJDialog(JFrame parent) {
         super(parent, "Connexion", true);
@@ -90,7 +92,7 @@ public class LoginJDialog extends JDialog {
                 JOptionPane.showMessageDialog(this, "Tous les champs sont obligatoires.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            confirmed = true;
             // Ici, tu pourras appeler ton DAO / AuthService :
             // DoctorDAO dao = new DoctorDAOImpl(...);
             // boolean ok = dao.authenticate(id, nom, prenom, password);
@@ -102,13 +104,13 @@ public class LoginJDialog extends JDialog {
             System.out.println("  MDP = " + password);
 
             // Exemple de succès fictif :
-            authenticated = true;
+            //authenticated = true;
             dispose();
         });
 
         btnAnnuler.addActionListener(e -> dispose());
     }
-
+    public boolean isConfirmed() { return confirmed; }
     public boolean isAuthenticated() {
         return authenticated;
     }

@@ -106,7 +106,6 @@ public class AddPatientJDialog extends JDialog {
     }
 
     public boolean isConfirmed() { return confirmed; }
-
     public String getLastName() { return txtLastName.getText().trim(); }
     public String getFirstName() { return txtFirstName.getText().trim(); }
 

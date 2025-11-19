@@ -41,7 +41,7 @@ public class DoctorDAO {
             if (csvm != null) {
                 String where = " WHERE 1=1 ";
 
-                if (csvm.getId() != 0) {
+                if (csvm.getId() != null) {
                     where += "AND doctors.id = ? ";
                 }
                 if (csvm.getSpeciality_id() != null) {
@@ -52,6 +52,10 @@ public class DoctorDAO {
                 }
                 if (csvm.getFirst_name() != null) {
                     where += "AND doctors.first_name like ? ";
+                }
+                // Ajout Pour le connect
+                if (csvm.getMdp() != null) {
+                    where += "AND doctors.mdp like ? ";
                 }
                 requete += where + " ORDER BY doctors.id ASC";
             }
@@ -125,10 +129,12 @@ public class DoctorDAO {
                     requete = "INSERT INTO doctors ("
                             + "speciality_id, "
                             + "last_name, "
-                            + "first_name "
+                            + "first_name, "
+                            + "mdp "
                             + ") VALUES ("
                             + "?, "
                             + "?, "
+                            + "? "
                             + "? "
                             + ")";
 

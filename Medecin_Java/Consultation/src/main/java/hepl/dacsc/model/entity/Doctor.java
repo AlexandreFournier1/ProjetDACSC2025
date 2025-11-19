@@ -4,6 +4,7 @@ public class Doctor extends Entity {
     private Integer speciality_id;
     private String last_name;
     private String first_name;
+    private  String mdp;
 
     public Doctor() {}
     public Doctor(int id, Integer speciality_id, String last_name, String first_name) {
@@ -36,4 +37,11 @@ public class Doctor extends Entity {
         this.first_name = first_name;
     }
 
+    public String getMdp() {
+        return mdp;
+    }
+
+    public void setMdp(String mdp) {
+        this.mdp = mdp;
+    }
 }

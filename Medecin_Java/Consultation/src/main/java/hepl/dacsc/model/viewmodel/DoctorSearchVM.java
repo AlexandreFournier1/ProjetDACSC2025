@@ -5,6 +5,7 @@ public class DoctorSearchVM {
     private Integer speciality_id;
     private String last_name;
     private String first_name;
+    private String mdp;
 
     public DoctorSearchVM() {}
 
@@ -38,5 +39,11 @@ public class DoctorSearchVM {
 
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
+    }
+    public String getMdp() {
+        return mdp;
+    }
+    public void setMdp(String mdp) {
+        this.mdp = mdp;
     }
 }

@@ -4,6 +4,7 @@ import hepl.dacsc.View.JDialog.AddConsultationJDialog;
 import hepl.dacsc.View.JDialog.AddPatientJDialog;
 import hepl.dacsc.View.JDialog.LoginJDialog;
 import hepl.dacsc.View.JDialog.UpdateConsultationJDialog;
+import hepl.dacsc.lib.requete.RequeteLOGIN;
 import hepl.dacsc.model.entity.Consultation;
 
 import javax.swing.*;
@@ -145,6 +146,23 @@ public class ClientCAP extends JFrame {
         btnUpdateConsultation.addActionListener(e -> jButtonUpdateConsultationActionPerformed(e, table, tableModel));
     }
 
+    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) {
+        LoginJDialog loginJDialog = new LoginJDialog(this);
+        loginJDialog.setVisible(true);
+
+        if(loginJDialog.isConfirmed()) {
+            try {
+                //Ip PC Noah
+                socket = new Socket("10.236.64.95", 55000);
+                //Ip PC Alex
+                //socket = new Socket("10.236.64.95", 55000);
+                //RequeteLOGIN
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) {
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Voulez-vous vraiment vous déconnecter ?",
