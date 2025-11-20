@@ -17,7 +17,7 @@ public class ServerCAP {
                 }
             };
 
-            ThreadServeurPool server = new ThreadServeurPool(55000, protocol, 5, logger);
+            ThreadServeurPool server = new ThreadServeurPool(50000, protocol, 2, logger);
 
             server.start();
         } catch (Exception e) {

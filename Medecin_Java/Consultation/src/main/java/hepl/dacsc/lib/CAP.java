@@ -31,7 +31,12 @@ import java.util.HashMap;
 public class CAP implements Protocol {
     private HashMap<String, String> passwords;
     private HashMap<String, Socket> medecinsConnectes;
-    private Logger logger;
+    private Logger logger = new Logger() {
+        @Override
+        public void Trace(String message) {
+            System.out.println("[PROTOCOL] " + message);
+        }
+    };;
 
     private static Connection conn = null;
     private static int nbConsultation = 0;
@@ -74,8 +79,11 @@ public class CAP implements Protocol {
         doc.setFirst_name(requete.getFirstName());
         doc.setMdp(requete.getMdp());
 
+        logger.Trace("Début requetteDAO");
         DoctorDAO dao = new DoctorDAO();
         ArrayList<Doctor> result = dao.loadDoctor(doc);
+        logger.Trace("Fin requetteDAO");
+
 
         if (result.size() > 0)
             return new ReponseLOGIN(true);
@@ -150,7 +158,9 @@ public class CAP implements Protocol {
         return reponse;
     }
 
-    public void TestVide() {}
+    public void TestVide() {
+        System.out.println("testVide");
+    }
     @Override
     public String getNom() {
         return "CAP";

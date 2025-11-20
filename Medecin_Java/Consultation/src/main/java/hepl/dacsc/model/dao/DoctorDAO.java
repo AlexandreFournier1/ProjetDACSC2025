@@ -31,6 +31,7 @@ public class DoctorDAO {
 
     public ArrayList<Doctor> loadDoctor(DoctorSearchVM csvm) {
         doctors.clear();
+        System.out.println("[DAO] debut requette");
         try {
             String requete = "SELECT " +
                     "doctors.id, " +
@@ -59,7 +60,7 @@ public class DoctorDAO {
                 }
                 requete += where + " ORDER BY doctors.id ASC";
             }
-
+            System.out.println("[DAO] Fin requette");
             PreparedStatement stmt = connectDB.getConn().prepareStatement(requete);
 
             if (csvm != null) {

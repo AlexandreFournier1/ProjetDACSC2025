@@ -103,7 +103,7 @@ public class LoginJDialog extends JDialog {
             System.out.println("  MDP = " + password);
 
             // Exemple de succès fictif :
-            //authenticated = true;
+            authenticated = true;
             dispose();
         });
 

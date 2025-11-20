@@ -6,7 +6,6 @@ import java.util.logging.*;
 
 public class ConnectDB {
     private static Connection conn = null;
-
     public Connection getConn() {
         return conn;
     }
@@ -14,7 +13,7 @@ public class ConnectDB {
         try {
             if (conn == null || conn.isClosed()) {
                 // IP Noah
-                String sCon = "jdbc:mysql://192.168.159.131/PourStudent";
+                String sCon = "jdbc:mysql://192.168.150.131/PourStudent";
                 // IP Alex
                 //String sCon = "jdbc:mysql://192.168.2.128/PourStudent";
                 String sUser = "Student";

@@ -158,7 +158,7 @@ public class ClientCAP extends JFrame {
                 String first_name = loginJDialog.getFirstName();
                 String mdp = loginJDialog.getMdp();
                 //Ip PC Noah
-                socket = new Socket("10.236.64.95", 55000);
+                socket = new Socket("10.236.64.95", 50000);
                 //Ip PC Alex
                 //socket = new Socket("10.236.64.95", 55000);
                 RequeteLOGIN requete = new RequeteLOGIN(id, last_name, first_name, mdp);
