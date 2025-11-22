@@ -41,9 +41,6 @@ public class CAP implements Protocol {
     private static Connection conn = null;
     private static int nbConsultation = 0;
 
-    public void testGit(){
-        System.out.println("testGit");
-    }
     @Override
     public synchronized Reponse TraiteRequete(Requete requete, Socket socket) throws FinConnexionException
     {
@@ -143,7 +140,7 @@ public class CAP implements Protocol {
 
         // Dans le cas où la consultation n'a pas encore de Patient
         if (consultation.getPatient_id() == null) {
-            consultation.setPatient_id(requete.getId());
+            consultation.setPatient_id(requete.getIdPatient());
             consultation.setReason(requete.getReason());
         }
         // Dans le cas où on modifie la date et l'heure
@@ -158,9 +155,6 @@ public class CAP implements Protocol {
         return reponse;
     }
 
-    public void TestVide() {
-        System.out.println("testVide");
-    }
     @Override
     public String getNom() {
         return "CAP";

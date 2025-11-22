@@ -5,20 +5,19 @@ import hepl.dacsc.model.entity.Patient;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
 public class RequeteUPDATE_CONSULTATION implements Requete {
     private int id;
     private LocalDate newDate;
     private LocalTime newHour;
-    private Patient patient;
+    private int idPatient;
     private String reason;
 
-    public RequeteUPDATE_CONSULTATION(int id, LocalDate newDate, LocalTime newHour, Patient patient, String reason) {
+    public RequeteUPDATE_CONSULTATION(int id, LocalDate newDate, LocalTime newHour, int idPatient, String reason) {
         this.id = id;
         this.newDate = newDate;
         this.newHour = newHour;
-        this.patient = patient;
+        this.idPatient = idPatient;
         this.reason = reason;
     }
 
@@ -34,8 +33,8 @@ public class RequeteUPDATE_CONSULTATION implements Requete {
         return newHour;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public int getIdPatient() {
+        return idPatient;
     }
 
     public String getReason() {

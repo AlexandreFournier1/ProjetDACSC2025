@@ -50,14 +50,14 @@ public class AddPatientJDialog extends JDialog {
         txtFirstName = new JTextField(15);
         formPanel.add(txtFirstName, gbc);
 
-        // Date naissance
-        gbc.gridx = 0; gbc.gridy = 2;
-        formPanel.add(new JLabel("Date de naissance :"), gbc);
-
-        gbc.gridx = 1;
-        txtBirthDate = new JTextField(15);
-        txtBirthDate.setToolTipText("Format : JJ-MM-AAAA");
-        formPanel.add(txtBirthDate, gbc);
+//        // Date naissance
+//        gbc.gridx = 0; gbc.gridy = 2;
+//        formPanel.add(new JLabel("Date de naissance :"), gbc);
+//
+//        gbc.gridx = 1;
+//        txtBirthDate = new JTextField(15);
+//        txtBirthDate.setToolTipText("Format : JJ-MM-AAAA");
+//        formPanel.add(txtBirthDate, gbc);
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
 

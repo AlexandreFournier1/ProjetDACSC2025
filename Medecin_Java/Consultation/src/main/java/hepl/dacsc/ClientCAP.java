@@ -4,13 +4,20 @@ import hepl.dacsc.View.JDialog.AddConsultationJDialog;
 import hepl.dacsc.View.JDialog.AddPatientJDialog;
 import hepl.dacsc.View.JDialog.LoginJDialog;
 import hepl.dacsc.View.JDialog.UpdateConsultationJDialog;
+import hepl.dacsc.lib.reponse.ReponseADD_CONSULTATION;
+import hepl.dacsc.lib.reponse.ReponseADD_PATIENT;
 import hepl.dacsc.lib.reponse.ReponseLOGIN;
+import hepl.dacsc.lib.reponse.ReponseUPDATE_CONSULTATION;
+import hepl.dacsc.lib.requete.RequeteADD_CONSULTATION;
+import hepl.dacsc.lib.requete.RequeteADD_PATIENT;
 import hepl.dacsc.lib.requete.RequeteLOGIN;
+import hepl.dacsc.lib.requete.RequeteUPDATE_CONSULTATION;
 import hepl.dacsc.model.entity.Consultation;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -18,7 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class ClientCAP extends JFrame {
-    private Socket socket;
+    private Socket socket = null;
     private String login;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
@@ -54,18 +61,6 @@ public class ClientCAP extends JFrame {
         workArea = new JPanel(new BorderLayout());
         workArea.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         add(workArea, BorderLayout.CENTER);
-    }
-
-    private void showLoginDialog(JButton btnLogin, JButton btnLogout) {
-        LoginJDialog loginDialog = new LoginJDialog(this);
-        loginDialog.setVisible(true);
-
-        if (loginDialog.isAuthenticated()) {
-            authenticated = true;
-            btnLogin.setVisible(false);
-            btnLogout.setVisible(true);
-            showWorkPanel();
-        }
     }
 
     private void showWorkPanel() {
@@ -142,9 +137,34 @@ public class ClientCAP extends JFrame {
         });
 
 
-        btnAddPatient.addActionListener(e -> jButtonAddPatientActionPerformed(e));
-        btnAddConsultation.addActionListener(e -> jButtonAddConsultationActionPerformed(e));
-        btnUpdateConsultation.addActionListener(e -> jButtonUpdateConsultationActionPerformed(e, table, tableModel));
+        btnAddPatient.addActionListener(e -> {
+            try {
+                jButtonAddPatientActionPerformed(e);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        btnAddConsultation.addActionListener(e -> {
+            try {
+                jButtonAddConsultationActionPerformed(e);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        btnUpdateConsultation.addActionListener(e -> {
+            try {
+                jButtonUpdateConsultationActionPerformed(e, table, tableModel);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) {
@@ -158,9 +178,9 @@ public class ClientCAP extends JFrame {
                 String first_name = loginJDialog.getFirstName();
                 String mdp = loginJDialog.getMdp();
                 //Ip PC Noah
-                socket = new Socket("10.236.64.95", 50000);
+                //socket = new Socket("10.236.64.95", 50000);
                 //Ip PC Alex
-                //socket = new Socket("10.236.64.95", 55000);
+                socket = new Socket("192.168.56.1", 50000);
                 RequeteLOGIN requete = new RequeteLOGIN(id, last_name, first_name, mdp);
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
@@ -174,7 +194,7 @@ public class ClientCAP extends JFrame {
                     this.login = String.valueOf(id);
                 }
                 else {
-                    JOptionPane.showMessageDialog(this, "Erreur de connexion", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    showErrorMessage("Erreur de connexion");
                     socket.close();
                 }
 
@@ -196,22 +216,29 @@ public class ClientCAP extends JFrame {
             workArea.repaint();
         }
     }
-    private void jButtonAddPatientActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonAddPatientActionPerformed(java.awt.event.ActionEvent evt) throws IOException, ClassNotFoundException {
         AddPatientJDialog addPatientJDialog = new AddPatientJDialog(this);
         addPatientJDialog.setVisible(true);
 
-        if (addPatientJDialog.isConfirmed()){
+        if (addPatientJDialog.isConfirmed()) {
             String lastname = addPatientJDialog.getLastName();
             String firstname = addPatientJDialog.getFirstName();
-            LocalDate birthDate = addPatientJDialog.getBirthDate();
 
-            System.out.println(lastname + " " + firstname + " " + birthDate);
+            System.out.println(lastname + " " + firstname);
 
-            // Ajout DB
+            RequeteADD_PATIENT requete = new RequeteADD_PATIENT(lastname, firstname);
+
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+            oos.writeObject(requete);
+
+            ReponseADD_PATIENT reponse = (ReponseADD_PATIENT) ois.readObject();
+
+            showMessage("Id du patient créé = " + reponse.getId(), "Information");
         }
     }
 
-    private void jButtonAddConsultationActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonAddConsultationActionPerformed(java.awt.event.ActionEvent evt) throws IOException, ClassNotFoundException {
         AddConsultationJDialog dialog = new AddConsultationJDialog(this);
         dialog.setVisible(true);
 
@@ -222,20 +249,28 @@ public class ClientCAP extends JFrame {
             int duration = dialog.getDuration();
             int count = dialog.getCount();
 
-            System.out.println("Création " + count + " consultations à partir de " +
-                    date + " " + hour + ", durée=" + duration + " min");
+            System.out.println("Création " + count + " consultations à partir de " + date + " " + hour + ", durée=" + duration + " min");
 
+            RequeteADD_CONSULTATION requete = new RequeteADD_CONSULTATION(date, hour, duration, count);
+
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+            oos.writeObject(requete);
+
+            ReponseADD_CONSULTATION reponse = (ReponseADD_CONSULTATION) ois.readObject();
+
+            if (reponse.isOver17hours())
+                showWarningMessage("La consultation est au delà de 17h !", "Warning");
+            else
+                showMessage("Consultation ajoutée avec succès", "Succès");
         }
     }
 
-    private void jButtonUpdateConsultationActionPerformed(java.awt.event.ActionEvent evt, JTable table,DefaultTableModel tableModel) {
+    private void jButtonUpdateConsultationActionPerformed(java.awt.event.ActionEvent evt, JTable table,DefaultTableModel tableModel) throws IOException, ClassNotFoundException {
         int row = table.getSelectedRow();
 
         if (row == -1) {
-            JOptionPane.showMessageDialog(this,
-                    "Veuillez sélectionner une consultation dans le tableau.",
-                    "Aucune sélection",
-                    JOptionPane.WARNING_MESSAGE);
+            showWarningMessage("Veuillez sélectionner une consultation dans le tableau.", "Aucune sélection");
             return;
         }
 
@@ -263,18 +298,43 @@ public class ClientCAP extends JFrame {
         // Si confirmé, mise à jour du tableau
         if (dialog.isConfirmed()) {
 
-            tableModel.setValueAt(dialog.getDate().toString(), row, 3);
-            tableModel.setValueAt(dialog.getHour().toString(), row, 4);
-            Integer pid = dialog.getPatientId();
-            tableModel.setValueAt(pid == null ? "" : pid, row, 2);
-            tableModel.setValueAt(dialog.getDuration(), row, 5);
-            tableModel.setValueAt(dialog.getReason(), row, 6);
+            RequeteUPDATE_CONSULTATION requete = new RequeteUPDATE_CONSULTATION(id, date, hour, patientId, reason);
 
-            System.out.println("Consultation " + id + " mise à jour !");
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+            oos.writeObject(requete);
+
+            ReponseUPDATE_CONSULTATION reponse = (ReponseUPDATE_CONSULTATION) ois.readObject();
+
+            if (reponse.isValid())
+            {
+                tableModel.setValueAt(dialog.getDate().toString(), row, 3);
+                tableModel.setValueAt(dialog.getHour().toString(), row, 4);
+                Integer pid = dialog.getPatientId();
+                tableModel.setValueAt(pid == null ? "" : pid, row, 2);
+                tableModel.setValueAt(dialog.getDuration(), row, 5);
+                tableModel.setValueAt(dialog.getReason(), row, 6);
+
+                System.out.println("Consultation " + id + " mise à jour !");
+            }
+            else
+                showErrorMessage("Une erreur est survenue lors de l'ajout");
         }
     }
 
     private void jButtonSearchConsultationActionPerformed(java.awt.event.ActionEvent evt) {
 
+    }
+
+    private void showMessage(String msg, String title) {
+        JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void showWarningMessage(String msg, String title) {
+        JOptionPane.showMessageDialog(this, msg, title, JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void showErrorMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Erreur", JOptionPane.ERROR_MESSAGE);
     }
 }

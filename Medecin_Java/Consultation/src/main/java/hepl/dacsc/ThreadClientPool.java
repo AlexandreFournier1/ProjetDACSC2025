@@ -25,8 +25,6 @@ public class ThreadClientPool extends ThreadClient {
         ClientCAP mf = new ClientCAP();
         mf.setVisible(true);
 
-
-
         boolean interrompu = false;
         while(!interrompu)
         {
