@@ -27,6 +27,16 @@ public class ConsultationDAO {
         return null;
     }
 
+    public Consultation getConsultationsByDoctorId(Integer id) {
+        for (Consultation entity : consultations) {
+            if (Objects.equals(entity.getDoctor_id(), id))
+            {
+                return entity;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Consultation> loadConsultations() {
         return this.loadConsultations(null);
     }
@@ -135,7 +145,7 @@ public class ConsultationDAO {
             if(c != null) {
                 if (c.getId() != null) { // Update
 
-                    requete = "UPDATE Consultations SET "
+                    requete = "UPDATE consultations SET "
                             + " doctor_id = ?, "
                             + " patient_id = ?, "
                             + " date = ?, "
@@ -157,7 +167,7 @@ public class ConsultationDAO {
                     pStmt.close();
 
                 } else {
-                    requete = "INSERT INTO Consultations ("
+                    requete = "INSERT INTO consultations ("
                             + "doctor_id, "
                             + "patient_id, "
                             + "date, "
@@ -209,7 +219,7 @@ public class ConsultationDAO {
             try {
                 String requete;
 
-                requete = " DELETE FROM Consultations WHERE id = ?";
+                requete = " DELETE FROM consultations WHERE id = ?";
                 PreparedStatement stmt = connectDB.getConn().prepareStatement(requete);
                 stmt.setInt(1, id);
                 stmt.executeUpdate();

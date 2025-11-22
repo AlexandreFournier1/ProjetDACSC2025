@@ -148,9 +148,9 @@ public class MainJFrame extends JFrame {
             if (addPatientJDialog.isConfirmed()){
                 String lastname = addPatientJDialog.getLastName();
                 String firstname = addPatientJDialog.getFirstName();
-                LocalDate birthDate = addPatientJDialog.getBirthDate();
+                //LocalDate birthDate = addPatientJDialog.getBirthDate();
 
-                System.out.println(lastname + " " + firstname + " " + birthDate);
+                System.out.println(lastname + " " + firstname);
 
                 // Ajout DB
             }

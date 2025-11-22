@@ -12,7 +12,9 @@ import hepl.dacsc.lib.requete.RequeteADD_CONSULTATION;
 import hepl.dacsc.lib.requete.RequeteADD_PATIENT;
 import hepl.dacsc.lib.requete.RequeteLOGIN;
 import hepl.dacsc.lib.requete.RequeteUPDATE_CONSULTATION;
+import hepl.dacsc.model.dao.ConsultationDAO;
 import hepl.dacsc.model.entity.Consultation;
+import hepl.dacsc.model.entity.Doctor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +25,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class ClientCAP extends JFrame {
     private Socket socket = null;
@@ -30,7 +33,10 @@ public class ClientCAP extends JFrame {
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
 
+    private Doctor doctorConnected;
+
     private JPanel workArea;
+    private int nbConsultations;
     private boolean authenticated = false;
 
     public ClientCAP() {
@@ -122,6 +128,9 @@ public class ClientCAP extends JFrame {
         workArea.revalidate();
         workArea.repaint();
 
+        System.out.println("Affichage de consultation");
+        showConsultation(table, tableModel);
+
         btnSearch.addActionListener(e -> {
             String idPatient = txtIdPatient.getText().trim();
             String dateText = txtDate.getText().trim();
@@ -149,7 +158,7 @@ public class ClientCAP extends JFrame {
 
         btnAddConsultation.addActionListener(e -> {
             try {
-                jButtonAddConsultationActionPerformed(e);
+                jButtonAddConsultationActionPerformed(e, table, tableModel);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (ClassNotFoundException ex) {
@@ -167,6 +176,17 @@ public class ClientCAP extends JFrame {
         });
     }
 
+    private void showConsultation(JTable table, DefaultTableModel tableModel) {
+        ConsultationDAO dao = new ConsultationDAO();
+        ArrayList<Consultation> consultations = dao.loadConsultations();
+        Consultation consultation = dao.getConsultationsByDoctorId(doctorConnected.getId());
+
+        for (Consultation c : consultations) {
+            System.out.println(c.toString());
+            tableModel.addRow(new Object[]{nbConsultations, doctorConnected.getId(), c.getPatient_id(), c.getDate(), c.getHour(), c.getDuree(), c.getReason()});
+        }
+    }
+
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) {
         LoginJDialog loginJDialog = new LoginJDialog(this);
         loginJDialog.setVisible(true);
@@ -177,6 +197,14 @@ public class ClientCAP extends JFrame {
                 String last_name = loginJDialog.getLastName();
                 String first_name = loginJDialog.getFirstName();
                 String mdp = loginJDialog.getMdp();
+
+                doctorConnected = new Doctor();
+
+                doctorConnected.setId(id);
+                doctorConnected.setLast_name(last_name);
+                doctorConnected.setFirst_name(first_name);
+                doctorConnected.setMdp(mdp);
+
                 //Ip PC Noah
                 //socket = new Socket("10.236.64.95", 50000);
                 //Ip PC Alex
@@ -185,6 +213,7 @@ public class ClientCAP extends JFrame {
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
                 oos.writeObject(requete);
+                oos.flush();
                 ReponseLOGIN reponse = (ReponseLOGIN) ois.readObject();
 
                 System.out.println("test valid : " + reponse.isValid());
@@ -230,9 +259,8 @@ public class ClientCAP extends JFrame {
 
             RequeteADD_PATIENT requete = new RequeteADD_PATIENT(lastname, firstname);
 
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());
             oos.writeObject(requete);
+            oos.flush();
 
             ReponseADD_PATIENT reponse = (ReponseADD_PATIENT) ois.readObject();
 
@@ -240,24 +268,27 @@ public class ClientCAP extends JFrame {
         }
     }
 
-    private void jButtonAddConsultationActionPerformed(java.awt.event.ActionEvent evt) throws IOException, ClassNotFoundException {
+    private void jButtonAddConsultationActionPerformed(java.awt.event.ActionEvent evt, JTable table, DefaultTableModel tableModel) throws IOException, ClassNotFoundException {
         AddConsultationJDialog dialog = new AddConsultationJDialog(this);
         dialog.setVisible(true);
 
         if (dialog.isConfirmed()) {
-
             LocalDate date = dialog.getDate();
             LocalTime hour = dialog.getHour();
             int duration = dialog.getDuration();
-            int count = dialog.getCount();
 
-            System.out.println("Création " + count + " consultations à partir de " + date + " " + hour + ", durée=" + duration + " min");
+            // IdPatient et Reason ajoutée de manière fictive pour le moment
+            int idPatient = dialog.getIdPatient();
+            String reason = dialog.getReason();
 
-            RequeteADD_CONSULTATION requete = new RequeteADD_CONSULTATION(date, hour, duration, count);
+            int count = table.getRowCount();
 
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());
+            System.out.println("Création de la consultation " + count + " : " + reason + " du patient " + idPatient + " à la date " + date + " : " + hour + " : " + duration);
+
+            RequeteADD_CONSULTATION requete = new RequeteADD_CONSULTATION(doctorConnected.getId(), date, hour, duration, count);
+
             oos.writeObject(requete);
+            oos.flush();
 
             ReponseADD_CONSULTATION reponse = (ReponseADD_CONSULTATION) ois.readObject();
 
@@ -265,6 +296,10 @@ public class ClientCAP extends JFrame {
                 showWarningMessage("La consultation est au delà de 17h !", "Warning");
             else
                 showMessage("Consultation ajoutée avec succès", "Succès");
+
+            nbConsultations = count + 1;
+
+            tableModel.addRow(new Object[]{nbConsultations, doctorConnected.getId(), idPatient, date, hour, duration, reason});
         }
     }
 
@@ -302,9 +337,8 @@ public class ClientCAP extends JFrame {
 
             RequeteUPDATE_CONSULTATION requete = new RequeteUPDATE_CONSULTATION(id, date, hour, patientId, reason);
 
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());
             oos.writeObject(requete);
+            oos.flush();
 
             ReponseUPDATE_CONSULTATION reponse = (ReponseUPDATE_CONSULTATION) ois.readObject();
 

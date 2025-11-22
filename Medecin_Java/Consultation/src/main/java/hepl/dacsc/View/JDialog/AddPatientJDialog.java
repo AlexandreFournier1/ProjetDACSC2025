@@ -10,7 +10,7 @@ public class AddPatientJDialog extends JDialog {
 
     private JTextField txtLastName;
     private JTextField txtFirstName;
-    private JTextField txtBirthDate;
+    //private JTextField txtBirthDate;
 
     private boolean confirmed = false;
 
@@ -82,8 +82,8 @@ public class AddPatientJDialog extends JDialog {
     private boolean validateFields() {
 
         if (txtLastName.getText().trim().isEmpty() ||
-                txtFirstName.getText().trim().isEmpty() ||
-                txtBirthDate.getText().trim().isEmpty()) {
+                txtFirstName.getText().trim().isEmpty() /*||
+                txtBirthDate.getText().trim().isEmpty()*/) {
 
             JOptionPane.showMessageDialog(this,
                     "Veuillez remplir tous les champs.",
@@ -92,15 +92,15 @@ public class AddPatientJDialog extends JDialog {
             return false;
         }
 
-        try {
-            LocalDate.parse(txtBirthDate.getText().trim(), dateFormatter);
-        } catch (DateTimeParseException e) {
-            JOptionPane.showMessageDialog(this,
-                    "La date doit être au format JJ-MM-AAAA.",
-                    "Erreur format date",
-                    JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+//        try {
+//            LocalDate.parse(txtBirthDate.getText().trim(), dateFormatter);
+//        } catch (DateTimeParseException e) {
+//            JOptionPane.showMessageDialog(this,
+//                    "La date doit être au format JJ-MM-AAAA.",
+//                    "Erreur format date",
+//                    JOptionPane.ERROR_MESSAGE);
+//            return false;
+//        }
 
         return true;
     }
@@ -109,7 +109,7 @@ public class AddPatientJDialog extends JDialog {
     public String getLastName() { return txtLastName.getText().trim(); }
     public String getFirstName() { return txtFirstName.getText().trim(); }
 
-    public LocalDate getBirthDate() {
-        return LocalDate.parse(txtBirthDate.getText().trim(), dateFormatter);
-    }
+//    public LocalDate getBirthDate() {
+//        return LocalDate.parse(txtBirthDate.getText().trim(), dateFormatter);
+//    }
 }

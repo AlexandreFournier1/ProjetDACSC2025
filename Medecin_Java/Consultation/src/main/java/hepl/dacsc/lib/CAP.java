@@ -112,6 +112,7 @@ public class CAP implements Protocol {
         else {
             reponse = new ReponseADD_CONSULTATION(false);
             Consultation consultation = new Consultation();
+            consultation.setDoctor_id(requete.getIdDoctor());
             consultation.setDate(requete.getDate());
             consultation.setHour(requete.getHour());
             consultation.setDuree(requete.getDuration());
@@ -136,9 +137,9 @@ public class CAP implements Protocol {
         PatientDAO dao = new PatientDAO();
         dao.save(patient);
 
-        Patient newPatient = dao.getPatientByName(requete.getNom(), requete.getPrenom());
+        //Patient newPatient = dao.getPatientByName(requete.getNom(), requete.getPrenom());
 
-        ReponseADD_PATIENT reponse = new ReponseADD_PATIENT(newPatient.getId());
+        ReponseADD_PATIENT reponse = new ReponseADD_PATIENT(patient.getId());
 
         return reponse;
     }
@@ -148,7 +149,14 @@ public class CAP implements Protocol {
         logger.Trace("Requete UPDATE_CONSULTATION reçue !");
 
         ConsultationDAO dao = new ConsultationDAO();
+
+        ArrayList<Consultation> consultations = dao.loadConsultations();
         Consultation consultation = dao.getConsultationsById(requete.getId());
+
+        if (consultation == null) {
+            logger.Trace("Consultation avec ID " + requete.getId() + " introuvable !");
+            return new ReponseUPDATE_CONSULTATION(false);
+        }
 
         // Dans le cas où la consultation n'a pas encore de Patient
         if (consultation.getPatient_id() == null) {

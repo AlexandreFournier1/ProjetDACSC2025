@@ -126,7 +126,14 @@ public class PatientDAO {
 
                     pStmt.setString(1, c.getLast_name());
                     pStmt.setString(2, c.getFirst_name());
-                    pStmt.setDate(3, Date.valueOf(c.getBirth_date()));
+
+                    if(c.getBirth_date() != null) {
+                        pStmt.setDate(3, Date.valueOf(c.getBirth_date()));
+                    } else {
+                        pStmt.setNull(3, java.sql.Types.DATE);
+                    }
+
+                    //pStmt.setDate(3, Date.valueOf(c.getBirth_date()));
                     pStmt.setInt(4, c.getId());
                     pStmt.executeUpdate();
                     pStmt.close();
@@ -147,7 +154,14 @@ public class PatientDAO {
 
                     pStmt.setString(1, c.getLast_name());
                     pStmt.setString(2, c.getFirst_name());
-                    pStmt.setDate(3, Date.valueOf(c.getBirth_date()));
+
+                    if(c.getBirth_date() != null) {
+                        pStmt.setDate(3, Date.valueOf(c.getBirth_date()));
+                    } else {
+                        pStmt.setNull(3, java.sql.Types.DATE);
+                    }
+
+                    //pStmt.setDate(3, Date.valueOf(c.getBirth_date()));
                     pStmt.executeUpdate();
 
                     ResultSet rs = pStmt.getGeneratedKeys();

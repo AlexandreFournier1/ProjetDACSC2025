@@ -13,6 +13,8 @@ public class AddConsultationJDialog extends JDialog {
     private JTextField txtHour;
     private JTextField txtDuration;
     private JTextField txtCount;
+    private JTextField txtIdPatient;
+    private JTextField txtReason;
 
     private boolean confirmed = false;
     private boolean exceeds17h = false;
@@ -65,14 +67,32 @@ public class AddConsultationJDialog extends JDialog {
         txtDuration.setToolTipText("ex : 15");
         formPanel.add(txtDuration, gbc);
 
-        // NOMBRE CONSÉCUTIVES
+        // ID PATIENT
         gbc.gridx = 0; gbc.gridy = 3;
-        formPanel.add(new JLabel("Nb consultations :"), gbc);
+        formPanel.add(new JLabel("Id Patient :"), gbc);
 
         gbc.gridx = 1;
-        txtCount = new JTextField(15);
-        txtCount.setToolTipText("ex : 3");
-        formPanel.add(txtCount, gbc);
+        txtIdPatient = new JTextField(15);
+        txtIdPatient.setToolTipText("ex : 7");
+        formPanel.add(txtIdPatient, gbc);
+
+        // REASON
+        gbc.gridx = 0; gbc.gridy = 4;
+        formPanel.add(new JLabel("Raison :"), gbc);
+
+        gbc.gridx = 1;
+        txtReason = new JTextField(15);
+        txtReason.setToolTipText("ex : Maux de tête");
+        formPanel.add(txtReason, gbc);
+
+        // NOMBRE CONSÉCUTIVES
+//        gbc.gridx = 0; gbc.gridy = 3;
+//        formPanel.add(new JLabel("Nb consultations :"), gbc);
+//
+//        gbc.gridx = 1;
+//        txtCount = new JTextField(15);
+//        txtCount.setToolTipText("ex : 3");
+//        formPanel.add(txtCount, gbc);
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
@@ -88,17 +108,17 @@ public class AddConsultationJDialog extends JDialog {
         btnConfirm.addActionListener(e -> {
             if (validateFields()) {
 
-                computeIfExceeds17h();
-
-                if (exceeds17h) {
-                    JOptionPane.showMessageDialog(this,
-                            "ATTENTION : la dernière consultation dépasse 17h00 de "
-                                    + overflowMinutes + " minutes.\n" +
-                                    "Veuillez modifier l'heure, la durée ou le nombre.",
-                            "Dépassement horaire",
-                            JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+//                computeIfExceeds17h();
+//
+//                if (exceeds17h) {
+//                    JOptionPane.showMessageDialog(this,
+//                            "ATTENTION : la dernière consultation dépasse 17h00 de "
+//                                    + overflowMinutes + " minutes.\n" +
+//                                    "Veuillez modifier l'heure, la durée ou le nombre.",
+//                            "Dépassement horaire",
+//                            JOptionPane.WARNING_MESSAGE);
+//                    return;
+//                }
 
                 confirmed = true;
                 dispose();
@@ -114,7 +134,8 @@ public class AddConsultationJDialog extends JDialog {
         if (txtDate.getText().trim().isEmpty()
                 || txtHour.getText().trim().isEmpty()
                 || txtDuration.getText().trim().isEmpty()
-                || txtCount.getText().trim().isEmpty()) {
+                || txtIdPatient.getText().trim().isEmpty()
+                || txtReason.getText().trim().isEmpty()) {
 
             JOptionPane.showMessageDialog(this, "Tous les champs doivent être remplis.",
                     "Erreur", JOptionPane.WARNING_MESSAGE);
@@ -141,14 +162,6 @@ public class AddConsultationJDialog extends JDialog {
             Integer.parseInt(txtDuration.getText().trim());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Durée invalide",
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        try {
-            Integer.parseInt(txtCount.getText().trim());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Nombre consultations invalide",
                     "Erreur", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -191,5 +204,13 @@ public class AddConsultationJDialog extends JDialog {
 
     public int getCount() {
         return Integer.parseInt(txtCount.getText().trim());
+    }
+
+    public int getIdPatient() {
+        return Integer.parseInt(txtIdPatient.getText().trim());
+    }
+
+    public String getReason() {
+        return txtReason.getText().trim();
     }
 }
