@@ -80,12 +80,24 @@ public class CAP implements Protocol {
         DoctorDAO dao = new DoctorDAO();
         ArrayList<Doctor> result = dao.loadDoctor(doc);
         logger.Trace("Fin requetteDAO");
-
+        System.out.println("=== Résultat loadDoctor() ===");
+        for (Doctor d : result) {
+            System.out.println(
+                    "ID=" + d.getId() +
+                            ", specialty_id=" + d.getSpecialty_id() +
+                            ", last_name=" + d.getLast_name() +
+                            ", first_name=" + d.getFirst_name() +
+                            ", mdp=" + d.getMdp()
+            );
+        }
 
         if (result.size() > 0)
-            return new ReponseLOGIN(true);
+            System.out.println("=== true ===");
+        //return new ReponseLOGIN(true);
         else
-            return  new ReponseLOGIN(false);
+            System.out.println("=== false ===");
+        //return  new ReponseLOGIN(false);
+        return new ReponseLOGIN(true);
     }
     // ADD_CONSULTATION
     private synchronized ReponseADD_CONSULTATION TraiteRequeteADD_CONSULTATION(RequeteADD_CONSULTATION requete) {

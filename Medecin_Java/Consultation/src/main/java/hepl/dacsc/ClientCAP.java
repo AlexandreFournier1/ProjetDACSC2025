@@ -187,10 +187,12 @@ public class ClientCAP extends JFrame {
                 oos.writeObject(requete);
                 ReponseLOGIN reponse = (ReponseLOGIN) ois.readObject();
 
+                System.out.println("test valid : " + reponse.isValid());
                 if(reponse.isValid()){
+                    System.out.println("test valid : " + reponse.isValid());
                     btnLogin.setVisible(false);
                     btnLogout.setVisible(true);
-                    workArea.setVisible(true);
+                    showWorkPanel();
                     this.login = String.valueOf(id);
                 }
                 else {

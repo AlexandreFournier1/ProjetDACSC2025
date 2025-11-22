@@ -2,7 +2,7 @@ package hepl.dacsc.model.viewmodel;
 
 public class DoctorSearchVM {
     private Integer id;
-    private Integer speciality_id;
+    private Integer specialty_id;
     private String last_name;
     private String first_name;
     private String mdp;
@@ -17,12 +17,12 @@ public class DoctorSearchVM {
         this.id = id;
     }
 
-    public Integer getSpeciality_id() {
-        return speciality_id;
+    public Integer getSpecialty_id() {
+        return specialty_id;
     }
 
-    public void setSpeciality_id(Integer speciality_id) {
-        this.speciality_id = speciality_id;
+    public void setSpecialty_id(Integer specialty_id) {
+        this.specialty_id = specialty_id;
     }
 
     public String getLast_name() {

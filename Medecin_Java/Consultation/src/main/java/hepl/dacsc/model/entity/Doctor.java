@@ -1,24 +1,24 @@
 package hepl.dacsc.model.entity;
 
 public class Doctor extends Entity {
-    private Integer speciality_id;
+    private Integer specialty_id;
     private String last_name;
     private String first_name;
     private  String mdp;
 
     public Doctor() {}
-    public Doctor(int id, Integer speciality_id, String last_name, String first_name) {
+    public Doctor(int id, Integer specialty_id, String last_name, String first_name) {
         super(id);
-        this.speciality_id = speciality_id;
+        this.specialty_id = specialty_id;
         this.last_name = last_name;
         this.first_name = first_name;
     }
-    public Integer getSpeciality_id() {
-        return speciality_id;
+    public Integer getSpecialty_id() {
+        return specialty_id;
     }
 
     public void setSpeciality_id(Integer speciality_id) {
-        this.speciality_id = speciality_id;
+        this.specialty_id = speciality_id;
     }
 
     public String getLast_name() {
