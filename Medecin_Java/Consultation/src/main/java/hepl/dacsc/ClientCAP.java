@@ -4,14 +4,8 @@ import hepl.dacsc.View.JDialog.AddConsultationJDialog;
 import hepl.dacsc.View.JDialog.AddPatientJDialog;
 import hepl.dacsc.View.JDialog.LoginJDialog;
 import hepl.dacsc.View.JDialog.UpdateConsultationJDialog;
-import hepl.dacsc.lib.reponse.ReponseADD_CONSULTATION;
-import hepl.dacsc.lib.reponse.ReponseADD_PATIENT;
-import hepl.dacsc.lib.reponse.ReponseLOGIN;
-import hepl.dacsc.lib.reponse.ReponseUPDATE_CONSULTATION;
-import hepl.dacsc.lib.requete.RequeteADD_CONSULTATION;
-import hepl.dacsc.lib.requete.RequeteADD_PATIENT;
-import hepl.dacsc.lib.requete.RequeteLOGIN;
-import hepl.dacsc.lib.requete.RequeteUPDATE_CONSULTATION;
+import hepl.dacsc.lib.reponse.*;
+import hepl.dacsc.lib.requete.*;
 import hepl.dacsc.model.dao.ConsultationDAO;
 import hepl.dacsc.model.entity.Consultation;
 import hepl.dacsc.model.entity.Doctor;
@@ -38,6 +32,8 @@ public class ClientCAP extends JFrame {
     private JPanel workArea;
     private int nbConsultations;
     private boolean authenticated = false;
+
+    private DefaultTableModel tableModel;
 
     public ClientCAP() {
         initComponents();
@@ -103,7 +99,7 @@ public class ClientCAP extends JFrame {
 
         //tableau
         String[] columnNames = {"ID", "Doc ID", "Patient ID", "Date", "Heure", "Durée", "Raison"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(tableModel);
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -112,6 +108,8 @@ public class ClientCAP extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+
+        showConsultation();
 
         // PANELS FIXES EN HAUT
         JPanel topSection = new JPanel();
@@ -128,21 +126,11 @@ public class ClientCAP extends JFrame {
         workArea.revalidate();
         workArea.repaint();
 
-        System.out.println("Affichage de consultation");
-        showConsultation(table, tableModel);
-
         btnSearch.addActionListener(e -> {
             String idPatient = txtIdPatient.getText().trim();
             String dateText = txtDate.getText().trim();
 
             tableModel.setRowCount(0);
-
-            // Vérification des champs
-
-            // Ajoute les lignes avec durée
-            tableModel.addRow(new Object[]{1, 1, idPatient, "2025-02-01", "09:00", 30, "Contrôle annuel du patient."});
-            tableModel.addRow(new Object[]{2, 1, idPatient, "2025-02-01", "09:30", 30, "Vaccination antigrippale et vérification tension artérielle."});
-            tableModel.addRow(new Object[]{3, 1, idPatient, "2025-02-01", "10:00", 30, "Suivi post-opératoire et renouvellement d’ordonnance."});
         });
 
 
@@ -176,14 +164,29 @@ public class ClientCAP extends JFrame {
         });
     }
 
-    private void showConsultation(JTable table, DefaultTableModel tableModel) {
-        ConsultationDAO dao = new ConsultationDAO();
-        ArrayList<Consultation> consultations = dao.loadConsultations();
-        Consultation consultation = dao.getConsultationsByDoctorId(doctorConnected.getId());
+    private void showConsultation() {
+        try {
+            RequeteGET_CONSULTATION req = new RequeteGET_CONSULTATION(doctorConnected.getId());
+            oos.writeObject(req);
+            oos.flush();
 
-        for (Consultation c : consultations) {
-            System.out.println(c.toString());
-            tableModel.addRow(new Object[]{nbConsultations, doctorConnected.getId(), c.getPatient_id(), c.getDate(), c.getHour(), c.getDuree(), c.getReason()});
+            ReponseGET_CONSULTATION rep = (ReponseGET_CONSULTATION) ois.readObject();
+
+            tableModel.setRowCount(0);
+            for (Consultation c : rep.getConsultations()) {
+                tableModel.addRow(new Object[]{
+                        c.getId(),
+                        c.getDoctor_id(),
+                        c.getPatient_id(),
+                        c.getDate(),
+                        c.getHour(),
+                        c.getDuree(),
+                        c.getReason()
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -223,6 +226,8 @@ public class ClientCAP extends JFrame {
                     btnLogout.setVisible(true);
                     showWorkPanel();
                     this.login = String.valueOf(id);
+
+                    //showConsultation();
                 }
                 else {
                     showErrorMessage("Erreur de connexion");
@@ -312,6 +317,11 @@ public class ClientCAP extends JFrame {
         }
 
         // Récupération des données du tableau
+        Object idObj = tableModel.getValueAt(row, 0);
+        if (idObj == null) {
+            showWarningMessage("La consultation sélectionnée est invalide.", "Erreur");
+            return;
+        }
         int id = (int) tableModel.getValueAt(row, 0);
         int docId = (int) tableModel.getValueAt(row, 1);
         Object patientObj = tableModel.getValueAt(row, 2);

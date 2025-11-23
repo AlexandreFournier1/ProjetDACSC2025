@@ -1,9 +1,10 @@
 package hepl.dacsc.model.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Consultation extends Entity {
+public class Consultation extends Entity implements Serializable {
     private Integer doctor_id;
     private Integer patient_id;
     private LocalDate date;

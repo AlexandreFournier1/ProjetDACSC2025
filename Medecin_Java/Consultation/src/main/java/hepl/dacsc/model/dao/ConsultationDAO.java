@@ -27,14 +27,18 @@ public class ConsultationDAO {
         return null;
     }
 
-    public Consultation getConsultationsByDoctorId(Integer id) {
+    public ArrayList<Consultation> getConsultationsByDoctorId(Integer id) {
+        // Toujours recharger depuis la DB
+        loadConsultations();
+
+        ArrayList<Consultation> result = new ArrayList<>();
+
         for (Consultation entity : consultations) {
-            if (Objects.equals(entity.getDoctor_id(), id))
-            {
-                return entity;
+            if (Objects.equals(entity.getDoctor_id(), id)) {
+                result.add(entity);
             }
         }
-        return null;
+        return result;
     }
 
     public ArrayList<Consultation> loadConsultations() {
@@ -121,7 +125,13 @@ public class ConsultationDAO {
                 Integer doctorId = rs.getInt("doctor_id");
                 Integer patientId = rs.getObject("patient_id", Integer.class);
                 LocalDate date = rs.getDate("date").toLocalDate();
-                LocalTime hour = rs.getTime("hour").toLocalTime();
+
+                String hourStr = rs.getString("hour");
+                if (hourStr.length() == 4) {            // Si format H:mm : exemple 9:00
+                    hourStr = "0" + hourStr;            // devient 09:00
+                }
+                LocalTime hour = LocalTime.parse(hourStr);
+
                 Integer duree = rs.getInt("duree");
                 String reason = rs.getString("reason");
 
@@ -131,10 +141,10 @@ public class ConsultationDAO {
                 consultations.add(consultation);
             }
             stmt.close();
+
+            return consultations;
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }finally {
-            return consultations;
         }
     }
 

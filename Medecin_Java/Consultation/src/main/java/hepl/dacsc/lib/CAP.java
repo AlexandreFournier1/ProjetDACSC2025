@@ -5,15 +5,8 @@ import hepl.dacsc.ServerGeneriqueTCP.interfaces.Logger;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Protocol;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Reponse;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Requete;
-import hepl.dacsc.lib.reponse.ReponseADD_CONSULTATION;
-import hepl.dacsc.lib.reponse.ReponseADD_PATIENT;
-import hepl.dacsc.lib.reponse.ReponseLOGIN;
-import hepl.dacsc.lib.reponse.ReponseUPDATE_CONSULTATION;
-import hepl.dacsc.lib.requete.RequeteADD_CONSULTATION;
-import hepl.dacsc.lib.requete.RequeteADD_PATIENT;
-import hepl.dacsc.lib.requete.RequeteLOGIN;
-import hepl.dacsc.lib.requete.RequeteUPDATE_CONSULTATION;
-import hepl.dacsc.model.dao.ConnectDB;
+import hepl.dacsc.lib.reponse.*;
+import hepl.dacsc.lib.requete.*;
 import hepl.dacsc.model.dao.ConsultationDAO;
 import hepl.dacsc.model.dao.DoctorDAO;
 import hepl.dacsc.model.dao.PatientDAO;
@@ -61,6 +54,9 @@ public class CAP implements Protocol {
         // DELETE_CONSULTATION
 
         // LOGOUT
+
+        // GET_CONSULTATION -> Pas demandé mais ajout pour afficher les consultations dans la fenêtre
+        if (requete instanceof RequeteGET_CONSULTATION) return TraiteRequeteGET_CONSULTATION((RequeteGET_CONSULTATION) requete);
 
 
         return null;
@@ -151,6 +147,7 @@ public class CAP implements Protocol {
         ConsultationDAO dao = new ConsultationDAO();
 
         ArrayList<Consultation> consultations = dao.loadConsultations();
+
         Consultation consultation = dao.getConsultationsById(requete.getId());
 
         if (consultation == null) {
@@ -158,19 +155,31 @@ public class CAP implements Protocol {
             return new ReponseUPDATE_CONSULTATION(false);
         }
 
-        // Dans le cas où la consultation n'a pas encore de Patient
-        if (consultation.getPatient_id() == null) {
-            consultation.setPatient_id(requete.getIdPatient());
-            consultation.setReason(requete.getReason());
-        }
-        // Dans le cas où on modifie la date et l'heure
-        else {
-            consultation.setDate(requete.getNewDate());
-            consultation.setHour(requete.getNewHour());
-        }
+        consultation.setPatient_id(requete.getIdPatient());
+        consultation.setReason(requete.getReason());
+        consultation.setDate(requete.getNewDate());
+        consultation.setHour(requete.getNewHour());
 
         dao.save(consultation);
         ReponseUPDATE_CONSULTATION reponse = new ReponseUPDATE_CONSULTATION(true);
+
+        return reponse;
+    }
+
+    // GET_CONSULTATION
+    private synchronized ReponseGET_CONSULTATION TraiteRequeteGET_CONSULTATION(RequeteGET_CONSULTATION requete) {
+        ConsultationDAO dao = new ConsultationDAO();
+        ArrayList<Consultation> all = dao.loadConsultations();
+
+        System.out.println("Nombre de consultations chargées : " + all.size());
+        System.out.println(all);
+
+        ArrayList<Consultation> list = dao.getConsultationsByDoctorId(requete.getDoctorId());
+
+        System.out.println("Id doctor dans CAP : " + requete.getDoctorId());
+        System.out.println(list);
+
+        ReponseGET_CONSULTATION reponse = new ReponseGET_CONSULTATION(list);
 
         return reponse;
     }
