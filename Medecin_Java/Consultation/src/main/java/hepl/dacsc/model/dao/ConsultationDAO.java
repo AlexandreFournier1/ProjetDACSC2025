@@ -84,10 +84,10 @@ public class ConsultationDAO {
             if (csvm != null) {
                 String where = " WHERE 1=1 ";
 
-                if (csvm.getId() != 0) {
+                if (csvm.getId() != null) {
                     where += "AND consultations.id = ? ";
                 }
-                if (csvm.getDoctor_id() != 0) {
+                if (csvm.getDoctor_id() != null) {
                     where += "AND consultations.doctor_id = ? ";
                 }
                 if (csvm.getPatient_id() != null) {
@@ -253,7 +253,7 @@ public class ConsultationDAO {
             try {
                 String requete;
 
-                requete = " DELETE FROM consultations WHERE id = ?";
+                requete = " DELETE FROM consultations WHERE id = ? ;";
                 PreparedStatement stmt = connectDB.getConn().prepareStatement(requete);
                 stmt.setInt(1, id);
                 stmt.executeUpdate();

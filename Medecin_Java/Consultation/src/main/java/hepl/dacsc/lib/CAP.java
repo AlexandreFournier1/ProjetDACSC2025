@@ -13,6 +13,7 @@ import hepl.dacsc.model.dao.PatientDAO;
 import hepl.dacsc.model.entity.Consultation;
 import hepl.dacsc.model.entity.Doctor;
 import hepl.dacsc.model.entity.Patient;
+import hepl.dacsc.model.viewmodel.ConsultationSearchVM;
 import hepl.dacsc.model.viewmodel.DoctorSearchVM;
 
 import java.net.Socket;
@@ -50,8 +51,10 @@ public class CAP implements Protocol {
         if (requete instanceof RequeteUPDATE_CONSULTATION) return TraiteRequeteUPDATE_CONSULTATION((RequeteUPDATE_CONSULTATION) requete);
 
         // SEARCH_CONSULTATIONS
+        if (requete instanceof RequeteSEARCH_CONSULTATION) return TraiteRequeteSEARCH_CONSULTATION((RequeteSEARCH_CONSULTATION) requete);
 
         // DELETE_CONSULTATION
+        if (requete instanceof RequeteDELETE_CONSULTATION) return TraiteRequeteDELETE_CONSULTATION((RequeteDELETE_CONSULTATION) requete);
 
         // LOGOUT
 
@@ -87,13 +90,15 @@ public class CAP implements Protocol {
             );
         }
 
-        if (result.size() > 0)
+        if (result.size() > 0){
             System.out.println("=== true ===");
-        //return new ReponseLOGIN(true);
-        else
+            return new ReponseLOGIN(true);
+        }
+        else {
             System.out.println("=== false ===");
-        //return  new ReponseLOGIN(false);
-        return new ReponseLOGIN(true);
+            return  new ReponseLOGIN(false);
+        }
+        //return new ReponseLOGIN(true);
     }
     // ADD_CONSULTATION
     private synchronized ReponseADD_CONSULTATION TraiteRequeteADD_CONSULTATION(RequeteADD_CONSULTATION requete) {
@@ -167,7 +172,43 @@ public class CAP implements Protocol {
         return reponse;
     }
 
-    // GET_CONSULTATION
+    //Search Consultation
+    private synchronized ReponseSEARCH_CONSULTATION TraiteRequeteSEARCH_CONSULTATION(RequeteSEARCH_CONSULTATION requete) {
+        ConsultationDAO dao = new ConsultationDAO();
+        ConsultationSearchVM cons = new ConsultationSearchVM();
+
+        cons.setDoctor_id(requete.getDoctorId());
+        if (requete.getDate() != null) {
+            cons.setDate(requete.getDate());
+        }
+
+        Integer id = requete.getId();
+        if (id != null && id != 0) {
+            cons.setPatient_id(id);
+        }
+
+        System.out.println("=== OBJET cons ===");
+        System.out.println("doctor_id : " + cons.getDoctor_id());
+        System.out.println("patient_id : " + cons.getPatient_id());
+        System.out.println("date       : " + cons.getDate());
+
+        ArrayList<Consultation> all = dao.loadConsultations(cons);
+
+        System.out.println("Nombre de consultations filtrées : " + all.size());
+
+        return new ReponseSEARCH_CONSULTATION(all);
+    }
+
+    private synchronized ReponseDELETE_CONSULTATION TraiteRequeteDELETE_CONSULTATION(RequeteDELETE_CONSULTATION requete) {
+
+        ConsultationDAO dao = new ConsultationDAO();
+        dao.delete(requete.getConsultationId());
+
+        return new ReponseDELETE_CONSULTATION(true);
+    }
+
+
+        // GET_CONSULTATION
     private synchronized ReponseGET_CONSULTATION TraiteRequeteGET_CONSULTATION(RequeteGET_CONSULTATION requete) {
         ConsultationDAO dao = new ConsultationDAO();
         ArrayList<Consultation> all = dao.loadConsultations();

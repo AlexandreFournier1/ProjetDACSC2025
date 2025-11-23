@@ -6,13 +6,13 @@ import hepl.dacsc.View.JDialog.LoginJDialog;
 import hepl.dacsc.View.JDialog.UpdateConsultationJDialog;
 import hepl.dacsc.lib.reponse.*;
 import hepl.dacsc.lib.requete.*;
-import hepl.dacsc.model.dao.ConsultationDAO;
 import hepl.dacsc.model.entity.Consultation;
 import hepl.dacsc.model.entity.Doctor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,11 +24,15 @@ import java.util.ArrayList;
 public class ClientCAP extends JFrame {
     private Socket socket = null;
     private String login;
+    private JTextField txtIdPatient;
+    private JTextField txtDate;
+
+
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
 
-    private Doctor doctorConnected;
 
+    private Doctor doctorConnected;
     private JPanel workArea;
     private int nbConsultations;
     private boolean authenticated = false;
@@ -85,17 +89,20 @@ public class ClientCAP extends JFrame {
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
         searchPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
-        JLabel lblIdPatient = new JLabel("id patient:");
-        JTextField txtIdPatient = new JTextField(10);
-        JLabel lblDate = new JLabel("date:");
-        JTextField txtDate = new JTextField(10);
+        JLabel lblIdPatient = new JLabel("id patient: (0 = tout)");
+        txtIdPatient = new JTextField(10);
+        JLabel lblDate = new JLabel("date: (0 = tout)");
+        txtDate = new JTextField(10);
         JButton btnSearch = new JButton("search consultation");
+        JButton btnDelete = new JButton("delete consultation");
+
 
         searchPanel.add(lblIdPatient);
         searchPanel.add(txtIdPatient);
         searchPanel.add(lblDate);
         searchPanel.add(txtDate);
         searchPanel.add(btnSearch);
+        searchPanel.add(btnDelete);
 
         //tableau
         String[] columnNames = {"ID", "Doc ID", "Patient ID", "Date", "Heure", "Durée", "Raison"};
@@ -109,7 +116,7 @@ public class ClientCAP extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
 
-        showConsultation();
+        //showConsultation();
 
         // PANELS FIXES EN HAUT
         JPanel topSection = new JPanel();
@@ -127,10 +134,21 @@ public class ClientCAP extends JFrame {
         workArea.repaint();
 
         btnSearch.addActionListener(e -> {
-            String idPatient = txtIdPatient.getText().trim();
-            String dateText = txtDate.getText().trim();
+            try {
+                jButtonSearchConsultationActionPerformed(e);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
-            tableModel.setRowCount(0);
+        btnDelete.addActionListener(e -> {
+            try {
+                jButtonDeleteConsultation(e, table, tableModel);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
 
@@ -215,9 +233,9 @@ public class ClientCAP extends JFrame {
                 doctorConnected.setMdp(mdp);
 
                 //Ip PC Noah
-                //socket = new Socket("10.236.64.95", 50000);
+                socket = new Socket("192.168.0.81", 50000);
                 //Ip PC Alex
-                socket = new Socket("192.168.56.1", 50000);
+                //socket = new Socket("192.168.56.1", 50000);
                 RequeteLOGIN requete = new RequeteLOGIN(id, last_name, first_name, mdp);
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
@@ -384,11 +402,109 @@ public class ClientCAP extends JFrame {
         }
     }
 
-    private void jButtonSearchConsultationActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonSearchConsultationActionPerformed(java.awt.event.ActionEvent evt) throws IOException, ClassNotFoundException {
+        String Id = txtIdPatient.getText().trim();
+        String Date = txtDate.getText().trim();
 
+        if(Id.isEmpty() || Date.isEmpty()){
+            showWarningMessage("Veuillez enter un id de patient et une date", "Warning");
+            return;
+        }
+
+        Integer idPatient;
+        try {
+            idPatient = Integer.valueOf(Id);
+        } catch (NumberFormatException ex) {
+            showWarningMessage("L'ID patient doit être un nombre entier.", "Erreur");
+            return;
+        }
+
+        LocalDate date = null;
+        if (!Date.equals("0")) {
+            try {
+                date = LocalDate.parse(Date);
+            } catch (Exception ex) {
+                showWarningMessage("La date doit être au format YYYY-MM-DD ou 0.", "Erreur");
+                return;
+            }
+        }
+
+        System.out.println(Id + " " + date);
+
+        RequeteSEARCH_CONSULTATION requete = new RequeteSEARCH_CONSULTATION(doctorConnected.getId(), idPatient, date);
+
+        oos.writeObject(requete);
+        oos.flush();
+
+        ReponseSEARCH_CONSULTATION reponse = (ReponseSEARCH_CONSULTATION) ois.readObject();
+
+        ArrayList<Consultation> consultations = reponse.getSearchedConsultations();
+
+        if (consultations == null || consultations.isEmpty()) {
+            showMessage("Aucune consultation trouvée pour ces critères.", "Information");
+            return;
+        }
+
+        tableModel.setRowCount(0);
+
+        for (Consultation c : consultations) {
+            tableModel.addRow(new Object[]{
+                    c.getId(),
+                    c.getDoctor_id(),
+                    c.getPatient_id(),
+                    c.getDate(),
+                    c.getHour(),
+                    c.getDuree(),
+                    c.getReason()
+            });
+        }
     }
 
-    private void showMessage(String msg, String title) {
+    private void jButtonDeleteConsultation(ActionEvent evt, JTable table, DefaultTableModel tableModel) throws IOException, ClassNotFoundException {
+
+        int selectedRow = table.getSelectedRow();
+
+        if (selectedRow == -1) {
+            showWarningMessage("Veuillez sélectionner une consultation avant de supprimer.", "Aucune sélection");
+            return;
+        }
+        Object idObj = tableModel.getValueAt(selectedRow, 0);
+
+        if (idObj == null) {
+            showErrorMessage("Impossible de récupérer l'ID de la consultation.");
+            return;
+        }
+
+        int consultationId = Integer.parseInt(idObj.toString());
+
+        // Confirmation
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Voulez-vous vraiment supprimer la consultation " + consultationId + " ?",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        RequeteDELETE_CONSULTATION requete = new RequeteDELETE_CONSULTATION(consultationId);
+        oos.writeObject(requete);
+        oos.flush();
+
+        ReponseDELETE_CONSULTATION reponse = (ReponseDELETE_CONSULTATION) ois.readObject();
+
+        if (reponse.isValid()) {
+            tableModel.removeRow(selectedRow);
+            showMessage("Consultation supprimée avec succès.", "Succès");
+        } else {
+            showErrorMessage("Impossible de supprimer la consultation.");
+        }
+    }
+
+
+        private void showMessage(String msg, String title) {
         JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
