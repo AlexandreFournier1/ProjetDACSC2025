@@ -10,13 +10,15 @@ public class RequeteUPDATE_CONSULTATION implements Requete {
     private int id;
     private LocalDate newDate;
     private LocalTime newHour;
-    private int idPatient;
+    private Integer duration;
+    private Integer idPatient;
     private String reason;
 
-    public RequeteUPDATE_CONSULTATION(int id, LocalDate newDate, LocalTime newHour, int idPatient, String reason) {
+    public RequeteUPDATE_CONSULTATION(int id, LocalDate newDate, LocalTime newHour, Integer duration, Integer idPatient, String reason) {
         this.id = id;
         this.newDate = newDate;
         this.newHour = newHour;
+        this.duration = duration;
         this.idPatient = idPatient;
         this.reason = reason;
     }
@@ -33,7 +35,11 @@ public class RequeteUPDATE_CONSULTATION implements Requete {
         return newHour;
     }
 
-    public int getIdPatient() {
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public Integer getIdPatient() {
         return idPatient;
     }
 

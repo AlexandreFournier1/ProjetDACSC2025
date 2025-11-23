@@ -172,8 +172,14 @@ public class ClientCAP extends JFrame {
 
             ReponseGET_CONSULTATION rep = (ReponseGET_CONSULTATION) ois.readObject();
 
+            System.out.println("Dans ShowConsultation :");
+            for (Consultation c : rep.getConsultations()) {
+                System.out.println("Id : " + c.getId());
+            }
+
             tableModel.setRowCount(0);
             for (Consultation c : rep.getConsultations()) {
+                System.out.println(c.getId());
                 tableModel.addRow(new Object[]{
                         c.getId(),
                         c.getDoctor_id(),
@@ -324,12 +330,17 @@ public class ClientCAP extends JFrame {
         }
         int id = (int) tableModel.getValueAt(row, 0);
         int docId = (int) tableModel.getValueAt(row, 1);
+
         Object patientObj = tableModel.getValueAt(row, 2);
         Integer patientId = null;
-
         if (patientObj != null && !patientObj.toString().isEmpty()) {
-            patientId = Integer.parseInt(patientObj.toString());
+            try {
+                patientId = Integer.valueOf(patientObj.toString());
+            } catch (NumberFormatException e) {
+                patientId = null; // si la cellule contient une valeur non numérique
+            }
         }
+
         LocalDate date = LocalDate.parse(tableModel.getValueAt(row, 3).toString());
         LocalTime hour = LocalTime.parse(tableModel.getValueAt(row, 4).toString());
         int duree = (int) tableModel.getValueAt(row, 5);
@@ -344,8 +355,13 @@ public class ClientCAP extends JFrame {
 
         // Si confirmé, mise à jour du tableau
         if (dialog.isConfirmed()) {
+            LocalDate newDate = dialog.getDate();
+            LocalTime newHour = dialog.getHour();
+            Integer newPatientId = dialog.getPatientId();
+            int newDuration = dialog.getDuration();
+            String newReason = dialog.getReason();
 
-            RequeteUPDATE_CONSULTATION requete = new RequeteUPDATE_CONSULTATION(id, date, hour, patientId, reason);
+            RequeteUPDATE_CONSULTATION requete = new RequeteUPDATE_CONSULTATION(id, newDate, newHour, newDuration,newPatientId, newReason);
 
             oos.writeObject(requete);
             oos.flush();

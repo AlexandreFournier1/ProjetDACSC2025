@@ -1,6 +1,8 @@
 package hepl.dacsc.model.entity;
 
-public abstract class Entity {
+import java.io.Serializable;
+
+public abstract class Entity implements Serializable {
 
     private Integer id;
     public Entity() {}

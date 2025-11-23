@@ -41,6 +41,30 @@ public class ConsultationDAO {
         return result;
     }
 
+    public Consultation loadConsultationById(Integer id) {
+        try {
+            String sql = "SELECT id, doctor_id, patient_id, date, hour, duree, reason FROM consultations WHERE id = ?";
+            PreparedStatement stmt = connectDB.getConn().prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Integer consultationId = rs.getObject("id", Integer.class);
+                Integer doctorId = rs.getObject("doctor_id", Integer.class);
+                Integer patientId = rs.getObject("patient_id", Integer.class);
+                LocalDate date = rs.getDate("date").toLocalDate();
+                String hourStr = rs.getString("hour");
+                if(hourStr.length() == 4) hourStr = "0" + hourStr;
+                LocalTime hour = LocalTime.parse(hourStr);
+                Integer duree = rs.getInt("duree");
+                String reason = rs.getString("reason");
+                return new Consultation(consultationId, doctorId, patientId, date, hour, duree, reason);
+            }
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ArrayList<Consultation> loadConsultations() {
         return this.loadConsultations(null);
     }

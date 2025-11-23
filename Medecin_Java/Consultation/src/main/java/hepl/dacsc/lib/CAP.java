@@ -159,6 +159,7 @@ public class CAP implements Protocol {
         consultation.setReason(requete.getReason());
         consultation.setDate(requete.getNewDate());
         consultation.setHour(requete.getNewHour());
+        consultation.setDuree(requete.getDuration());
 
         dao.save(consultation);
         ReponseUPDATE_CONSULTATION reponse = new ReponseUPDATE_CONSULTATION(true);
@@ -174,10 +175,18 @@ public class CAP implements Protocol {
         System.out.println("Nombre de consultations chargées : " + all.size());
         System.out.println(all);
 
+        for (Consultation consultation : all) {
+            System.out.println("Id : " + consultation.getId());
+        }
+
         ArrayList<Consultation> list = dao.getConsultationsByDoctorId(requete.getDoctorId());
 
         System.out.println("Id doctor dans CAP : " + requete.getDoctorId());
         System.out.println(list);
+
+        for (Consultation consultation : list) {
+            System.out.println("Id : " + consultation.getId());
+        }
 
         ReponseGET_CONSULTATION reponse = new ReponseGET_CONSULTATION(list);
 

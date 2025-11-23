@@ -14,7 +14,7 @@ public class Consultation extends Entity implements Serializable {
 
     public Consultation() {}
 
-    public Consultation(int id, Integer doctor_id, Integer patient_id, LocalDate date, LocalTime hour, Integer duree,String reason) {
+    public Consultation(Integer id, Integer doctor_id, Integer patient_id, LocalDate date, LocalTime hour, Integer duree,String reason) {
         super(id);
         this.doctor_id = doctor_id;
         this.patient_id = patient_id;
