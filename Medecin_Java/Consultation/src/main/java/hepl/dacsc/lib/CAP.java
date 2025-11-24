@@ -18,6 +18,7 @@ import hepl.dacsc.model.viewmodel.DoctorSearchVM;
 
 import java.net.Socket;
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,27 +105,39 @@ public class CAP implements Protocol {
     private synchronized ReponseADD_CONSULTATION TraiteRequeteADD_CONSULTATION(RequeteADD_CONSULTATION requete) {
         logger.Trace("Requete ADD_CONSULTATION reçue !");
 
-        ReponseADD_CONSULTATION reponse;
+        int doctorId = requete.getIdDoctor();
+        LocalDate date = requete.getDate();
+        LocalTime startHour = requete.getHour();
+        int duration = requete.getDuration();
+        int count = requete.getNbConsultation();
+
+        LocalTime currentHour = startHour;
         LocalTime limit = LocalTime.of(17, 0);
 
-        if (requete.getHour().isAfter(limit)) {
-             reponse = new ReponseADD_CONSULTATION(true);
-        }
-        else {
-            reponse = new ReponseADD_CONSULTATION(false);
-            Consultation consultation = new Consultation();
-            consultation.setDoctor_id(requete.getIdDoctor());
-            consultation.setDate(requete.getDate());
-            consultation.setHour(requete.getHour());
-            consultation.setDuree(requete.getDuration());
+        LocalTime lastEnd = startHour.plusMinutes((long) duration * count);
 
-            ConsultationDAO dao = new ConsultationDAO();
+        if (lastEnd.isAfter(limit)) {
+            return new ReponseADD_CONSULTATION(true);
+        }
+
+        ConsultationDAO dao = new ConsultationDAO();
+
+        for (int i = 0; i < count; i++) {
+
+            Consultation consultation = new Consultation();
+            consultation.setDoctor_id(doctorId);
+            consultation.setDate(date);
+            consultation.setHour(currentHour);
+            consultation.setDuree(duration);
+            consultation.setPatient_id(null);
+            consultation.setReason(null);
+
             dao.save(consultation);
 
-            nbConsultation += nbConsultation;
+            currentHour = currentHour.plusMinutes(duration);
         }
 
-        return reponse;
+        return new ReponseADD_CONSULTATION(false);
     }
 
     // ADD_PATIENT

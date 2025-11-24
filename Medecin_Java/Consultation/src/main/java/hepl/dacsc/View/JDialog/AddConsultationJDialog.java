@@ -67,32 +67,32 @@ public class AddConsultationJDialog extends JDialog {
         txtDuration.setToolTipText("ex : 15");
         formPanel.add(txtDuration, gbc);
 
-        // ID PATIENT
-        gbc.gridx = 0; gbc.gridy = 3;
-        formPanel.add(new JLabel("Id Patient :"), gbc);
-
-        gbc.gridx = 1;
-        txtIdPatient = new JTextField(15);
-        txtIdPatient.setToolTipText("ex : 7");
-        formPanel.add(txtIdPatient, gbc);
-
-        // REASON
-        gbc.gridx = 0; gbc.gridy = 4;
-        formPanel.add(new JLabel("Raison :"), gbc);
-
-        gbc.gridx = 1;
-        txtReason = new JTextField(15);
-        txtReason.setToolTipText("ex : Maux de tête");
-        formPanel.add(txtReason, gbc);
-
-        // NOMBRE CONSÉCUTIVES
+//        // ID PATIENT
 //        gbc.gridx = 0; gbc.gridy = 3;
-//        formPanel.add(new JLabel("Nb consultations :"), gbc);
+//        formPanel.add(new JLabel("Id Patient :"), gbc);
 //
 //        gbc.gridx = 1;
-//        txtCount = new JTextField(15);
-//        txtCount.setToolTipText("ex : 3");
-//        formPanel.add(txtCount, gbc);
+//        txtIdPatient = new JTextField(15);
+//        txtIdPatient.setToolTipText("ex : 7");
+//        formPanel.add(txtIdPatient, gbc);
+//
+//        // REASON
+//        gbc.gridx = 0; gbc.gridy = 4;
+//        formPanel.add(new JLabel("Raison :"), gbc);
+//
+//        gbc.gridx = 1;
+//        txtReason = new JTextField(15);
+//        txtReason.setToolTipText("ex : Maux de tête");
+//        formPanel.add(txtReason, gbc);
+
+        // NOMBRE CONSÉCUTIVES
+        gbc.gridx = 0; gbc.gridy = 3;
+        formPanel.add(new JLabel("Nb consultations :"), gbc);
+
+        gbc.gridx = 1;
+        txtCount = new JTextField(15);
+        txtCount.setToolTipText("ex : 3");
+        formPanel.add(txtCount, gbc);
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
 
@@ -132,10 +132,9 @@ public class AddConsultationJDialog extends JDialog {
     private boolean validateFields() {
 
         if (txtDate.getText().trim().isEmpty()
-                || txtHour.getText().trim().isEmpty()
-                || txtDuration.getText().trim().isEmpty()
-                || txtIdPatient.getText().trim().isEmpty()
-                || txtReason.getText().trim().isEmpty()) {
+            || txtHour.getText().trim().isEmpty()
+            || txtDuration.getText().trim().isEmpty()
+            || txtCount.getText().trim().isEmpty()) {
 
             JOptionPane.showMessageDialog(this, "Tous les champs doivent être remplis.",
                     "Erreur", JOptionPane.WARNING_MESSAGE);
@@ -161,8 +160,7 @@ public class AddConsultationJDialog extends JDialog {
         try {
             Integer.parseInt(txtDuration.getText().trim());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Durée invalide",
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Durée invalide", "Erreur", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 

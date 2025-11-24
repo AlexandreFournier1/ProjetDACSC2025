@@ -8,7 +8,6 @@ public class ReponseADD_CONSULTATION implements Reponse {
     public ReponseADD_CONSULTATION(boolean over17hours) {
         this.over17hours = over17hours;
     }
-
     public boolean isOver17hours() {
         return over17hours;
     }

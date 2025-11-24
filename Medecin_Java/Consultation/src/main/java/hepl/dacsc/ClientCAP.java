@@ -233,7 +233,7 @@ public class ClientCAP extends JFrame {
                 doctorConnected.setMdp(mdp);
 
                 //Ip PC Noah
-                socket = new Socket("192.168.0.81", 50000);
+                socket = new Socket("10.236.71.53", 50000);
                 //Ip PC Alex
                 //socket = new Socket("192.168.56.1", 50000);
                 RequeteLOGIN requete = new RequeteLOGIN(id, last_name, first_name, mdp);
@@ -301,35 +301,29 @@ public class ClientCAP extends JFrame {
         AddConsultationJDialog dialog = new AddConsultationJDialog(this);
         dialog.setVisible(true);
 
-        if (dialog.isConfirmed()) {
-            LocalDate date = dialog.getDate();
-            LocalTime hour = dialog.getHour();
-            int duration = dialog.getDuration();
-
-            // IdPatient et Reason ajoutée de manière fictive pour le moment
-            int idPatient = dialog.getIdPatient();
-            String reason = dialog.getReason();
-
-            int count = table.getRowCount();
-
-            System.out.println("Création de la consultation " + count + " : " + reason + " du patient " + idPatient + " à la date " + date + " : " + hour + " : " + duration);
-
-            RequeteADD_CONSULTATION requete = new RequeteADD_CONSULTATION(doctorConnected.getId(), date, hour, duration, count);
-
-            oos.writeObject(requete);
-            oos.flush();
-
-            ReponseADD_CONSULTATION reponse = (ReponseADD_CONSULTATION) ois.readObject();
-
-            if (reponse.isOver17hours())
-                showWarningMessage("La consultation est au delà de 17h !", "Warning");
-            else
-                showMessage("Consultation ajoutée avec succès", "Succès");
-
-            nbConsultations = count + 1;
-
-            tableModel.addRow(new Object[]{nbConsultations, doctorConnected.getId(), idPatient, date, hour, duration, reason});
+        if (!dialog.isConfirmed()) {
+            return;
         }
+
+        LocalDate date = dialog.getDate();
+        LocalTime hour = dialog.getHour();
+        int duration = dialog.getDuration();
+        int count = dialog.getCount();
+
+        System.out.println("Ajout consultations : " + count + " à partir de " + date + " " + hour + " durée=" + duration);
+
+        RequeteADD_CONSULTATION requete = new RequeteADD_CONSULTATION(doctorConnected.getId(), date, hour, duration, count);
+
+        oos.writeObject(requete);
+        oos.flush();
+
+        ReponseADD_CONSULTATION reponse = (ReponseADD_CONSULTATION) ois.readObject();
+
+        if (reponse.isOver17hours()) {
+            showWarningMessage("La consultation est au delà de 17h !", "Warning");
+            return;
+        }
+        addToTable(0, null);
     }
 
     private void jButtonUpdateConsultationActionPerformed(java.awt.event.ActionEvent evt, JTable table,DefaultTableModel tableModel) throws IOException, ClassNotFoundException {
@@ -340,7 +334,6 @@ public class ClientCAP extends JFrame {
             return;
         }
 
-        // Récupération des données du tableau
         Object idObj = tableModel.getValueAt(row, 0);
         if (idObj == null) {
             showWarningMessage("La consultation sélectionnée est invalide.", "Erreur");
@@ -355,7 +348,7 @@ public class ClientCAP extends JFrame {
             try {
                 patientId = Integer.valueOf(patientObj.toString());
             } catch (NumberFormatException e) {
-                patientId = null; // si la cellule contient une valeur non numérique
+                patientId = null;
             }
         }
 
@@ -431,33 +424,7 @@ public class ClientCAP extends JFrame {
 
         System.out.println(Id + " " + date);
 
-        RequeteSEARCH_CONSULTATION requete = new RequeteSEARCH_CONSULTATION(doctorConnected.getId(), idPatient, date);
-
-        oos.writeObject(requete);
-        oos.flush();
-
-        ReponseSEARCH_CONSULTATION reponse = (ReponseSEARCH_CONSULTATION) ois.readObject();
-
-        ArrayList<Consultation> consultations = reponse.getSearchedConsultations();
-
-        if (consultations == null || consultations.isEmpty()) {
-            showMessage("Aucune consultation trouvée pour ces critères.", "Information");
-            return;
-        }
-
-        tableModel.setRowCount(0);
-
-        for (Consultation c : consultations) {
-            tableModel.addRow(new Object[]{
-                    c.getId(),
-                    c.getDoctor_id(),
-                    c.getPatient_id(),
-                    c.getDate(),
-                    c.getHour(),
-                    c.getDuree(),
-                    c.getReason()
-            });
-        }
+        addToTable(idPatient, date);
     }
 
     private void jButtonDeleteConsultation(ActionEvent evt, JTable table, DefaultTableModel tableModel) throws IOException, ClassNotFoundException {
@@ -503,8 +470,37 @@ public class ClientCAP extends JFrame {
         }
     }
 
+    public void addToTable(Integer idPatient, LocalDate date) throws IOException, ClassNotFoundException {
+        RequeteSEARCH_CONSULTATION requete = new RequeteSEARCH_CONSULTATION(doctorConnected.getId(), idPatient, date);
 
-        private void showMessage(String msg, String title) {
+        oos.writeObject(requete);
+        oos.flush();
+
+        ReponseSEARCH_CONSULTATION reponse = (ReponseSEARCH_CONSULTATION) ois.readObject();
+
+        ArrayList<Consultation> consultations = reponse.getSearchedConsultations();
+
+        if (consultations == null || consultations.isEmpty()) {
+            showMessage("Aucune consultation trouvée pour ces critères.", "Information");
+            return;
+        }
+
+        tableModel.setRowCount(0);
+
+        for (Consultation c : consultations) {
+            tableModel.addRow(new Object[]{
+                    c.getId(),
+                    c.getDoctor_id(),
+                    c.getPatient_id(),
+                    c.getDate(),
+                    c.getHour(),
+                    c.getDuree(),
+                    c.getReason()
+            });
+        }
+    }
+
+    private void showMessage(String msg, String title) {
         JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
