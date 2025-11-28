@@ -251,7 +251,7 @@ public class ClientCAP extends JFrame {
                     showWorkPanel();
                     this.login = String.valueOf(id);
 
-                    //showConsultation();
+                    addToTable(0, null);
                 }
                 else {
                     showErrorMessage("Erreur de connexion");
