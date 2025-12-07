@@ -1,5 +1,7 @@
 package hepl.dacsc.view.JDialog;
 
+import hepl.dacsc.view.error.ErrorMessage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
@@ -16,11 +18,14 @@ public class EncoderRapportJDialog extends JDialog {
     private JTextField txtRecommendation;
     private boolean confirmed = false;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private ErrorMessage errMsg = new ErrorMessage();
+    private JFrame parent;
 
     public EncoderRapportJDialog(JFrame parent) {
         super(parent, "Encoder Rapport", true);
+        this.parent = parent;
 
-        setSize(350, 250);
+        setSize(400, 450);
         setMinimumSize(new Dimension(350, 250));
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -115,25 +120,18 @@ public class EncoderRapportJDialog extends JDialog {
 
         if (getTxtIdDoctor().isEmpty() ||
         getTxtIdPatient().isEmpty() ||
-        getTxtDate().isEmpty() ||
         getTxtMotifConsultation().isEmpty() ||
         getTxtObservation().isEmpty() ||
         getTxtDiagnostic().isEmpty() ||
         getTxtRecommendation().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Veuillez remplir tous les champs.",
-                    "Erreur",
-                    JOptionPane.WARNING_MESSAGE);
+            errMsg.showWarningMessage(parent, "Veuillez remplir tous les champs.", "Attention");
             return false;
         }
 
         try {
             LocalDate.parse(txtDate.getText().trim(), dateFormatter);
         } catch (DateTimeParseException e) {
-            JOptionPane.showMessageDialog(this,
-                    "La date doit être au format JJ-MM-AAAA.",
-                    "Erreur format date",
-                    JOptionPane.ERROR_MESSAGE);
+            errMsg.showErrorMessage(parent, "La date doit être au format JJ-MM-AAAA.");
             return false;
         }
 

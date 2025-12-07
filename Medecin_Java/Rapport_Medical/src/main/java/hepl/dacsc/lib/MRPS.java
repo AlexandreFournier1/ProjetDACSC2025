@@ -19,13 +19,13 @@ public class MRPS implements Protocol {
     @Override
     public Reponse TraiteRequete(Requete requete, Socket socket) throws FinConnexionException {
 
-        if (requete instanceof RequeteLOGIN) return TraitementLOGIN((RequeteLOGIN) requete);
-
-        if (requete instanceof Requete_ADD_REPORT) return TraitementADD_REPORT((RequeteADD_REPORT) requete);
-
-        if (requete instanceof Requete_EDIT_REPORT) return TraitementEDIT_REPORT((RequeteEDIT_REPORT) requete);
-
-        if (requete instanceof Requete_LIST_REPORTS) return TraitementLIST_REPORTS((RequeteLIST_REPORTS) requete);
-
+//        if (requete instanceof RequeteLOGIN) return TraitementLOGIN((RequeteLOGIN) requete);
+//
+//        if (requete instanceof Requete_ADD_REPORT) return TraitementADD_REPORT((RequeteADD_REPORT) requete);
+//
+//        if (requete instanceof Requete_EDIT_REPORT) return TraitementEDIT_REPORT((RequeteEDIT_REPORT) requete);
+//
+//        if (requete instanceof Requete_LIST_REPORTS) return TraitementLIST_REPORTS((RequeteLIST_REPORTS) requete);
+        return null;
     }
 }

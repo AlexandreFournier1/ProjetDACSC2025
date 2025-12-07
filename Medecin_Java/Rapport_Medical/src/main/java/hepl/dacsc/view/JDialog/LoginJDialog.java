@@ -1,5 +1,7 @@
 package hepl.dacsc.view.JDialog;
 
+import hepl.dacsc.view.error.ErrorMessage;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,6 +10,7 @@ public class LoginJDialog extends JDialog {
     private final JPasswordField txtPassword;
     private boolean authenticated = false;
     private boolean confirmed = false;
+    private ErrorMessage errMsg = new ErrorMessage();
     public LoginJDialog(JFrame parent) {
         super(parent, "Login", true);
 
@@ -64,7 +67,7 @@ public class LoginJDialog extends JDialog {
             String password = new String(txtPassword.getPassword());
 
             if (login.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Tous les champs sont obligatoires.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                errMsg.showErrorMessage(parent, "Tous les champs sont obligatoires.");
                 return;
             }
 
