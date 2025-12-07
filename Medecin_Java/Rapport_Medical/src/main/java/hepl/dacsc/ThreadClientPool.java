@@ -21,8 +21,8 @@ public class ThreadClientPool extends ThreadClient {
     {
         logger.Trace("TH Client (Pool) démarre...");
 
-        //ClientCAP mf = new ClientCAP();
-        //mf.setVisible(true);
+        ClientMRPS mf = new ClientMRPS();
+        mf.setVisible(true);
 
         boolean interrompu = false;
         while(!interrompu)
