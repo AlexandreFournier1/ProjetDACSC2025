@@ -140,25 +140,44 @@ public class MainJFrame extends JFrame {
                 return;
             }
 
-            // Recherche BDD + affichage
+            tableModel.setRowCount(0);
+
+            for (Rapport rapport : listRapport) {
+                if (rapport.getIdPatient() == Integer.parseInt(idPatient)) {
+                    tableModel.addRow(new Object[]{rapport.getId(), rapport.getIdDoctor(), rapport.getIdPatient(), rapport.getDate()});
+                }
+            }
         });
 
-        btnEncoderRapport.addActionListener(e ->{
+        btnEncoderRapport.addActionListener(e -> {
             EncoderRapportJDialog rapportJDialog = new EncoderRapportJDialog(this);
             rapportJDialog.setVisible(true);
 
-            if (rapportJDialog.isConfirmed()){
-                String idPatient = rapportJDialog.getTxtIdPatient();
-                String idDoctor = rapportJDialog.getTxtIdDoctor();
-                String date = String.valueOf(rapportJDialog.getTxtDate());
-                String motif = rapportJDialog.getTxtMotifConsultation();
-                String observation = rapportJDialog.getTxtObservation();
-                String diagnostic = rapportJDialog.getTxtDiagnostic();
-                String recommendation = rapportJDialog.getTxtRecommendation();
+            if (rapportJDialog.isConfirmed()) {
+                int idPatient = Integer.parseInt(rapportJDialog.getTxtIdPatient());
+                int idDoctor = Integer.parseInt(rapportJDialog.getTxtIdDoctor());
+                LocalDate date = rapportJDialog.getTxtDate();
 
-                String rapport = assembleRapport(motif, observation, diagnostic, recommendation);
+                String rapport = assembleRapport(
+                        rapportJDialog.getTxtMotifConsultation(),
+                        rapportJDialog.getTxtObservation(),
+                        rapportJDialog.getTxtDiagnostic(),
+                        rapportJDialog.getTxtRecommendation()
+                );
 
-                System.out.println("Rapport du médecin : " + idDoctor + "\n" + "Concernant le patient : " + idPatient + "\n" + date + "\n" + rapport);
+                int newId = listRapport.size() + 1;
+
+                Rapport rap = new Rapport(newId, idDoctor, idPatient, date, rapport);
+                listRapport.add(rap);
+
+                tableModel.addRow(new Object[]{
+                        newId,
+                        idDoctor,
+                        idPatient,
+                        date.format(dateFormatter)
+                });
+
+                System.out.println("Rapport encodé !");
             }
         });
 
@@ -230,29 +249,37 @@ public class MainJFrame extends JFrame {
             }
 
             // Récupération des données du tableau
-            int id = (int) tableModel.getValueAt(row, 0);
-            int docId = (int) tableModel.getValueAt(row, 1);
-            int patientId = (int) tableModel.getValueAt(row, 2);
+            int id = Integer.parseInt(tableModel.getValueAt(row, 0).toString());
+            int docId = Integer.parseInt(tableModel.getValueAt(row, 1).toString());
+            int patientId = Integer.parseInt(tableModel.getValueAt(row, 2).toString());
             LocalDate date = LocalDate.parse(tableModel.getValueAt(row, 3).toString(), dateFormatter);
 
-            String txtRapport = "";
+            Rapport rapport = null;
 
-            for (Rapport rapport : listRapport) {
-                if (rapport.getId() == id) {
-                    txtRapport = rapport.getTextRapport();
+            for (Rapport r : listRapport) {
+                if (r.getId() == id) {
+                    rapport = r;
+                    break;
                 }
             }
 
-            Rapport rapport = new Rapport(id, docId, patientId, date, txtRapport);
+            if (rapport == null) {
+                errMsg.showErrorMessage(this, "Rapport introuvable.");
+                return;
+            }
 
             ModifierRapportJDialog dialog = new ModifierRapportJDialog(this, rapport);
             dialog.setVisible(true);
 
             // Si confirmé, mise à jour du tableau
             if (dialog.isConfirmed()) {
-                tableModel.setValueAt(dialog.getDoctorId().toString(), row, 1);
-                tableModel.setValueAt(dialog.getPatientId().toString(), row, 2);
-                tableModel.setValueAt(dialog.getDate(), row, 3);
+                rapport.setIdDoctor(dialog.getDoctorId());
+                rapport.setIdPatient(dialog.getPatientId());
+                rapport.setDate(dialog.getDate());
+
+                tableModel.setValueAt(dialog.getDoctorId(), row, 1);
+                tableModel.setValueAt(dialog.getPatientId(), row, 2);
+                tableModel.setValueAt(dialog.getDate().format(dateFormatter), row, 3);
 
                 System.out.println("Rapport " + id + " mise à jour !");
             }
