@@ -4,8 +4,7 @@ import hepl.dacsc.view.JFrame.MainJFrame;
 
 public class Main {
     public static void main(String[] args) {
-        //ClientMRPS frame = new ClientMRPS();
-        MainJFrame frame = new MainJFrame();
+        ClientMRPS frame = new ClientMRPS();
         frame.setVisible(true);
     }
 }

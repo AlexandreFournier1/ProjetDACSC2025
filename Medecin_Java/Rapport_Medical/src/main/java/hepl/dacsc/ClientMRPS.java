@@ -135,17 +135,4 @@ public class ClientMRPS extends JFrame {
     private void jButtonSHOW_REPORT_TEXT(JTable evt) {
 
     }
-
-
-    private void showMessage(String msg, String title) {
-        JOptionPane.showMessageDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void showWarningMessage(String msg, String title) {
-        JOptionPane.showMessageDialog(this, msg, title, JOptionPane.WARNING_MESSAGE);
-    }
-
-    private void showErrorMessage(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Erreur", JOptionPane.ERROR_MESSAGE);
-    }
 }
