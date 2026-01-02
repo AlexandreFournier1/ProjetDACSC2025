@@ -1,6 +1,11 @@
 package hepl.dacsc;
 
+import hepl.dacsc.lib.reponse.ReponseLOGIN;
+import hepl.dacsc.lib.reponse.ReponseLOGIN_DIGEST;
+import hepl.dacsc.lib.requete.RequeteLOGIN;
+import hepl.dacsc.lib.requete.RequeteLOGIN_DIGEST;
 import hepl.dacsc.view.JDialog.LoginJDialog;
+import hepl.dacsc.view.error.ErrorMessage;
 
 import javax.crypto.SecretKey;
 import javax.swing.*;
@@ -9,6 +14,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.*;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.util.Properties;
 
 public class ClientMRPS extends JFrame {
 
@@ -20,6 +28,7 @@ public class ClientMRPS extends JFrame {
     private DefaultTableModel tableModel;
 
     private SecretKey cleSession;
+    private ErrorMessage errMsg = new ErrorMessage();
 
     public ClientMRPS() {
         initComponents();
@@ -38,7 +47,19 @@ public class ClientMRPS extends JFrame {
         JButton btnLogout = new JButton("Logout");
         btnLogout.setVisible(false);
 
-        btnLogin.addActionListener(e -> jButtonLoginActionPerformed(e, btnLogin, btnLogout));
+        btnLogin.addActionListener(e -> {
+            try {
+                jButtonLoginActionPerformed(e, btnLogin, btnLogout);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (NoSuchAlgorithmException ex) {
+                throw new RuntimeException(ex);
+            } catch (NoSuchProviderException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         btnLogout.addActionListener(e -> jButtonLogoutActionPerformed(e, btnLogin, btnLogout));
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
@@ -111,9 +132,67 @@ public class ClientMRPS extends JFrame {
 
 
     }
-    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) {
+    private void connect() throws IOException {
+        if (socket == null) {
+            Properties props = new Properties();
+            props.load(new FileInputStream("src/main/java/hepl/dacsc/config.properties"));
+
+            int port = Integer.parseInt(props.getProperty("PORT_REPORT_SECURE"));
+
+            // Ip PC Noah
+            //socket = new Socket("10.236.71.53", port);
+            // Ip PC Alex
+            socket = new Socket("192.168.56.1", port);
+
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+        }
+    }
+
+    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) throws IOException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException {
         LoginJDialog login = new LoginJDialog(this);
         login.setVisible(true);
+
+        if (login.isAuthenticated()) {
+            connect();
+
+            String lastname = login.getTxtLastname();
+            String firstname = login.getTxtFirstname();
+            String password = login.getPassword();
+
+            // Envoie du Login
+            RequeteLOGIN reqLogin = new RequeteLOGIN(firstname, lastname);
+            oos.writeObject(reqLogin);
+            oos.flush();
+
+            // Récupération du sel envoyé par le serveur
+            ReponseLOGIN repLogin = (ReponseLOGIN) ois.readObject();
+
+            if (!repLogin.isSuccess()) {
+                errMsg.showErrorMessage(this, "Login inconnu");
+                return;
+            }
+
+            String salt = repLogin.getSalt();
+
+            // Envoie du digest
+            RequeteLOGIN_DIGEST reqDigest = new RequeteLOGIN_DIGEST(firstname, lastname, password, salt);
+            oos.writeObject(reqDigest);
+            oos.flush();
+
+            // Réponse finale
+            ReponseLOGIN_DIGEST repDigest = (ReponseLOGIN_DIGEST) ois.readObject();
+
+            if (!repDigest.isSuccess()) {
+                errMsg.showErrorMessage(this, "Mot de passe incorrect");
+                return;
+            }
+
+            errMsg.showMessage(this, "Authentification réussie !", "Success");
+            btnLogin.setVisible(false);
+            btnLogout.setVisible(true);
+            showWorkPanel();
+        }
     }
 
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) {

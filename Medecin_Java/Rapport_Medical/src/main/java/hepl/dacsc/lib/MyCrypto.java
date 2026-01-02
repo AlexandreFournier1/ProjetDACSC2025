@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
 public class MyCrypto {
-    // Cryptage Décryptage Syméthrique
+    // Cryptage Décryptage Symétrique
     public static byte[] CryptSymDES(SecretKey key, byte[] data) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         Cipher chiffrementE =  Cipher.getInstance("DES/ECB/PKCS5Padding","BC");
         chiffrementE.init(Cipher.ENCRYPT_MODE, key);

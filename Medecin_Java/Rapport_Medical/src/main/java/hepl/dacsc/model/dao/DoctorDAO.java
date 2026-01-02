@@ -28,6 +28,15 @@ public class DoctorDAO {
         return null;
     }
 
+    public Doctor getDoctorByName(String lastname, String firstname) {
+        for (Doctor entity : doctors) {
+            if (Objects.equals(entity.getLast_name(), lastname) && Objects.equals(entity.getFirst_name(), firstname)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Doctor> loadDoctor() {
         return this.loadDoctor(null);
     }
