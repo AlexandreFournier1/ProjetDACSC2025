@@ -1,10 +1,7 @@
 package hepl.dacsc.model.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.*;
+import java.util.logging.*;
 
 public class ConnectDB {
     private static Connection conn = null;
@@ -22,6 +19,7 @@ public class ConnectDB {
                 String sPwd = "PassStudent1_";
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = DriverManager.getConnection(sCon, sUser, sPwd);
+                System.out.println("[DEBUG] Connecter avec JDBC");
             }
         }
         catch (ClassNotFoundException | SQLException ex) {

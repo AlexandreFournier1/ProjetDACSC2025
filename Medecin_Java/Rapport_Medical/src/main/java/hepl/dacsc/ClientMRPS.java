@@ -1,9 +1,12 @@
 package hepl.dacsc;
 
+import hepl.dacsc.lib.MyCrypto;
 import hepl.dacsc.lib.reponse.ReponseLOGIN;
 import hepl.dacsc.lib.reponse.ReponseLOGIN_DIGEST;
 import hepl.dacsc.lib.requete.RequeteLOGIN;
 import hepl.dacsc.lib.requete.RequeteLOGIN_DIGEST;
+import hepl.dacsc.utils.KeyUtils;
+import hepl.dacsc.utils.KeystoreUtils;
 import hepl.dacsc.view.JDialog.LoginJDialog;
 import hepl.dacsc.view.error.ErrorMessage;
 
@@ -14,8 +17,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.*;
 import java.net.Socket;
+import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
 import java.util.Properties;
 
 public class ClientMRPS extends JFrame {
@@ -24,11 +29,10 @@ public class ClientMRPS extends JFrame {
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
     private JPanel workArea;
-
     private DefaultTableModel tableModel;
-
     private SecretKey cleSession;
     private ErrorMessage errMsg = new ErrorMessage();
+    private PrivateKey clientPrivateKey;
 
     public ClientMRPS() {
         initComponents();
@@ -57,6 +61,8 @@ public class ClientMRPS extends JFrame {
             } catch (NoSuchProviderException ex) {
                 throw new RuntimeException(ex);
             } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         });
@@ -149,12 +155,15 @@ public class ClientMRPS extends JFrame {
         }
     }
 
-    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) throws IOException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException {
+    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) throws Exception {
         LoginJDialog login = new LoginJDialog(this);
         login.setVisible(true);
 
         if (login.isAuthenticated()) {
             connect();
+
+            KeyStore ksClient = KeystoreUtils.loadKeystore("KeystoreClient.jks", "123456789");
+            clientPrivateKey = KeyUtils.getPrivateKey(ksClient, "mrpskey", "123456789");
 
             String lastname = login.getTxtLastname();
             String firstname = login.getTxtFirstname();
@@ -187,6 +196,14 @@ public class ClientMRPS extends JFrame {
                 errMsg.showErrorMessage(this, "Mot de passe incorrect");
                 return;
             }
+
+            byte[] encryptedSessionKey = repDigest.getEncryptedSessionKey();
+
+            // Déchiffrement RSA
+            byte[] rawKey = MyCrypto.DecryptAsymRSA(encryptedSessionKey, clientPrivateKey);
+
+            // Reconstruction clé AES
+            cleSession = MyCrypto.rebuildAESKey(rawKey);
 
             errMsg.showMessage(this, "Authentification réussie !", "Success");
             btnLogin.setVisible(false);

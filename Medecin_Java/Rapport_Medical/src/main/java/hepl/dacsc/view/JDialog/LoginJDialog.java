@@ -44,7 +44,7 @@ public class LoginJDialog extends JDialog {
         // === Ligne 2 : FIRSTNAME ===
         gbc.gridx = 0;
         gbc.gridy = 1;
-        fieldPanel.add(new JLabel("Last Name :"), gbc);
+        fieldPanel.add(new JLabel("First Name :"), gbc);
 
         gbc.gridx = 1;
         txtFirstname = new JTextField();

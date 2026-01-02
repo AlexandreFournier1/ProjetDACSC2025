@@ -19,6 +19,7 @@ public class DoctorDAO {
     }
 
     public Doctor getDoctorsById(Integer id) {
+        loadDoctor();
         for (Doctor entity : doctors) {
             if (Objects.equals(entity.getId(), id))
             {
@@ -29,6 +30,7 @@ public class DoctorDAO {
     }
 
     public Doctor getDoctorByName(String lastname, String firstname) {
+        loadDoctor();
         for (Doctor entity : doctors) {
             if (Objects.equals(entity.getLast_name(), lastname) && Objects.equals(entity.getFirst_name(), firstname)) {
                 return entity;
@@ -49,7 +51,8 @@ public class DoctorDAO {
                     "doctors.id, " +
                     "doctors.specialty_id, " +
                     "doctors.last_name, " +
-                    "doctors.first_name " +
+                    "doctors.first_name, " +
+                    "doctors.mdp " +
                     "FROM doctors";
             if (csvm != null) {
                 String where = " WHERE 1=1 ";
@@ -112,13 +115,14 @@ public class DoctorDAO {
             }
 
             while (rs.next()) {
-                System.out.println("[DAO] début reponse");
                 Integer doctorId = rs.getInt("id");
                 Integer specialty_id = rs.getInt("specialty_id");
                 String last_name = rs.getString("last_name");
                 String first_name = rs.getString("first_name");
+                String mdp = rs.getString("mdp");
 
                 Doctor doctor1 = new Doctor(doctorId, specialty_id, last_name, first_name);
+                doctor1.setMdp(mdp);
 
                 doctors.add(doctor1);
             }
