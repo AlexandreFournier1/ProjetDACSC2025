@@ -3,8 +3,10 @@ package hepl.dacsc;
 import hepl.dacsc.lib.MyCrypto;
 import hepl.dacsc.lib.reponse.ReponseLOGIN;
 import hepl.dacsc.lib.reponse.ReponseLOGIN_DIGEST;
+import hepl.dacsc.lib.reponse.ReponseLOGOUT;
 import hepl.dacsc.lib.requete.RequeteLOGIN;
 import hepl.dacsc.lib.requete.RequeteLOGIN_DIGEST;
+import hepl.dacsc.lib.requete.RequeteLOGOUT;
 import hepl.dacsc.utils.KeyUtils;
 import hepl.dacsc.utils.KeystoreUtils;
 import hepl.dacsc.view.JDialog.LoginJDialog;
@@ -66,7 +68,15 @@ public class ClientMRPS extends JFrame {
                 throw new RuntimeException(ex);
             }
         });
-        btnLogout.addActionListener(e -> jButtonLogoutActionPerformed(e, btnLogin, btnLogout));
+        btnLogout.addActionListener(e -> {
+            try {
+                jButtonLogoutActionPerformed(e, btnLogin, btnLogout);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         topPanel.add(btnLogin);
@@ -212,8 +222,33 @@ public class ClientMRPS extends JFrame {
         }
     }
 
-    private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) {
+    private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) throws IOException, ClassNotFoundException {
+        // Envoi requête LOGOUT
+        oos.writeObject(new RequeteLOGOUT());
+        oos.flush();
 
+        ReponseLOGOUT rep = (ReponseLOGOUT) ois.readObject();
+
+        if (rep.isSuccess()) {
+            System.out.println("[CLIENT] Logout confirmé par le serveur");
+        }
+
+        // Nettoyage client
+        cleSession = null;
+        clientPrivateKey = null;
+
+        ois.close();
+        oos.close();
+        socket.close();
+
+        socket = null;
+
+        btnLogout.setVisible(false);
+        btnLogin.setVisible(true);
+
+        workArea.removeAll();
+        workArea.revalidate();
+        workArea.repaint();
     }
 
     private void jButtonADD_REPORT(ActionEvent evt) {

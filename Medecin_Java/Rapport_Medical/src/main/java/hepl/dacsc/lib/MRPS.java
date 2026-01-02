@@ -7,8 +7,10 @@ import hepl.dacsc.ServerGeneriqueTCP.interfaces.Reponse;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Requete;
 import hepl.dacsc.lib.reponse.ReponseLOGIN;
 import hepl.dacsc.lib.reponse.ReponseLOGIN_DIGEST;
+import hepl.dacsc.lib.reponse.ReponseLOGOUT;
 import hepl.dacsc.lib.requete.RequeteLOGIN;
 import hepl.dacsc.lib.requete.RequeteLOGIN_DIGEST;
+import hepl.dacsc.lib.requete.RequeteLOGOUT;
 import hepl.dacsc.model.dao.DoctorDAO;
 import hepl.dacsc.model.entity.Doctor;
 import hepl.dacsc.utils.KeyUtils;
@@ -43,6 +45,7 @@ public class MRPS implements Protocol {
 
         if (requete instanceof RequeteLOGIN) return TraitementLOGIN((RequeteLOGIN) requete);
         if (requete instanceof RequeteLOGIN_DIGEST) return TraitementLOGIN_DIGEST((RequeteLOGIN_DIGEST) requete, socket);
+        if (requete instanceof RequeteLOGOUT) return TraitementLOGOUT(socket);
 //
 //        if (requete instanceof RequeteADD_REPORT) return TraitementADD_REPORT((RequeteADD_REPORT) requete);
 //
@@ -129,6 +132,12 @@ public class MRPS implements Protocol {
             e.printStackTrace();
             return new ReponseLOGIN_DIGEST(false, encryptedSessionKey);
         }
+    }
+
+    private synchronized ReponseLOGOUT TraitementLOGOUT(Socket socket) {
+        sessionKeys.remove(socket);
+        System.out.println("[SERVER] Logout effectué, clé de session supprimée");
+        return new ReponseLOGOUT(true);
     }
 //
 //    private synchronized ReponseADD_REPORT TraiteRequeteADD_PATIENT(RequeteADD_REPORT requete) {
