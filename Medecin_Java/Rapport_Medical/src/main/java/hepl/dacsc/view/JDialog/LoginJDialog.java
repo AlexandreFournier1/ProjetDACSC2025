@@ -6,7 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoginJDialog extends JDialog {
-    private final JTextField txtLogin;
+    private final JTextField txtLastname;
+    private final JTextField txtFirstname;
     private final JPasswordField txtPassword;
     private boolean authenticated = false;
     private boolean confirmed = false;
@@ -30,19 +31,29 @@ public class LoginJDialog extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.LINE_END;
 
-        // === Ligne 1 : LOGIN ===
+        // === Ligne 1 : LASTNAME ===
         gbc.gridx = 0;
         gbc.gridy = 0;
-        fieldPanel.add(new JLabel("Login :"), gbc);
+        fieldPanel.add(new JLabel("Last Name :"), gbc);
 
         gbc.gridx = 1;
-        txtLogin = new JTextField();
-        txtLogin.setPreferredSize(new Dimension(180, 25));
-        fieldPanel.add(txtLogin, gbc);
+        txtLastname = new JTextField();
+        txtLastname.setPreferredSize(new Dimension(180, 25));
+        fieldPanel.add(txtLastname, gbc);
 
-        // === Ligne 2 : MDP ===
+        // === Ligne 2 : FIRSTNAME ===
         gbc.gridx = 0;
         gbc.gridy = 1;
+        fieldPanel.add(new JLabel("First Name :"), gbc);
+
+        gbc.gridx = 1;
+        txtFirstname = new JTextField();
+        txtFirstname.setPreferredSize(new Dimension(180, 25));
+        fieldPanel.add(txtFirstname, gbc);
+
+        // === Ligne 3 : MDP ===
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         fieldPanel.add(new JLabel("Mot de passe :"), gbc);
 
         gbc.gridx = 1;
@@ -63,10 +74,11 @@ public class LoginJDialog extends JDialog {
 
         // ===== ACTIONS =====
         btnConnexion.addActionListener(e -> {
-            String login = txtLogin.getText().trim();
+            String lastname = txtLastname.getText().trim();
+            String firstname = txtFirstname.getText().trim();
             String password = new String(txtPassword.getPassword());
 
-            if (login.isEmpty() || password.isEmpty()) {
+            if (lastname.isEmpty() || firstname.isEmpty() || password.isEmpty()) {
                 errMsg.showErrorMessage(parent, "Tous les champs sont obligatoires.");
                 return;
             }
@@ -74,7 +86,7 @@ public class LoginJDialog extends JDialog {
             confirmed = true;
 
             System.out.println("Tentative de connexion :");
-            System.out.println("  Login = " + login);
+            System.out.println("  Login = " + lastname + " " + firstname);
             System.out.println("  Mot de passe = " + password);
 
             authenticated = true;
@@ -85,9 +97,15 @@ public class LoginJDialog extends JDialog {
     }
 
     public boolean isConfirmed() { return confirmed; }
-    public String getLogin(){
-        return txtLogin.getText().trim();
+
+    public String getTxtLastname() {
+        return txtLastname.getText().trim();
     }
+
+    public String getTxtFirstname() {
+        return txtFirstname.getText().trim();
+    }
+
     public String getPassword(){
         return txtPassword.getText().trim();
     }

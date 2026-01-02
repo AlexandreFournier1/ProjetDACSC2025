@@ -1,10 +1,7 @@
 package hepl.dacsc.model.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.*;
+import java.util.logging.*;
 
 public class ConnectDB {
     private static Connection conn = null;
@@ -15,13 +12,14 @@ public class ConnectDB {
         try {
             if (conn == null || conn.isClosed()) {
                 // IP Noah
-                String sCon = "jdbc:mysql://192.168.162.128/PourStudent";
+                //String sCon = "jdbc:mysql://192.168.162.128/PourStudent";
                 // IP Alex
-                //String sCon = "jdbc:mysql://192.168.186.128/PourStudent";
+                String sCon = "jdbc:mysql://192.168.186.128/PourStudent";
                 String sUser = "Student";
                 String sPwd = "PassStudent1_";
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = DriverManager.getConnection(sCon, sUser, sPwd);
+                System.out.println("[DEBUG] Connecter avec JDBC");
             }
         }
         catch (ClassNotFoundException | SQLException ex) {
