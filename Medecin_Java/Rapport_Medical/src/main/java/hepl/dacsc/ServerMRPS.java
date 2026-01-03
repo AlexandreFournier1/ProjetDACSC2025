@@ -5,34 +5,30 @@ import hepl.dacsc.ServerGeneriqueTCP.interfaces.Protocol;
 import hepl.dacsc.lib.MRPS;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.Security;
-import java.util.Properties;
 
 public class ServerMRPS {
+
+    // TODO : lire depuis un fichier properties
+    public static final int PORT_REPORT_SECURE = 60000;
+
     public static void main(String[] args) throws IOException {
-        try{
+        try {
+            // Initialisation Bouncy Castle
             Security.addProvider(new BouncyCastleProvider());
+
             Protocol protocol = new MRPS();
-            Logger logger = new Logger() {
-                @Override
-                public void Trace(String message) {
-                    System.out.println("[SERVER] " + message);
-                }
-            };
 
-            Properties props = new Properties();
-            props.load(new FileInputStream("src/main/java/hepl/dacsc/config.properties"));
+            Logger logger = message ->
+                    System.out.println("[SERVER MRPS] " + message);
 
-            int port = Integer.parseInt(props.getProperty("PORT_REPORT_SECURE"));
-
-            ThreadServeurPool server = new ThreadServeurPool(port, protocol, 1, logger);
+            ThreadServeurDemande server = new ThreadServeurDemande(PORT_REPORT_SECURE, protocol, logger);
 
             server.start();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 }
