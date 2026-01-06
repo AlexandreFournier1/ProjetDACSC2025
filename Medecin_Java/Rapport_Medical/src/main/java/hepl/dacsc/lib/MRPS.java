@@ -53,7 +53,7 @@ public class MRPS implements Protocol {
 //
 //        if (requete instanceof RequeteLIST_REPORTS) return TraitementLIST_REPORTS((RequeteLIST_REPORTS) requete);
 
-        return null;
+        return new ReponseLOGOUT(false);
     }
 
     private synchronized ReponseLOGIN TraitementLOGIN(RequeteLOGIN requete) {

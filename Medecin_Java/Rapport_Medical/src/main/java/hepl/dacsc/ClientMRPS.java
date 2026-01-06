@@ -11,6 +11,7 @@ import hepl.dacsc.utils.KeyUtils;
 import hepl.dacsc.utils.KeystoreUtils;
 import hepl.dacsc.view.JDialog.LoginJDialog;
 import hepl.dacsc.view.error.ErrorMessage;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.SecretKey;
 import javax.swing.*;
@@ -19,10 +20,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.*;
 import java.net.Socket;
-import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
+import java.security.*;
 import java.util.Properties;
 
 public class ClientMRPS extends JFrame {
@@ -37,6 +35,7 @@ public class ClientMRPS extends JFrame {
     private PrivateKey clientPrivateKey;
 
     public ClientMRPS() {
+        Security.addProvider(new BouncyCastleProvider());
         initComponents();
 
         oos = null;
@@ -224,6 +223,8 @@ public class ClientMRPS extends JFrame {
 
     private void jButtonLogoutActionPerformed(java.awt.event.ActionEvent evt, JButton btnLogin, JButton btnLogout) throws IOException, ClassNotFoundException {
         // Envoi requête LOGOUT
+        if (socket == null || oos == null || ois == null) return;
+
         oos.writeObject(new RequeteLOGOUT());
         oos.flush();
 
