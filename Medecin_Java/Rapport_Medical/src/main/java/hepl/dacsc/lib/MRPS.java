@@ -5,25 +5,31 @@ import hepl.dacsc.ServerGeneriqueTCP.exceptions.FinConnexionException;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Protocol;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Reponse;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Requete;
-import hepl.dacsc.lib.reponse.ReponseLOGIN;
-import hepl.dacsc.lib.reponse.ReponseLOGIN_DIGEST;
-import hepl.dacsc.lib.reponse.ReponseLOGOUT;
+import hepl.dacsc.lib.reponse.*;
+import hepl.dacsc.lib.requete.RequeteLIST_REPORTS;
 import hepl.dacsc.lib.requete.RequeteLOGIN;
 import hepl.dacsc.lib.requete.RequeteLOGIN_DIGEST;
 import hepl.dacsc.lib.requete.RequeteLOGOUT;
 import hepl.dacsc.model.dao.DoctorDAO;
+import hepl.dacsc.model.dao.RapportDAO;
 import hepl.dacsc.model.entity.Doctor;
+import hepl.dacsc.model.entity.Rapport;
+import hepl.dacsc.model.viewmodel.RapportSearchVM;
 import hepl.dacsc.utils.KeyUtils;
 import hepl.dacsc.utils.KeystoreUtils;
 import hepl.dacsc.utils.SessionKeyUtils;
 
 import javax.crypto.SecretKey;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -45,15 +51,15 @@ public class MRPS implements Protocol {
 
         if (requete instanceof RequeteLOGIN) return TraitementLOGIN((RequeteLOGIN) requete);
         if (requete instanceof RequeteLOGIN_DIGEST) return TraitementLOGIN_DIGEST((RequeteLOGIN_DIGEST) requete, socket);
-        if (requete instanceof RequeteLOGOUT) return TraitementLOGOUT(socket);
+        if (requete instanceof RequeteLOGOUT) return TraitementLOGOUT((RequeteLOGOUT) requete, socket);
 //
 //        if (requete instanceof RequeteADD_REPORT) return TraitementADD_REPORT((RequeteADD_REPORT) requete);
 //
 //        if (requete instanceof RequeteEDIT_REPORT) return TraitementEDIT_REPORT((RequeteEDIT_REPORT) requete);
 //
-//        if (requete instanceof RequeteLIST_REPORTS) return TraitementLIST_REPORTS((RequeteLIST_REPORTS) requete);
+        if (requete instanceof RequeteLIST_REPORTS) return TraitementLIST_REPORTS((RequeteLIST_REPORTS) requete, socket);
 
-        return new ReponseLOGOUT(false);
+        return new ReponseERREUR("Requête non reconnue par le protocole MRPS");
     }
 
     private synchronized ReponseLOGIN TraitementLOGIN(RequeteLOGIN requete) {
@@ -134,7 +140,7 @@ public class MRPS implements Protocol {
         }
     }
 
-    private synchronized ReponseLOGOUT TraitementLOGOUT(Socket socket) {
+    private synchronized ReponseLOGOUT TraitementLOGOUT(RequeteLOGOUT requete, Socket socket) {
         sessionKeys.remove(socket);
         System.out.println("[SERVER] Logout effectué, clé de session supprimée");
         return new ReponseLOGOUT(true);
@@ -149,9 +155,48 @@ public class MRPS implements Protocol {
 //
 //        return reponse;
 //    }
-//
-//    private synchronized ReponseLIST_REPORTS TraiteRequeteADD_PATIENT(RequeteLIST_REPORTS requete) {
-//
-//        return reponse;
-//    }
+
+    private synchronized ReponseLIST_REPORTS TraitementLIST_REPORTS(RequeteLIST_REPORTS requete, Socket socket) {
+        SecretKey sessionKey = sessionKeys.get(socket);
+        if (sessionKey == null) {
+            return new ReponseLIST_REPORTS(false, null, null);
+        }
+
+        try {
+            RapportSearchVM vm = new RapportSearchVM();
+
+            if (requete.getPatientId() != null) {
+                vm.setIdPatient(requete.getPatientId());
+            }
+
+            RapportDAO dao = new RapportDAO();
+            var rapports = dao.loadRapports(vm);
+
+            List<byte[]> encryptedReports = new ArrayList<>();
+
+            for (Rapport r : rapports) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(baos);
+                oos.writeObject(r);
+                oos.close();
+
+                byte[] serializedRapport = baos.toByteArray();
+                byte[] encrypted = MyCrypto.CryptSymDES(sessionKey, serializedRapport);
+
+                encryptedReports.add(encrypted);
+            }
+
+            ByteArrayOutputStream hmacStream = new ByteArrayOutputStream();
+            for (byte[] b : encryptedReports) {
+                hmacStream.write(b);
+            }
+
+            byte[] hmac = MyCrypto.computeHmac(sessionKey, hmacStream.toByteArray());
+
+            return new ReponseLIST_REPORTS(true, encryptedReports, hmac);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReponseLIST_REPORTS(false, null, null);
+        }
+    }
 }

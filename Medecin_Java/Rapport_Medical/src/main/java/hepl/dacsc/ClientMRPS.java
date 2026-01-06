@@ -1,12 +1,15 @@
 package hepl.dacsc;
 
 import hepl.dacsc.lib.MyCrypto;
+import hepl.dacsc.lib.reponse.ReponseLIST_REPORTS;
 import hepl.dacsc.lib.reponse.ReponseLOGIN;
 import hepl.dacsc.lib.reponse.ReponseLOGIN_DIGEST;
 import hepl.dacsc.lib.reponse.ReponseLOGOUT;
+import hepl.dacsc.lib.requete.RequeteLIST_REPORTS;
 import hepl.dacsc.lib.requete.RequeteLOGIN;
 import hepl.dacsc.lib.requete.RequeteLOGIN_DIGEST;
 import hepl.dacsc.lib.requete.RequeteLOGOUT;
+import hepl.dacsc.model.entity.Rapport;
 import hepl.dacsc.utils.KeyUtils;
 import hepl.dacsc.utils.KeystoreUtils;
 import hepl.dacsc.view.JDialog.LoginJDialog;
@@ -260,8 +263,39 @@ public class ClientMRPS extends JFrame {
 
     }
 
-    private void jButtonLIST_REPORTS(java.awt.event.ActionEvent evt) {
+    private void jButtonLIST_REPORTS(ActionEvent evt) throws Exception {
+        // TODO : Ajouter la possibilité de rechercher par id
 
+        oos.writeObject(new RequeteLIST_REPORTS(null));
+        oos.flush();
+
+        ReponseLIST_REPORTS rep = (ReponseLIST_REPORTS) ois.readObject();
+
+        if (!rep.isSuccess()) {
+            errMsg.showErrorMessage(this, "Erreur LIST_REPORTS");
+            return;
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        for (byte[] b : rep.getEncryptedReports()) {
+            baos.write(b);
+        }
+
+        byte[] localHmac =
+                MyCrypto.computeHmac(cleSession, baos.toByteArray());
+
+        if (!MessageDigest.isEqual(localHmac, rep.getHmac())) {
+            errMsg.showErrorMessage(this, "HMAC invalide");
+            return;
+        }
+
+        for (byte[] encrypted : rep.getEncryptedReports()) {
+            byte[] clear = MyCrypto.DecryptSymDES(cleSession, encrypted);
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(clear));
+            Rapport r = (Rapport) ois.readObject();
+            tableModel.addRow(new Object[]{r.getId(), r.getIdDoctor(), r.getIdPatient(), r.getDate()});
+            System.out.println("[RAPPORT] id=" + r.getId() + " patient=" + r.getIdPatient() + " date=" + r.getDate());
+        }
     }
 
     private void jButtonSHOW_REPORT_TEXT(JTable evt) {

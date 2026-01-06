@@ -18,6 +18,12 @@ public class MyCrypto {
         return chiffrementD.doFinal(data);
     }
 
+    public static byte[] computeHmac(SecretKey key, byte[] data) throws Exception {
+        Mac mac = Mac.getInstance("HmacSHA256", "BC");
+        mac.init(key);
+        return mac.doFinal(data);
+    }
+
     public static byte[] CryptAsymRSA(byte[] data, PublicKey key) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, key);
