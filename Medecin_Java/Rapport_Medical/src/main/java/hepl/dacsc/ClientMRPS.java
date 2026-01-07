@@ -13,6 +13,7 @@ import hepl.dacsc.model.entity.Rapport;
 import hepl.dacsc.utils.KeyUtils;
 import hepl.dacsc.utils.KeystoreUtils;
 import hepl.dacsc.view.JDialog.LoginJDialog;
+import hepl.dacsc.view.JTextArea.RapportJTextArea;
 import hepl.dacsc.view.error.ErrorMessage;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -24,6 +25,8 @@ import java.awt.event.ActionEvent;
 import java.io.*;
 import java.net.Socket;
 import java.security.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class ClientMRPS extends JFrame {
@@ -32,10 +35,12 @@ public class ClientMRPS extends JFrame {
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
     private JPanel workArea;
+    private JTextField txtIdPatient;
     private DefaultTableModel tableModel;
     private SecretKey cleSession;
     private ErrorMessage errMsg = new ErrorMessage();
     private PrivateKey clientPrivateKey;
+    private List<Rapport> listRapport = new ArrayList<Rapport>();
 
     public ClientMRPS() {
         Security.addProvider(new BouncyCastleProvider());
@@ -105,14 +110,32 @@ public class ClientMRPS extends JFrame {
         topButtons.add(btnList);
         topButtons.add(btnShow);
 
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        searchPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+        JLabel lblIdPatient = new JLabel("id patient:");
+        txtIdPatient = new JTextField(10);
+        JButton btnSearch = new JButton("Chercher Rapports");
+
+        searchPanel.add(lblIdPatient);
+        searchPanel.add(txtIdPatient);
+        searchPanel.add(btnSearch);
+
         String[] cols = {"ID", "Médecin", "Patient", "Date"};
         tableModel = new DefaultTableModel(cols, 0);
         JTable table = new JTable(tableModel);
 
-        mainPanel.add(topButtons, BorderLayout.NORTH);
-        mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+        JPanel topSection = new JPanel();
+        topSection.setLayout(new BoxLayout(topSection, BoxLayout.Y_AXIS));
+        topSection.add(topButtons);
+        topSection.add(Box.createVerticalStrut(5));
+        topSection.add(searchPanel);
 
-        workArea.add(mainPanel);
+        mainPanel.add(topSection, BorderLayout.NORTH);
+        mainPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+        workArea.add(mainPanel, BorderLayout.CENTER);
+
+        //workArea.add(mainPanel);
         workArea.revalidate();
         workArea.repaint();
 
@@ -126,9 +149,22 @@ public class ClientMRPS extends JFrame {
 
         btnList.addActionListener(e -> {
             try{
-                jButtonLIST_REPORTS(e);
+                jButtonLIST_REPORTS(e, null);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
+            }
+        });
+
+        btnSearch.addActionListener(e -> {
+            if (txtIdPatient.getText().trim().isEmpty()) {
+                errMsg.showWarningMessage(this, "Veuillez indiquer un id", "Warning");
+            }
+            else {
+                try{
+                    jButtonLIST_REPORTS(e, Integer.parseInt(txtIdPatient.getText()));
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -214,8 +250,8 @@ public class ClientMRPS extends JFrame {
             // Déchiffrement RSA
             byte[] rawKey = MyCrypto.DecryptAsymRSA(encryptedSessionKey, clientPrivateKey);
 
-            // Reconstruction clé AES
-            cleSession = MyCrypto.rebuildAESKey(rawKey);
+            // Reconstruction clé DES
+            cleSession = MyCrypto.rebuildDESKey(rawKey);
 
             errMsg.showMessage(this, "Authentification réussie !", "Success");
             btnLogin.setVisible(false);
@@ -263,10 +299,11 @@ public class ClientMRPS extends JFrame {
 
     }
 
-    private void jButtonLIST_REPORTS(ActionEvent evt) throws Exception {
-        // TODO : Ajouter la possibilité de rechercher par id
+    private void jButtonLIST_REPORTS(ActionEvent evt, Integer patientId) throws Exception {
+        tableModel.setRowCount(0);
+        listRapport.clear();
 
-        oos.writeObject(new RequeteLIST_REPORTS(null));
+        oos.writeObject(new RequeteLIST_REPORTS(patientId));
         oos.flush();
 
         ReponseLIST_REPORTS rep = (ReponseLIST_REPORTS) ois.readObject();
@@ -293,12 +330,38 @@ public class ClientMRPS extends JFrame {
             byte[] clear = MyCrypto.DecryptSymDES(cleSession, encrypted);
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(clear));
             Rapport r = (Rapport) ois.readObject();
+
+            if (r == null) {
+                errMsg.showErrorMessage(this, "Aucun de rapports trouvés !");
+                return;
+            }
+
+            listRapport.add(r);
+
             tableModel.addRow(new Object[]{r.getId(), r.getIdDoctor(), r.getIdPatient(), r.getDate()});
             System.out.println("[RAPPORT] id=" + r.getId() + " patient=" + r.getIdPatient() + " date=" + r.getDate());
         }
     }
 
     private void jButtonSHOW_REPORT_TEXT(JTable evt) {
+        int row = evt.getSelectedRow();
 
+        if (row == -1) {
+            errMsg.showWarningMessage(this, "Veuillez sélectionner une consultation dans le tableau.", "Aucune sélection");
+            return;
+        }
+
+        int id = (int) tableModel.getValueAt(row, 0);
+
+        for (Rapport rapport : listRapport) {
+            if (rapport.getId().equals(id)) {
+                RapportJTextArea dialog =
+                        new RapportJTextArea(this, rapport, false);
+                dialog.setVisible(true);
+                return;
+            }
+        }
+
+        errMsg.showErrorMessage(this, "Rapport introuvable en mémoire.");
     }
 }

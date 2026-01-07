@@ -18,6 +18,18 @@ public class MyCrypto {
         return chiffrementD.doFinal(data);
     }
 
+    public static byte[] CryptSymAES(SecretKey key, byte[] data) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding", "BC");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        return cipher.doFinal(data);
+    }
+
+    public static byte[] DecryptSymAES(SecretKey key, byte[] data) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding", "BC");
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        return cipher.doFinal(data);
+    }
+
     public static byte[] computeHmac(SecretKey key, byte[] data) throws Exception {
         Mac mac = Mac.getInstance("HmacSHA256", "BC");
         mac.init(key);
@@ -36,7 +48,7 @@ public class MyCrypto {
         return cipher.doFinal(data);
     }
 
-    public static SecretKey rebuildAESKey(byte[] rawKey) {
-        return new SecretKeySpec(rawKey, "AES");
+    public static SecretKey rebuildDESKey(byte[] rawKey) {
+        return new SecretKeySpec(rawKey, "DES");
     }
 }
