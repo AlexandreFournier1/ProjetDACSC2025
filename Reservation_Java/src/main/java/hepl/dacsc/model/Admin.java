@@ -7,7 +7,7 @@ public class Admin {
     private Socket socket;
 
     public void Connexion() throws IOException {
-        socket = new Socket("192.168.2.128", 60000);
+        socket = new Socket("192.168.186.128", 60000);
         System.out.println("Connexion établie !");
     }
 
