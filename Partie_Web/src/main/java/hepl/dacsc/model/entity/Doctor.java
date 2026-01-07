@@ -2,6 +2,7 @@ package hepl.dacsc.model.entity;
 
 public class Doctor extends Entity {
     private Integer specialty_id;
+    private String speciality_name;
     private String last_name;
     private String first_name;
     private  String mdp;
@@ -43,5 +44,17 @@ public class Doctor extends Entity {
 
     public void setMdp(String mdp) {
         this.mdp = mdp;
+    }
+
+    public String getSpeciality_name() {
+        return speciality_name;
+    }
+
+    public void setSpeciality_name(String speciality_name) {
+        this.speciality_name = speciality_name;
+    }
+
+    public void setSpecialty_id(Integer specialty_id) {
+        this.specialty_id = specialty_id;
     }
 }

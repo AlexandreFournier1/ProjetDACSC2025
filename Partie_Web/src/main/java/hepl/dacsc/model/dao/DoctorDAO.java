@@ -34,16 +34,20 @@ public class DoctorDAO {
 
     public ArrayList<Doctor> loadDoctor(DoctorSearchVM csvm) {
         doctors.clear();
-        System.out.println("[DAO] debut requette");
+        System.out.println("[DAO] Début requête loadDoctor");
+
         try {
-            String requete = "SELECT " +
-                    "doctors.id, " +
-                    "doctors.specialty_id, " +
-                    "doctors.last_name, " +
-                    "doctors.first_name " +
-                    "FROM doctors";
+            String requete =
+                    "SELECT " +
+                            "doctors.id, " +
+                            "doctors.specialty_id, " +
+                            "doctors.last_name, " +
+                            "doctors.first_name " +
+                            "FROM doctors " +
+                            "JOIN specialities ON doctors.specialty_id = specialities.id ";
+
             if (csvm != null) {
-                String where = " WHERE 1=1 ";
+                String where = "WHERE 1=1 ";
 
                 if (csvm.getId() != null) {
                     where += "AND doctors.id = ? ";
@@ -51,36 +55,48 @@ public class DoctorDAO {
                 if (csvm.getSpecialty_id() != null) {
                     where += "AND doctors.specialty_id = ? ";
                 }
+                if (csvm.getSpecialty_name() != null) {
+                    where += "AND specialities.name LIKE ? ";
+                }
                 if (csvm.getLast_name() != null) {
-                    where += "AND doctors.last_name like ? ";
+                    where += "AND doctors.last_name LIKE ? ";
                 }
                 if (csvm.getFirst_name() != null) {
-                    where += "AND doctors.first_name like ? ";
+                    where += "AND doctors.first_name LIKE ? ";
                 }
-                // Ajout Pour le connect
                 if (csvm.getMdp() != null) {
-                    where += "AND doctors.mdp like ? ";
+                    where += "AND doctors.mdp LIKE ? ";
                 }
-                requete += where + " ORDER BY doctors.id ASC;";
+
+                requete += where;
             }
-            System.out.println("[DAO] Fin requette");
+
+            requete += "ORDER BY doctors.id ASC;";
+
+            System.out.println("[DAO] Requête SQL = " + requete);
+
             PreparedStatement stmt = connectDB.getConn().prepareStatement(requete);
 
             if (csvm != null) {
                 int paramNumber = 0;
-                if(csvm.getId() != null){
+
+                if (csvm.getId() != null) {
                     paramNumber++;
                     stmt.setInt(paramNumber, csvm.getId());
                 }
-                if(csvm.getSpecialty_id() != null){
+                if (csvm.getSpecialty_id() != null) {
                     paramNumber++;
                     stmt.setInt(paramNumber, csvm.getSpecialty_id());
                 }
-                if(csvm.getLast_name() != null){
+                if (csvm.getSpecialty_name() != null) {
+                    paramNumber++;
+                    stmt.setString(paramNumber, csvm.getSpecialty_name());
+                }
+                if (csvm.getLast_name() != null) {
                     paramNumber++;
                     stmt.setString(paramNumber, csvm.getLast_name());
                 }
-                if(csvm.getFirst_name() != null){
+                if (csvm.getFirst_name() != null) {
                     paramNumber++;
                     stmt.setString(paramNumber, csvm.getFirst_name());
                 }
@@ -88,39 +104,38 @@ public class DoctorDAO {
                     paramNumber++;
                     stmt.setString(paramNumber, csvm.getMdp());
                 }
+
                 System.out.println("[DAO] Nombre de paramètres bindés = " + paramNumber);
             }
-            System.out.println("[DAO] Test1");
-            ResultSet rs = stmt.executeQuery();
-            System.out.println("[DAO] Test2");
 
-            doctors.clear();
-            // Vérifier si la require s’exécute et si elle renvoie quelque chose
+            ResultSet rs = stmt.executeQuery();
+
             if (!rs.isBeforeFirst()) {
-                System.out.println("[DAO] Aucune ligne retournée par la requête.");
+                System.out.println("[DAO] Aucun médecin trouvé.");
             } else {
-                System.out.println("[DAO] La requête s'est exécutée correctement et retourne des données.");
+                System.out.println("[DAO] Résultats trouvés.");
             }
 
             while (rs.next()) {
-                System.out.println("[DAO] début reponse");
                 Integer doctorId = rs.getInt("id");
-                Integer specialty_id = rs.getInt("specialty_id");
-                String last_name = rs.getString("last_name");
-                String first_name = rs.getString("first_name");
+                Integer specialtyId = rs.getInt("specialty_id");
+                String lastName = rs.getString("last_name");
+                String firstName = rs.getString("first_name");
 
-                Doctor doctor1 = new Doctor(doctorId, specialty_id, last_name, first_name);
-
-                doctors.add(doctor1);
+                Doctor doctor = new Doctor(doctorId, specialtyId, lastName, firstName);
+                doctors.add(doctor);
             }
+
+            rs.close();
             stmt.close();
-        }catch (Exception e) {
+
+        } catch (Exception e) {
             System.out.println("[DAO] ERREUR SQL : " + e.getMessage());
-            e.printStackTrace(); // indispensable
+            e.printStackTrace();
             throw new RuntimeException(e);
-        }finally {
-            return doctors;
         }
+
+        return doctors;
     }
 
     public void save(Doctor c) {
