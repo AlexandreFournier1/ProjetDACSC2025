@@ -6,6 +6,8 @@ import java.time.LocalTime;
 public class ConsultationSearchVM {
     private Integer id;
     private Integer doctor_id;
+    private String doctor_name;
+    private String speciality_name;
     private Integer patient_id;
     private LocalDate date;
     private LocalTime hour;
@@ -28,6 +30,22 @@ public class ConsultationSearchVM {
 
     public void setDoctor_id(Integer doctor_id) {
         this.doctor_id = doctor_id;
+    }
+
+    public String getDoctor_name() {
+        return doctor_name;
+    }
+
+    public void setDoctor_name(String doctor_name) {
+        this.doctor_name = doctor_name;
+    }
+
+    public String getSpeciality_name() {
+        return speciality_name;
+    }
+
+    public void setSpeciality_name(String speciality_name) {
+        this.speciality_name = speciality_name;
     }
 
     public Integer getPatient_id() {
