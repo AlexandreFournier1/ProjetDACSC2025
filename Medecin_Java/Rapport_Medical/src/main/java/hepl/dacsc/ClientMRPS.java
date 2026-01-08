@@ -194,9 +194,9 @@ public class ClientMRPS extends JFrame {
             int port = Integer.parseInt(props.getProperty("PORT_REPORT_SECURE"));
 
             // Ip PC Noah
-            //socket = new Socket("10.236.71.53", port);
+            socket = new Socket("192.168.0.81", port);
             // Ip PC Alex
-            socket = new Socket("192.168.56.1", port);
+            //socket = new Socket("192.168.56.1", port);
 
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());

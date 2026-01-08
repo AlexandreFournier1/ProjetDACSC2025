@@ -64,14 +64,14 @@ public class DoctorDAO {
                     where += "AND doctors.specialty_id = ? ";
                 }
                 if (csvm.getLast_name() != null) {
-                    where += "AND doctors.last_name like ? ";
+                    where += "AND doctors.last_name = ? ";
                 }
                 if (csvm.getFirst_name() != null) {
-                    where += "AND doctors.first_name like ? ";
+                    where += "AND doctors.first_name = ? ";
                 }
                 // Ajout Pour le connect
                 if (csvm.getMdp() != null) {
-                    where += "AND doctors.mdp like ? ";
+                    where += "AND doctors.mdp = ? ";
                 }
                 requete += where + " ORDER BY doctors.id ASC;";
             }

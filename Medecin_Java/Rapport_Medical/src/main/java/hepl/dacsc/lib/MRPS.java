@@ -14,6 +14,7 @@ import hepl.dacsc.model.dao.DoctorDAO;
 import hepl.dacsc.model.dao.RapportDAO;
 import hepl.dacsc.model.entity.Doctor;
 import hepl.dacsc.model.entity.Rapport;
+import hepl.dacsc.model.viewmodel.DoctorSearchVM;
 import hepl.dacsc.model.viewmodel.RapportSearchVM;
 import hepl.dacsc.utils.KeyUtils;
 import hepl.dacsc.utils.KeystoreUtils;
@@ -48,6 +49,7 @@ public class MRPS implements Protocol {
 
     @Override
     public Reponse TraiteRequete(Requete requete, Socket socket) throws FinConnexionException {
+        System.out.println("=== MRPS LOGIN CALLED ===");
 
         if (requete instanceof RequeteLOGIN) return TraitementLOGIN((RequeteLOGIN) requete);
         if (requete instanceof RequeteLOGIN_DIGEST) return TraitementLOGIN_DIGEST((RequeteLOGIN_DIGEST) requete, socket);
@@ -63,13 +65,27 @@ public class MRPS implements Protocol {
     }
 
     private synchronized ReponseLOGIN TraitementLOGIN(RequeteLOGIN requete) {
+        System.out.println("test1");
+
         String firstname = requete.getFirstname();
         String lastname = requete.getLastname();
+        System.out.println("test2");
 
         DoctorDAO dao = new DoctorDAO();
-        Doctor doctor = dao.getDoctorByName(lastname, firstname);
+        System.out.println("test3");
 
-        if (doctor == null) {
+        DoctorSearchVM search = new DoctorSearchVM();
+        System.out.println("test4");
+
+        search.setFirst_name(firstname);
+        search.setLast_name(lastname);
+        System.out.println("test5");
+
+        ArrayList<Doctor> doctor = dao.loadDoctor(search);
+        System.out.println("test6");
+
+        if (doctor.isEmpty()) {
+            System.out.println("test7");
             return new ReponseLOGIN(false, "Médecin inexistant");
         }
 
