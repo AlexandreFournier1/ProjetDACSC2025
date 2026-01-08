@@ -1,17 +1,12 @@
 package hepl.dacsc;
 
 import hepl.dacsc.lib.MyCrypto;
-import hepl.dacsc.lib.reponse.ReponseLIST_REPORTS;
-import hepl.dacsc.lib.reponse.ReponseLOGIN;
-import hepl.dacsc.lib.reponse.ReponseLOGIN_DIGEST;
-import hepl.dacsc.lib.reponse.ReponseLOGOUT;
-import hepl.dacsc.lib.requete.RequeteLIST_REPORTS;
-import hepl.dacsc.lib.requete.RequeteLOGIN;
-import hepl.dacsc.lib.requete.RequeteLOGIN_DIGEST;
-import hepl.dacsc.lib.requete.RequeteLOGOUT;
+import hepl.dacsc.lib.reponse.*;
+import hepl.dacsc.lib.requete.*;
 import hepl.dacsc.model.entity.Rapport;
 import hepl.dacsc.utils.KeyUtils;
 import hepl.dacsc.utils.KeystoreUtils;
+import hepl.dacsc.view.JDialog.Add_ReportJDialog;
 import hepl.dacsc.view.JDialog.LoginJDialog;
 import hepl.dacsc.view.JTextArea.RapportJTextArea;
 import hepl.dacsc.view.error.ErrorMessage;
@@ -25,7 +20,10 @@ import java.awt.event.ActionEvent;
 import java.io.*;
 import java.net.Socket;
 import java.security.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -291,9 +289,38 @@ public class ClientMRPS extends JFrame {
         workArea.repaint();
     }
 
-    private void jButtonADD_REPORT(ActionEvent evt) {
+    private void jButtonADD_REPORT(ActionEvent evt) throws Exception {
 
+        Add_ReportJDialog dialog = new Add_ReportJDialog(this);
+        dialog.setVisible(true);
+
+        if (!dialog.isConfirmed()){
+            return;
+        }
+
+        int idPatient = dialog.getIdPatient();
+        LocalDate date = dialog.getDate();
+
+        String texte = dialog.getRapportText();
+
+        byte[] clearBytes = texte.getBytes();
+        byte[] signature = MyCrypto.SignRSA(clearBytes, clientPrivateKey);
+        byte[] encrypted = MyCrypto.CryptSymDES(cleSession, clearBytes);
+        RequeteADD_REPORT req = new RequeteADD_REPORT(idPatient, date, encrypted, signature);
+
+        oos.writeObject(req);
+        oos.flush();
+
+        ReponseADD_REPORT rep = (ReponseADD_REPORT) ois.readObject();
+
+        if (!rep.isSuccess()) {
+            errMsg.showErrorMessage(this, "Erreur lors de l'ajout du rapport (Potentiellement Mauvais ID Patient)");
+            return;
+        }
+
+        errMsg.showMessage(this, "Rapport ajouté avec succès", "Succès");
     }
+
 
     private void jButtonEDIT_REPORT(ActionEvent evt, JTable table) {
 
