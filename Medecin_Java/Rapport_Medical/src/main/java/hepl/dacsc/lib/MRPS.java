@@ -57,9 +57,9 @@ public class MRPS implements Protocol {
         if (requete instanceof RequeteLOGOUT) return TraitementLOGOUT((RequeteLOGOUT) requete, socket);
 
         if (requete instanceof RequeteADD_REPORT) return TraitementADD_REPORT((RequeteADD_REPORT) requete, socket);
-//
-//        if (requete instanceof RequeteEDIT_REPORT) return TraitementEDIT_REPORT((RequeteEDIT_REPORT) requete);
-//
+
+        if (requete instanceof RequeteEDIT_REPORT) return TraitementEDIT_REPORT((RequeteEDIT_REPORT) requete, socket);
+
         if (requete instanceof RequeteLIST_REPORTS) return TraitementLIST_REPORTS((RequeteLIST_REPORTS) requete, socket);
 
         return new ReponseERREUR("Requête non reconnue par le protocole MRPS");
@@ -211,10 +211,39 @@ public class MRPS implements Protocol {
             return new ReponseADD_REPORT(false);
         }
     }
-//    private synchronized ReponseEDIT_REPORT TraiteRequeteADD_PATIENT(RequeteEDIT_REPORT requete) {
-//
-//        return reponse;
-//    }
+    private synchronized ReponseEDIT_REPORT TraitementEDIT_REPORT(RequeteEDIT_REPORT requete, Socket socket) {
+
+        SecretKey sessionKey = sessionKeys.get(socket);
+        if (sessionKey == null) {
+            return new ReponseEDIT_REPORT(false);
+        }
+
+        try {
+            // Déchiffrement du nouveau texte
+            byte[] clearBytes = MyCrypto.DecryptSymDES(sessionKey, requete.getEncryptedReport());
+            String newText = new String(clearBytes);
+
+            // Update
+            RapportDAO dao = new RapportDAO();
+            RapportSearchVM search = new RapportSearchVM();
+            search.setId(requete.getReportId());
+            List<Rapport> result = dao.loadRapports(search);
+            if(result.isEmpty()) {
+                return new ReponseEDIT_REPORT(false);
+            }
+            Rapport save = result.get(0);
+            save.setTextRapport(newText);
+
+            dao.save(save);
+
+            return new ReponseEDIT_REPORT(true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReponseEDIT_REPORT(false);
+        }
+    }
+
 
     private synchronized ReponseLIST_REPORTS TraitementLIST_REPORTS(RequeteLIST_REPORTS requete, Socket socket) {
         SecretKey sessionKey = sessionKeys.get(socket);

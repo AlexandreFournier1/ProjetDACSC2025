@@ -7,6 +7,7 @@ import hepl.dacsc.model.entity.Rapport;
 import hepl.dacsc.utils.KeyUtils;
 import hepl.dacsc.utils.KeystoreUtils;
 import hepl.dacsc.view.JDialog.Add_ReportJDialog;
+import hepl.dacsc.view.JDialog.Edit_RapportJDialog;
 import hepl.dacsc.view.JDialog.LoginJDialog;
 import hepl.dacsc.view.JTextArea.RapportJTextArea;
 import hepl.dacsc.view.error.ErrorMessage;
@@ -322,9 +323,69 @@ public class ClientMRPS extends JFrame {
     }
 
 
-    private void jButtonEDIT_REPORT(ActionEvent evt, JTable table) {
+    private void jButtonEDIT_REPORT(ActionEvent evt, JTable table) throws Exception {
 
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            errMsg.showWarningMessage(this, "Veuillez sélectionner un rapport dans le tableau.", "Aucune sélection");
+            return;
+        }
+
+        int reportId = (int) tableModel.getValueAt(row, 0);
+
+        Rapport selected = null;
+        for (Rapport r : listRapport) {
+            if (r.getId().equals(reportId)) {
+                selected = r;
+                break;
+            }
+        }
+
+        if (selected == null) {
+            errMsg.showErrorMessage(this, "Rapport introuvable");
+            return;
+        }
+
+        // Ouvre le dialog avec le texte actuel
+        Edit_RapportJDialog dialog = new Edit_RapportJDialog(this, reportId, selected.getTextRapport());
+
+        dialog.setVisible(true);
+
+        if (!dialog.isConfirmed()){
+            return;
+        }
+
+        String newText = dialog.getNewText();
+
+        // Chiffrement symétrique (DES)
+        byte[] encrypted = MyCrypto.CryptSymDES(cleSession, newText.getBytes());
+
+        // Envoi requête EDIT_REPORT
+        RequeteEDIT_REPORT req = new RequeteEDIT_REPORT(reportId, encrypted);
+        oos.writeObject(req);
+        oos.flush();
+
+        Object repObj = ois.readObject();
+
+        if (repObj instanceof ReponseEDIT_REPORT rep) {
+            if (!rep.isSuccess()) {
+                errMsg.showErrorMessage(this, "Erreur lors de la modification du rapport.");
+                return;
+            }
+
+            // Met à jour le texte en mémoire dans le tab
+            selected.setTextRapport(newText);
+
+            errMsg.showMessage(this, "Rapport modifié avec succès", "Succès");
+        }
+        else if (repObj instanceof ReponseERREUR err) {
+            errMsg.showErrorMessage(this, err.getMessage());
+        }
+        else {
+            errMsg.showErrorMessage(this, "Réponse serveur inattendue.");
+        }
     }
+
 
     private void jButtonLIST_REPORTS(ActionEvent evt, Integer patientId) throws Exception {
         tableModel.setRowCount(0);
