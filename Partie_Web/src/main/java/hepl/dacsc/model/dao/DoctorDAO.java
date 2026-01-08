@@ -41,10 +41,11 @@ public class DoctorDAO {
                     "SELECT " +
                             "doctors.id, " +
                             "doctors.specialty_id, " +
+                            "specialties.name, " +
                             "doctors.last_name, " +
                             "doctors.first_name " +
                             "FROM doctors " +
-                            "JOIN specialities ON doctors.specialty_id = specialities.id ";
+                            "JOIN specialties ON doctors.specialty_id = specialties.id ";
 
             if (csvm != null) {
                 String where = "WHERE 1=1 ";
@@ -56,7 +57,7 @@ public class DoctorDAO {
                     where += "AND doctors.specialty_id = ? ";
                 }
                 if (csvm.getSpecialty_name() != null) {
-                    where += "AND specialities.name LIKE ? ";
+                    where += "AND specialties.name LIKE ? ";
                 }
                 if (csvm.getLast_name() != null) {
                     where += "AND doctors.last_name LIKE ? ";
@@ -119,10 +120,11 @@ public class DoctorDAO {
             while (rs.next()) {
                 Integer doctorId = rs.getInt("id");
                 Integer specialtyId = rs.getInt("specialty_id");
+                String specialtyName = rs.getString("name");
                 String lastName = rs.getString("last_name");
                 String firstName = rs.getString("first_name");
 
-                Doctor doctor = new Doctor(doctorId, specialtyId, lastName, firstName);
+                Doctor doctor = new Doctor(doctorId, specialtyId, specialtyName, lastName, firstName);
                 doctors.add(doctor);
             }
 
