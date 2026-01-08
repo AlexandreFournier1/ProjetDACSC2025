@@ -7,6 +7,7 @@ import hepl.dacsc.model.entity.Consultation;
 import hepl.dacsc.model.entity.Doctor;
 import hepl.dacsc.model.viewmodel.ConsultationSearchVM;
 import hepl.dacsc.utils.QueryParser;
+import hepl.dacsc.utils.SendResponse;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -65,15 +66,10 @@ public class HandlerConsultations implements HttpHandler {
 
             String json = convertConsultationsToJson(consultations, reserved);
 
-            exchange.getResponseHeaders().set("Content-Type", "application/json");
-            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-            exchange.sendResponseHeaders(200, json.getBytes().length);
-
-            OutputStream os = exchange.getResponseBody();
-            os.write(json.getBytes());
-            os.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            SendResponse.sendResponse(exchange, 200, json);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SendResponse.sendResponse(exchange, 500, "Internal Server Error");
         }
     }
 
@@ -82,7 +78,28 @@ public class HandlerConsultations implements HttpHandler {
     }
 
     public void handleDelete(HttpExchange exchange) {
+        try {
+            QueryParser queryParser = new QueryParser();
+            Map<String, String> params = queryParser.parseQuery(exchange.getRequestURI().getQuery());
 
+            if (params.containsKey("id")) {
+                Integer id = Integer.parseInt(params.get("id"));
+
+                ConsultationDAO dao = new ConsultationDAO();
+
+                boolean isDeleted = dao.deleteReservation(id);
+
+                if (isDeleted) {
+                    SendResponse.sendResponse(exchange, 200, "Reservation supprimees avec succes !");
+                } else {
+                    SendResponse.sendResponse(exchange, 200, "La reservation n'a pas ete supprimees");
+                }
+            }
+            else SendResponse.sendResponse(exchange, 400, "L'id du patient est manquant !");
+        } catch (Exception e) {
+            e.printStackTrace();
+            SendResponse.sendResponse(exchange, 500, "Internal Server Error");
+        }
     }
 
     private static String convertConsultationsToJson(List<Consultation> consultations, boolean reserved)

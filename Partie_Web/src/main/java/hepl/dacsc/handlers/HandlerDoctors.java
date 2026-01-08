@@ -6,6 +6,7 @@ import hepl.dacsc.model.dao.DoctorDAO;
 import hepl.dacsc.model.entity.Doctor;
 import hepl.dacsc.model.viewmodel.DoctorSearchVM;
 import hepl.dacsc.utils.QueryParser;
+import hepl.dacsc.utils.SendResponse;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,7 +23,7 @@ public class HandlerDoctors implements HttpHandler {
         System.out.println("Request Method = " + method);
 
         if (!method.equalsIgnoreCase("GET")) {
-            sendError(exchange, 405, "Method Not Allowed");
+            SendResponse.sendResponse(exchange, 405, "Method Not Allowed");
             return;
         }
 
@@ -50,24 +51,11 @@ public class HandlerDoctors implements HttpHandler {
 
             String json = convertDoctorsToJson(doctors);
 
-            exchange.getResponseHeaders().set("Content-Type", "application/json");
-            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-            exchange.sendResponseHeaders(200, json.getBytes().length);
-
-            OutputStream os = exchange.getResponseBody();
-            os.write(json.getBytes());
-            os.close();
+            SendResponse.sendResponse(exchange, 200, json);
         } catch (Exception e) {
             e.printStackTrace();
-            sendError(exchange, 500, "Internal Server Error");
+            SendResponse.sendResponse(exchange, 500, "Internal Server Error");
         }
-    }
-    private void sendError(HttpExchange exchange, int code, String message) {
-        try {
-            exchange.sendResponseHeaders(code, message.length());
-            exchange.getResponseBody().write(message.getBytes());
-            exchange.getResponseBody().close();
-        } catch (IOException ignored) {}
     }
 
     private static String convertDoctorsToJson(List<Doctor> doctors)

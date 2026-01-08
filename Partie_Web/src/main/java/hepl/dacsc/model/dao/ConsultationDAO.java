@@ -254,10 +254,56 @@ public class ConsultationDAO {
                 stmt.setInt(1, id);
                 stmt.executeUpdate();
                 stmt.close();
-
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public boolean deleteReservation(Integer id) {
+        if (id == null) {
+            return false;
+        }
+
+        try {
+            String requete = "SELECT patient_id " +
+                            "FROM consultations " +
+                            "WHERE id = ?";
+
+            PreparedStatement stmt1 = connectDB.getConn().prepareStatement(requete);
+            stmt1.setInt(1, id);
+
+            ResultSet rs = stmt1.executeQuery();
+
+            if (!rs.next()) {
+                rs.close();
+                stmt1.close();
+                return false;
+            }
+
+            Integer patientId = rs.getObject("patient_id", Integer.class);
+
+            rs.close();
+            stmt1.close();
+
+            if (patientId == null) {
+                return false;
+            }
+
+            requete = "UPDATE consultations SET " +
+                    "patient_id = NULL, " +
+                    "reason = NULL " +
+                    "WHERE id = ?";
+
+            PreparedStatement stmt2 = connectDB.getConn().prepareStatement(requete);
+            stmt2.setInt(1, id);
+            stmt2.executeUpdate();
+            stmt2.close();
+
+            return true;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
