@@ -41,30 +41,6 @@ public class ConsultationDAO {
         return result;
     }
 
-    public Consultation loadConsultationById(Integer id) {
-        try {
-            String sql = "SELECT id, doctor_id, patient_id, date, hour, duree, reason FROM consultations WHERE id = ?";
-            PreparedStatement stmt = connectDB.getConn().prepareStatement(sql);
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                Integer consultationId = rs.getObject("id", Integer.class);
-                Integer doctorId = rs.getObject("doctor_id", Integer.class);
-                Integer patientId = rs.getObject("patient_id", Integer.class);
-                LocalDate date = rs.getDate("date").toLocalDate();
-                String hourStr = rs.getString("hour");
-                if(hourStr.length() == 4) hourStr = "0" + hourStr;
-                LocalTime hour = LocalTime.parse(hourStr);
-                Integer duree = rs.getInt("duree");
-                String reason = rs.getString("reason");
-                return new Consultation(consultationId, doctorId, patientId, date, hour, duree, reason);
-            }
-            return null;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public ArrayList<Consultation> loadConsultations() {
         return this.loadConsultations(null);
     }
@@ -75,12 +51,17 @@ public class ConsultationDAO {
             String requete = "SELECT " +
                     "consultations.id, " +
                     "consultations.doctor_id, " +
+                    "doctors.last_name, " +
+                    "specialties.name, " +
                     "consultations.patient_id, " +
                     "consultations.date, " +
                     "consultations.hour, " +
                     "consultations.duree, " +
                     "consultations.reason " +
-                    "FROM consultations";
+                    "FROM consultations " +
+                    "JOIN doctors ON doctors.id = consultations.doctor_id " +
+                    "JOIN specialties ON doctors.specialty_id = specialties.id ";
+
             if (csvm != null) {
                 String where = " WHERE 1=1 ";
 
@@ -89,6 +70,12 @@ public class ConsultationDAO {
                 }
                 if (csvm.getDoctor_id() != null) {
                     where += "AND consultations.doctor_id = ? ";
+                }
+                if (csvm.getDoctor_name() != null) {
+                    where += "AND doctors.last_name = ? ";
+                }
+                if (csvm.getSpeciality_name() != null) {
+                    where += "AND specialties.name LIKE ? ";
                 }
                 if (csvm.getPatient_id() != null) {
                     where += "AND consultations.patient_id = ? ";
@@ -120,6 +107,14 @@ public class ConsultationDAO {
                     paramNumber++;
                     stmt.setInt(paramNumber, csvm.getDoctor_id());
                 }
+                if (csvm.getDoctor_name() != null) {
+                    paramNumber++;
+                    stmt.setString(paramNumber, csvm.getDoctor_name());
+                }
+                if (csvm.getSpeciality_name() != null) {
+                    paramNumber++;
+                    stmt.setString(paramNumber, csvm.getSpeciality_name());
+                }
                 if(csvm.getPatient_id() != null) {
                     paramNumber++;
                     stmt.setInt(paramNumber, csvm.getPatient_id());
@@ -147,6 +142,8 @@ public class ConsultationDAO {
             while (rs.next()) {
                 Integer consultationId = rs.getInt("id");
                 Integer doctorId = rs.getInt("doctor_id");
+                String doctorName = rs.getString("last_name");
+                String specialtyName = rs.getString("name");
                 Integer patientId = rs.getObject("patient_id", Integer.class);
                 LocalDate date = rs.getDate("date").toLocalDate();
 
@@ -159,8 +156,7 @@ public class ConsultationDAO {
                 Integer duree = rs.getInt("duree");
                 String reason = rs.getString("reason");
 
-                Consultation consultation = new Consultation(consultationId, doctorId,
-                        patientId, date, hour, duree, reason);
+                Consultation consultation = new Consultation(consultationId, doctorId, doctorName, specialtyName, patientId, date, hour, duree, reason);
 
                 consultations.add(consultation);
             }
@@ -258,10 +254,56 @@ public class ConsultationDAO {
                 stmt.setInt(1, id);
                 stmt.executeUpdate();
                 stmt.close();
-
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public boolean deleteReservation(Integer id) {
+        if (id == null) {
+            return false;
+        }
+
+        try {
+            String requete = "SELECT patient_id " +
+                            "FROM consultations " +
+                            "WHERE id = ?";
+
+            PreparedStatement stmt1 = connectDB.getConn().prepareStatement(requete);
+            stmt1.setInt(1, id);
+
+            ResultSet rs = stmt1.executeQuery();
+
+            if (!rs.next()) {
+                rs.close();
+                stmt1.close();
+                return false;
+            }
+
+            Integer patientId = rs.getObject("patient_id", Integer.class);
+
+            rs.close();
+            stmt1.close();
+
+            if (patientId == null) {
+                return false;
+            }
+
+            requete = "UPDATE consultations SET " +
+                    "patient_id = NULL, " +
+                    "reason = NULL " +
+                    "WHERE id = ?";
+
+            PreparedStatement stmt2 = connectDB.getConn().prepareStatement(requete);
+            stmt2.setInt(1, id);
+            stmt2.executeUpdate();
+            stmt2.close();
+
+            return true;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

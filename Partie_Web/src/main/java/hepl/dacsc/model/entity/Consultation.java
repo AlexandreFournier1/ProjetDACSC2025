@@ -6,6 +6,8 @@ import java.time.LocalTime;
 
 public class Consultation extends Entity implements Serializable {
     private Integer doctor_id;
+    private String doctor_name;
+    private String speciality_name;
     private Integer patient_id;
     private LocalDate date;
     private LocalTime hour;
@@ -14,9 +16,11 @@ public class Consultation extends Entity implements Serializable {
 
     public Consultation() {}
 
-    public Consultation(Integer id, Integer doctor_id, Integer patient_id, LocalDate date, LocalTime hour, Integer duree,String reason) {
+    public Consultation(Integer id, Integer doctor_id, String doctor_name, String speciality_name, Integer patient_id, LocalDate date, LocalTime hour, Integer duree,String reason) {
         super(id);
         this.doctor_id = doctor_id;
+        this.doctor_name = doctor_name;
+        this.speciality_name = speciality_name;
         this.patient_id = patient_id;
         this.date = date;
         this.hour = hour;
@@ -69,4 +73,19 @@ public class Consultation extends Entity implements Serializable {
         this.reason = reason;
     }
 
+    public String getDoctor_name() {
+        return doctor_name;
+    }
+
+    public void setDoctor_name(String doctor_name) {
+        this.doctor_name = doctor_name;
+    }
+
+    public String getSpeciality_name() {
+        return speciality_name;
+    }
+
+    public void setSpeciality_name(String speciality_name) {
+        this.speciality_name = speciality_name;
+    }
 }

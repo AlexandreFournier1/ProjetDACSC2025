@@ -8,9 +8,10 @@ public class Doctor extends Entity {
     private  String mdp;
 
     public Doctor() {}
-    public Doctor(int id, Integer specialty_id, String last_name, String first_name) {
+    public Doctor(int id, Integer specialty_id, String speciality_name, String last_name, String first_name) {
         super(id);
         this.specialty_id = specialty_id;
+        this.speciality_name = speciality_name;
         this.last_name = last_name;
         this.first_name = first_name;
     }
