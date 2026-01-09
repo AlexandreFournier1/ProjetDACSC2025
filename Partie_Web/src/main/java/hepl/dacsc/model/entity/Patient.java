@@ -8,7 +8,7 @@ public class Patient extends Entity {
     private LocalDate birth_date;
 
     public Patient() {}
-    public Patient(int id, String last_name, String first_name, LocalDate birth_date) {
+    public Patient(Integer id, String last_name, String first_name, LocalDate birth_date) {
         super(id);
         this.last_name = last_name;
         this.first_name = first_name;

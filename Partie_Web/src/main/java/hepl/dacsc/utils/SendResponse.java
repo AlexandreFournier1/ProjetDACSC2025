@@ -11,7 +11,7 @@ public class SendResponse {
             System.out.println("Envoi de la réponse (" + statusCode + ") : --" + response + "--");
             exchange.getResponseHeaders().set("Content-Type", "application/json");
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-            exchange.sendResponseHeaders(statusCode, response.length());
+            exchange.sendResponseHeaders(statusCode, response.getBytes().length);
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();

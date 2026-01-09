@@ -74,8 +74,40 @@ public class HandlerConsultations implements HttpHandler {
     }
 
     public void handlePut(HttpExchange exchange) {
+        try {
+            QueryParser queryParser = new QueryParser();
+            Map<String, String> queryParams = queryParser.parseQuery(exchange.getRequestURI().getQuery());
 
+            if (!queryParams.containsKey("id")) {
+                SendResponse.sendResponse(exchange, 400, "Id de la consultation manquant");
+                return;
+            }
+
+            Integer consultationId = Integer.parseInt(queryParams.get("id"));
+
+            String body = new String(exchange.getRequestBody().readAllBytes());
+            Map<String, String> bodyParams = queryParser.parseQuery(body);
+
+            if (!bodyParams.containsKey("patientId") || !bodyParams.containsKey("reason")) {
+                SendResponse.sendResponse(exchange, 400, "patientId ou reason manquant");
+                return;
+            }
+
+            Integer patientId = Integer.parseInt(bodyParams.get("patientId"));
+            String reason = bodyParams.get("reason");
+
+            ConsultationDAO dao = new ConsultationDAO();
+
+            dao.updateConsultation(consultationId, patientId, reason);
+
+            String json = "{ \"message\": \"Consultation modifiée\", " + "\"consultationId\": " + consultationId + ", " + "\"patientId\": " + patientId + " }";
+            SendResponse.sendResponse(exchange, 200, json);
+        } catch (Exception e) {
+            e.printStackTrace();
+            SendResponse.sendResponse(exchange, 500, "Internal Server Error");
+        }
     }
+
 
     public void handleDelete(HttpExchange exchange) {
         try {
@@ -102,7 +134,7 @@ public class HandlerConsultations implements HttpHandler {
         }
     }
 
-    private static String convertConsultationsToJson(List<Consultation> consultations, boolean reserved)
+    private String convertConsultationsToJson(List<Consultation> consultations, boolean reserved)
     {
         StringBuilder json = new StringBuilder("[");
 

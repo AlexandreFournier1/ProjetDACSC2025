@@ -41,6 +41,30 @@ public class ConsultationDAO {
         return result;
     }
 
+    public void updateConsultation(Integer consultationId,
+                                      Integer patientId,
+                                      String reason) {
+        try {
+            String sql = "UPDATE consultations SET " +
+                    "patient_id = ?, " +
+                    "reason = ? " +
+                    "WHERE id = ?";
+
+            PreparedStatement stmt = connectDB.getConn().prepareStatement(sql);
+
+            stmt.setInt(1, patientId);
+            stmt.setString(2, reason);
+            stmt.setInt(3, consultationId);
+
+            stmt.executeUpdate();
+            stmt.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public ArrayList<Consultation> loadConsultations() {
         return this.loadConsultations(null);
     }

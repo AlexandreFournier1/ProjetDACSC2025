@@ -36,17 +36,17 @@ public class SpecialityDAO {
         specialities.clear();
         try {
             String requete = "SELECT " +
-                    "specialities.id, " +
-                    "specialities.name " +
-                    "FROM specialities";
+                    "specialties.id, " +
+                    "specialties.name " +
+                    "FROM specialties";
             if (csvm != null) {
                 String where = " WHERE 1=1 ";
 
                 if (csvm.getId() != null) {
-                    where += "AND specialities.id = ? ";
+                    where += "AND specialties.id = ? ";
                 }
                 if (csvm.getName() != null) {
-                    where += "AND specialities.name like ? ";
+                    where += "AND specialties.name like ? ";
                 }
                 requete += where + " ORDER BY specialities.id ASC";
             }
