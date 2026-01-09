@@ -12,9 +12,9 @@ public class ConnectDB {
         try {
             if (conn == null || conn.isClosed()) {
                 // IP Noah
-                //String sCon = "jdbc:mysql://192.168.162.128/PourStudent";
+                String sCon = "jdbc:mysql://192.168.162.128/PourStudent";
                 // IP Alex
-                String sCon = "jdbc:mysql://192.168.186.128/PourStudent";
+                //String sCon = "jdbc:mysql://192.168.186.128/PourStudent";
                 String sUser = "Student";
                 String sPwd = "PassStudent1_";
                 Class.forName("com.mysql.cj.jdbc.Driver");
