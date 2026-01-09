@@ -6,14 +6,15 @@ import hepl.dacsc.ServerGeneriqueTCP.interfaces.Protocol;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Reponse;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Requete;
 import hepl.dacsc.lib.reponse.*;
-import hepl.dacsc.lib.requete.RequeteLIST_REPORTS;
-import hepl.dacsc.lib.requete.RequeteLOGIN;
-import hepl.dacsc.lib.requete.RequeteLOGIN_DIGEST;
-import hepl.dacsc.lib.requete.RequeteLOGOUT;
+import hepl.dacsc.lib.requete.*;
+import hepl.dacsc.model.dao.ConsultationDAO;
 import hepl.dacsc.model.dao.DoctorDAO;
 import hepl.dacsc.model.dao.RapportDAO;
+import hepl.dacsc.model.entity.Consultation;
 import hepl.dacsc.model.entity.Doctor;
 import hepl.dacsc.model.entity.Rapport;
+import hepl.dacsc.model.viewmodel.ConsultationSearchVM;
+import hepl.dacsc.model.viewmodel.DoctorSearchVM;
 import hepl.dacsc.model.viewmodel.RapportSearchVM;
 import hepl.dacsc.utils.KeyUtils;
 import hepl.dacsc.utils.KeystoreUtils;
@@ -45,31 +46,39 @@ public class MRPS implements Protocol {
     private PublicKey clientPublicKey;
     private PrivateKey serverPrivateKey;
     private final Map<Socket, SecretKey> sessionKeys = new HashMap<>();
+    private final Map<Socket, Integer> connectedDoctorIds = new HashMap<>();
 
     @Override
     public Reponse TraiteRequete(Requete requete, Socket socket) throws FinConnexionException {
+        System.out.println("=== MRPS LOGIN CALLED ===");
 
         if (requete instanceof RequeteLOGIN) return TraitementLOGIN((RequeteLOGIN) requete);
         if (requete instanceof RequeteLOGIN_DIGEST) return TraitementLOGIN_DIGEST((RequeteLOGIN_DIGEST) requete, socket);
         if (requete instanceof RequeteLOGOUT) return TraitementLOGOUT((RequeteLOGOUT) requete, socket);
-//
-//        if (requete instanceof RequeteADD_REPORT) return TraitementADD_REPORT((RequeteADD_REPORT) requete);
-//
-//        if (requete instanceof RequeteEDIT_REPORT) return TraitementEDIT_REPORT((RequeteEDIT_REPORT) requete);
-//
+
+        if (requete instanceof RequeteADD_REPORT) return TraitementADD_REPORT((RequeteADD_REPORT) requete, socket);
+
+        if (requete instanceof RequeteEDIT_REPORT) return TraitementEDIT_REPORT((RequeteEDIT_REPORT) requete, socket);
+
         if (requete instanceof RequeteLIST_REPORTS) return TraitementLIST_REPORTS((RequeteLIST_REPORTS) requete, socket);
 
         return new ReponseERREUR("Requête non reconnue par le protocole MRPS");
     }
 
     private synchronized ReponseLOGIN TraitementLOGIN(RequeteLOGIN requete) {
+
         String firstname = requete.getFirstname();
         String lastname = requete.getLastname();
 
         DoctorDAO dao = new DoctorDAO();
-        Doctor doctor = dao.getDoctorByName(lastname, firstname);
+        DoctorSearchVM search = new DoctorSearchVM();
 
-        if (doctor == null) {
+        search.setFirst_name(firstname);
+        search.setLast_name(lastname);
+
+        ArrayList<Doctor> doctor = dao.loadDoctor(search);
+
+        if (doctor.isEmpty()) {
             return new ReponseLOGIN(false, "Médecin inexistant");
         }
 
@@ -132,6 +141,8 @@ public class MRPS implements Protocol {
             encryptedSessionKey = MyCrypto.CryptAsymRSA(sessionKey.getEncoded(), clientPublicKey);
             sessionKeys.put(socket, sessionKey);
 
+            connectedDoctorIds.put(socket, doctor.getId());
+
             return new ReponseLOGIN_DIGEST(true, encryptedSessionKey);
 
         } catch (Exception e) {
@@ -145,16 +156,94 @@ public class MRPS implements Protocol {
         System.out.println("[SERVER] Logout effectué, clé de session supprimée");
         return new ReponseLOGOUT(true);
     }
-//
-//    private synchronized ReponseADD_REPORT TraiteRequeteADD_PATIENT(RequeteADD_REPORT requete) {
-//
-//        return reponse;
-//    }
-//
-//    private synchronized ReponseEDIT_REPORT TraiteRequeteADD_PATIENT(RequeteEDIT_REPORT requete) {
-//
-//        return reponse;
-//    }
+
+    private synchronized ReponseADD_REPORT TraitementADD_REPORT(RequeteADD_REPORT requete, Socket socket) {
+        SecretKey sessionKey = sessionKeys.get(socket);
+        if (sessionKey == null) {
+            return new ReponseADD_REPORT(false);
+        }
+
+        Integer doctorId = connectedDoctorIds.get(socket);
+        if (doctorId == null) {
+            return new ReponseADD_REPORT(false);
+        }
+
+        try {
+            // Déchiffrement du rapport
+            byte[] rapportClairBytes = MyCrypto.DecryptSymDES(sessionKey, requete.getEncryptedReport());
+            String rapportClair = new String(rapportClairBytes);
+
+            // Vérification signature
+            ksClient = KeystoreUtils.loadKeystore("KeystoreClient.jks", "123456789");
+            PublicKey doctorPublicKey =
+                    KeyUtils.getPublicKey(ksClient, "mrpskey");
+
+            if (!MyCrypto.VerifyRSASignature(rapportClairBytes, requete.getSignature(), doctorPublicKey)) {
+                System.out.println("Verify RSASignature failed");
+                return new ReponseADD_REPORT(false);
+            }
+
+            // Vérification consultation médecin / patient
+            ConsultationDAO consultDAO = new ConsultationDAO();
+            ConsultationSearchVM vm = new ConsultationSearchVM();
+            vm.setDoctor_id(doctorId);
+            vm.setPatient_id(requete.getPatientId());
+
+            if (consultDAO.loadConsultations(vm).isEmpty()) {
+                System.out.println("Consultation not found");
+                return new ReponseADD_REPORT(false);
+            }
+
+            // Insertion du rapport
+            Rapport rapport = new Rapport();
+            rapport.setIdDoctor(doctorId);
+            rapport.setIdPatient(requete.getPatientId());
+            rapport.setDate(requete.getReportDate());
+            rapport.setTextRapport(rapportClair);
+
+            RapportDAO rapportDAO = new RapportDAO();
+            rapportDAO.save(rapport);
+
+            return new ReponseADD_REPORT(true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReponseADD_REPORT(false);
+        }
+    }
+    private synchronized ReponseEDIT_REPORT TraitementEDIT_REPORT(RequeteEDIT_REPORT requete, Socket socket) {
+
+        SecretKey sessionKey = sessionKeys.get(socket);
+        if (sessionKey == null) {
+            return new ReponseEDIT_REPORT(false);
+        }
+
+        try {
+            // Déchiffrement du nouveau texte
+            byte[] clearBytes = MyCrypto.DecryptSymDES(sessionKey, requete.getEncryptedReport());
+            String newText = new String(clearBytes);
+
+            // Update
+            RapportDAO dao = new RapportDAO();
+            RapportSearchVM search = new RapportSearchVM();
+            search.setId(requete.getReportId());
+            List<Rapport> result = dao.loadRapports(search);
+            if(result.isEmpty()) {
+                return new ReponseEDIT_REPORT(false);
+            }
+            Rapport save = result.get(0);
+            save.setTextRapport(newText);
+
+            dao.save(save);
+
+            return new ReponseEDIT_REPORT(true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReponseEDIT_REPORT(false);
+        }
+    }
+
 
     private synchronized ReponseLIST_REPORTS TraitementLIST_REPORTS(RequeteLIST_REPORTS requete, Socket socket) {
         SecretKey sessionKey = sessionKeys.get(socket);

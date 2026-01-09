@@ -48,6 +48,20 @@ public class MyCrypto {
         return cipher.doFinal(data);
     }
 
+
+    public static byte[] SignRSA(byte[] data, PrivateKey privateKey) throws Exception {
+        Signature signature = Signature.getInstance("SHA256withRSA", "BC");
+        signature.initSign(privateKey);
+        signature.update(data);
+        return signature.sign();
+    }
+
+    public static boolean VerifyRSASignature(byte[] data, byte[] sig, PublicKey publicKey) throws Exception {
+        Signature signature = Signature.getInstance("SHA256withRSA", "BC");
+        signature.initVerify(publicKey);
+        signature.update(data);
+        return signature.verify(sig);
+    }
     public static SecretKey rebuildDESKey(byte[] rawKey) {
         return new SecretKeySpec(rawKey, "DES");
     }
