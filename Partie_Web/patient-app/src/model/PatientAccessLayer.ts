@@ -1,4 +1,4 @@
-import type { PatientVM } from "@/viewmodel/PatientVM"
+import type { PatientVM } from "@/model/viewmodel/PatientVM"
 import type { Patient } from "./entity/Patient"
 
 export interface PatientAccessLayer {
