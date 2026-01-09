@@ -55,10 +55,10 @@ public class PatientDAO {
                     where += "AND patients.id = ? ";
                 }
                 if (csvm.getLast_name() != null) {
-                    where += "AND patients.last_name like ? ";
+                    where += "AND patients.last_name = ? ";
                 }
                 if (csvm.getFirst_name() != null) {
-                    where += "AND patients.first_name like ? ";
+                    where += "AND patients.first_name = ? ";
                 }
                 if (csvm.getBirth_date() != null) {
                     where += "AND patients.birth_date = ? ";
@@ -95,7 +95,8 @@ public class PatientDAO {
                 Integer patientId = rs.getInt("id");
                 String last_name = rs.getString("last_name");
                 String first_name = rs.getString("first_name");
-                LocalDate birth_date = rs.getDate("birth_date").toLocalDate();
+                Date sqlDate = rs.getDate("birth_date");
+                LocalDate birth_date = (sqlDate != null) ? sqlDate.toLocalDate() : null;
 
                 Patient patient1 = new Patient(patientId, last_name, first_name, birth_date);
 
