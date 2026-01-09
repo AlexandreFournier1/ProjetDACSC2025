@@ -21,6 +21,15 @@ export class PatientDAO_API implements PatientAccessLayer {
     }
 
     public async load(patientVM?: PatientVM): Promise<Array<Patient>> {
+        this.selectedPatient = [];
+        if (patientVM) {
+            const params = new URLSearchParams(); 
+            if (patientVM.id) {
+                params.append('id', patientVM.id.toString)
+            }
+        }
+        
+
         return this.selectedPatient;
     }
 
