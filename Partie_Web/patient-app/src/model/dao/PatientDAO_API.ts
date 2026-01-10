@@ -1,4 +1,3 @@
-import type { Patient } from "../entity/Patient"
 import type { PatientAccessLayer } from "../PatientAccessLayer"
 import type { PatientVM } from "../viewmodel/PatientVM"
 
