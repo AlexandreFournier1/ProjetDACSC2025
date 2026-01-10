@@ -1,17 +1,41 @@
-<script setup>
-    import { ref } from 'vue';
+<script setup lang="ts">
+    import { PatientDAO_API } from '@/model/dao/PatientDAO_API';
+    import type { PatientVM } from '@/model/viewmodel/PatientVM';
+    import { ref } from 'vue'
 
-    const nom = ref('');
-    const prenom = ref('');
-    const idPatient = ref('');
-    const isNewPatient = ref(false);
 
-    const error = ref('');
+    const emit = defineEmits<{(e: 'login-success', patientId: number): void}>()
 
-    function login() {
-        if (isNewPatient.value === false && idPatient.value === '') {
-            error.value = "Veuillez spécifier un ID ou cocher nouveau patient";
-            return;
+    const nom = ref('')
+    const prenom = ref('')
+    const birthDate = ref('')
+    const idPatient = ref('')
+    const isNewPatient = ref(false)
+    const error = ref('')
+
+    const dao = new PatientDAO_API()
+
+    async function login() {
+        error.value = ''
+
+        if (!isNewPatient.value && !idPatient.value) {
+            error.value = 'ID patient requis ou nouveau patient'
+            return
+        }
+
+        const vm: PatientVM = {
+            last_name: nom.value,
+            first_name: prenom.value,
+            birth_date: birthDate.value,
+            newPatient: isNewPatient.value,
+            id: idPatient.value || undefined
+        }
+
+        try {
+            const id = await dao.login(vm)
+            emit('login-success', id)
+        } catch (e: any) {
+            error.value = e.message || 'Erreur de login'
         }
     }
 
