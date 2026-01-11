@@ -114,7 +114,7 @@ watch(
 
 <style scoped>
 .consultation {
-  min-height: 100vh;
+  padding-top: 15vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -136,27 +136,26 @@ watch(
   margin-bottom: 20px;
 }
 
-.consultation_table thead {
+thead {
   background-color: green;
   color: white;
 }
 
-.consultation_table th,
-.consultation_table td {
+th, td {
   padding: 12px 16px;
   text-align: center;
 }
 
-.consultation_table tbody tr {
+tbody tr {
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.consultation_table tbody tr:hover {
+tbody tr:hover {
   background-color: #b6eeb6;
 }
 
-.consultation_table tbody tr.selected {
+tbody tr.selected {
   background-color: #8fdc8f;
   font-weight: bold;
 }

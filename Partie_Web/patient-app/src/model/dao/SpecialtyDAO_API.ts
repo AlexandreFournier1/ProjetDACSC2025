@@ -11,7 +11,7 @@ export class SpecialtyNotFoundError extends Error {
 export class SpecialtyDAO_API implements SpecialtyAccessLayer {
     private API_ENDPOINT = 'http://localhost:8080/api/specialties'
 
-    public async load(specialtyVM: SpecialtyVM): Promise<Specialty[]> {
+    public async load(specialtyVM?: SpecialtyVM): Promise<Specialty[]> {
         const res = await fetch(this.API_ENDPOINT, { method: 'GET' })
                 
         if (!res.ok) {

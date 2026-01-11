@@ -2,6 +2,9 @@ import type { ConsultationAccessLayer } from '@/model/ConsultationAccessLayer'
 import type { Consultation } from '@/model/entity/Consultation'
 import type { PatientVM } from '@/model/viewmodel/PatientVM'
 import type { ConsultationVM } from '@/model/viewmodel/ConsultationVM'
+import type { Specialty } from '../entity/Specialty'
+import type { DoctorVM } from '../viewmodel/DoctorVM'
+import type { SpecialtyVM } from '../viewmodel/SpecialtyVM'
 
 export class ConsultationNotFoundError extends Error {
     constructor(message: string) {
@@ -35,7 +38,34 @@ export class ConsultationDAO_API implements ConsultationAccessLayer {
         return json
     }
 
+    public async search(consultationVM: ConsultationVM): Promise<Consultation[]> {
+        const params = new URLSearchParams()
 
+        if (consultationVM.date) {
+            params.append('date', consultationVM.date)
+        }
+
+        if (consultationVM.doctor_name) {
+            params.append('doctor', consultationVM.doctor_name)
+        }
+
+        if (consultationVM.specialty) {
+            params.append('specialty', consultationVM.specialty)
+        }
+
+        if ([...params.keys()].length === 0) {
+            throw new ConsultationNotFoundError('Aucun critère de recherche fourni')
+        }
+
+        const url = `${this.API_ENDPOINT}?${params.toString()}`
+        const res = await fetch(url, { method: 'GET' })
+
+        if (!res.ok) {
+            throw new ConsultationNotFoundError(await res.text())
+        }
+
+        return await res.json()
+    }
 
     public async deleteConsultation(consultationVM: ConsultationVM): Promise<void> {
 
