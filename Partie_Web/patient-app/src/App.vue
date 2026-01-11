@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import Login from '@/components/LoginForm.vue'
 import TabConsultation from "@/components/TabConsultation.vue";
+import ReservationConsultation from './components/ReservationConsultation.vue';
 const patientId = ref<string | null>(null)
 
 function onLoginSuccess(id: number) {
@@ -26,5 +27,5 @@ function deleteConsultation() {
       @deleteConsultation="deleteConsultation"
   />
 
-
+  <ReservationConsultation/>
 </template>
