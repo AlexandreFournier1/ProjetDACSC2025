@@ -2,10 +2,10 @@
 import { ref } from 'vue'
 import Login from '@/components/LoginForm.vue'
 import TabConsultation from "@/components/TabConsultation.vue";
-const patientId = ref<number | null>(null)
+const patientId = ref<string | null>(null)
 
 function onLoginSuccess(id: number) {
-  patientId.value = id
+  patientId.value = id.toString()
 }
 function logout() {
   patientId.value = null

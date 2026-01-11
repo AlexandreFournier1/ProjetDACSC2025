@@ -7,7 +7,7 @@ import type { ConsultationVM } from '@/model/viewmodel/ConsultationVM'
 
 // recup l'idPatient
 const props = defineProps<{
-  patientId: number
+  patientId: string
 }>()
 console.log('Patient ID reçu :', props.patientId)
 
@@ -40,7 +40,7 @@ async function deleteSelectedConsultation() {
   }
 
   try {
-    const consultationVM: ConsultationVM = {id: selectedId.value}
+    const consultationVM: ConsultationVM = {id: selectedId.value.toString()}
 
     await dao.deleteConsultation(consultationVM)
 
@@ -89,7 +89,7 @@ watch(
 
         <td>{{consultation.date}}</td>
         <td>{{consultation.hour}}</td>
-        <td>{{consultation.doctor}}</td>
+        <td>{{consultation.doctor_name}}</td>
         <td>{{consultation.specialty}}</td>
         <td>{{consultation.reason}}</td>
       </tr>

@@ -1,8 +1,11 @@
 import Login from '@/components/LoginForm.vue'
+import TabConsultation from "@/components/TabConsultation.vue";
+
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
-  {path: '/', component: Login}
+  {path: '/', component: Login},
+  {path: '/Consultation', component: TabConsultation}
 ]
 
 const router = createRouter({
