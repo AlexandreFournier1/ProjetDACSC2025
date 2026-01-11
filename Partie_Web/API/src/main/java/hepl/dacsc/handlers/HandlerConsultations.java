@@ -26,12 +26,28 @@ public class HandlerConsultations implements HttpHandler {
         System.out.println("Request Path = " + requestPath);
         System.out.println("Request Method = " + method);
 
+        if(method.equalsIgnoreCase("OPTIONS")) {
+            handleOptions(exchange);
+            return;
+        }
+
         if (method.equalsIgnoreCase("GET")) {
             handleGet(exchange);
         } else if (method.equalsIgnoreCase("PUT")) {
             handlePut(exchange);
         } else if (method.equalsIgnoreCase("DELETE")) {
             handleDelete(exchange);
+        }
+    }
+    private void handleOptions(HttpExchange exchange) {
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+
+        try {
+            exchange.sendResponseHeaders(204, -1);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -107,7 +123,6 @@ public class HandlerConsultations implements HttpHandler {
             SendResponse.sendResponse(exchange, 500, "Internal Server Error");
         }
     }
-
 
     public void handleDelete(HttpExchange exchange) {
         try {

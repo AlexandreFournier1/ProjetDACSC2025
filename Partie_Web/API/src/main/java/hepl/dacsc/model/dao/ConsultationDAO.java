@@ -290,7 +290,7 @@ public class ConsultationDAO {
         }
 
         try {
-            String requete = "SELECT patient_id " +
+            String requete ="SELECT patient_id " +
                             "FROM consultations " +
                             "WHERE id = ?";
 
