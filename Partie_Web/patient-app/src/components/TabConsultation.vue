@@ -9,7 +9,7 @@ import type { ConsultationVM } from '@/model/viewmodel/ConsultationVM'
 const props = defineProps<{
   patientId: string
 }>()
-console.log('Patient ID reçu :', props.patientId)
+//console.log('Patient ID reçu :', props.patientId)
 
 const emit = defineEmits<{ (e: 'logout'): void, (e: 'newConsultation'): void, (e: 'deleteSelectedConsultation'): void }>()
 
@@ -21,7 +21,6 @@ const dao = new ConsultationDAO_API()
 
 async function loadConsultations() {
   try {
-    console.log("load test1")
     const patientVM: PatientVM = {id: props.patientId}
 
     consultations.value = await dao.getConsultationsByPatientId(patientVM)
@@ -32,10 +31,6 @@ async function loadConsultations() {
 }
 async function deleteSelectedConsultation() {
   if (!selectedId.value) {
-    return
-  }
-
-  if (!confirm('Voulez-vous vraiment supprimer ce rendez-vous ?')) {
     return
   }
 
@@ -55,7 +50,6 @@ watch(
     () => props.patientId,
     (newId) => {
       if (newId) {
-        console.log("load test2")
         loadConsultations()
       }
     },
