@@ -68,22 +68,27 @@ export class ConsultationDAO_API implements ConsultationAccessLayer {
     }
 
     public async deleteConsultation(consultationVM: ConsultationVM): Promise<void> {
-
+        console.log("Entrer delete1")
         if (!consultationVM.id) {
             throw new ConsultationNotFoundError('ID consultation manquant')
         }
 
         const params = new URLSearchParams()
         params.append('id', consultationVM.id)
+        console.log("Entrer delete2")
 
         const res = await fetch(
             `${this.API_ENDPOINT}?${params.toString()}`,
             { method: 'DELETE' }
         )
+        console.log("Entrer delete3")
+
 
         if (!res.ok) {
             throw new ConsultationNotFoundError(await res.text())
         }
+        console.log("Entrer delete4")
+
     }
 
 }
