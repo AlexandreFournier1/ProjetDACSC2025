@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import {onMounted, ref} from 'vue'
 import { ConsultationDAO_API } from '@/model/dao/ConsultationDAO_API'
 import type { Consultation } from '@/model/entity/Consultation'
 import type { PatientVM } from '@/model/viewmodel/PatientVM'
@@ -46,16 +46,9 @@ async function deleteSelectedConsultation() {
   }
 }
 
-watch(
-    () => props.patientId,
-    (newId) => {
-      if (newId) {
-        loadConsultations()
-      }
-    },
-    { immediate: true }
-)
-
+onMounted(() => {
+  loadConsultations()
+})
 
 </script>
 

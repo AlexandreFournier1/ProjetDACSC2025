@@ -98,7 +98,8 @@
 <template>
     <div class="reservation-consultation">
         <div class="research-consultation">
-            <h3>Réservation : </h3>
+          <button class="return" @click="emit('reservation-done')">Retour</button>
+          <h3>Réservation : </h3>
             <section class="inner-section">
                 <div class="label-column">
                     <label for="specialty">Spécialité :</label>
@@ -174,7 +175,7 @@
 
                     <div class="modal-buttons">
                         <button @click="confirmReservation">Valider</button>
-                        <button class="cancel" @click="showDialog = false">Annuler</button>
+                        <button class="cancel" @click="showDialog = false" >Annuler</button>
                     </div>
                 </dialog>
             </div>

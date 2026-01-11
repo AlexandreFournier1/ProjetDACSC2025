@@ -1,11 +1,14 @@
 import Login from '@/components/LoginForm.vue'
 import TabConsultation from "@/components/TabConsultation.vue";
+import ReservationConsultation from '@/components/ReservationConsultation.vue';
 
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {path: '/', component: Login},
-  {path: '/Consultation', component: TabConsultation}
+  {path: '/consultation', component: TabConsultation},
+  {path: '/reservation', component: ReservationConsultation},
+
 ]
 
 const router = createRouter({
