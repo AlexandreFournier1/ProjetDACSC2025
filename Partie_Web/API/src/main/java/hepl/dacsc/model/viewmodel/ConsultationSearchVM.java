@@ -13,6 +13,16 @@ public class ConsultationSearchVM {
     private LocalTime hour;
     private Integer duree;
     private String reason;
+
+    private boolean onlyAvailable;
+
+    public boolean isOnlyAvailable() {
+        return onlyAvailable;
+    }
+
+    public void setOnlyAvailable(boolean onlyAvailable) {
+        this.onlyAvailable = onlyAvailable;
+    }
     
     public ConsultationSearchVM() {}
 

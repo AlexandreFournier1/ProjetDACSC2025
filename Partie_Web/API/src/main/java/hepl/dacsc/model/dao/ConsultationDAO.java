@@ -116,6 +116,10 @@ public class ConsultationDAO {
                 if(csvm.getReason() != null) {
                     where += "AND consultations.reason = ? ";
                 }
+                if (csvm.isOnlyAvailable()) {
+                    where += "AND consultations.patient_id IS NULL ";
+                    where += "AND consultations.reason IS NULL ";
+                }
                 requete += where + "ORDER BY consultations.id ASC";
             }
 

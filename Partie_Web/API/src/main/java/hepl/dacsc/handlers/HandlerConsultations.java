@@ -73,7 +73,10 @@ public class HandlerConsultations implements HttpHandler {
 
             if (params.containsKey("patientId")) {
                 searchVM.setPatient_id(Integer.parseInt(params.get("patientId")));
+                searchVM.setOnlyAvailable(false);
                 reserved = true;
+            } else {
+                searchVM.setOnlyAvailable(true);
             }
 
             ConsultationDAO dao = new ConsultationDAO();
