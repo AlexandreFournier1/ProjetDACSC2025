@@ -11,7 +11,7 @@ const props = defineProps<{
 }>()
 //console.log('Patient ID reçu :', props.patientId)
 
-const emit = defineEmits<{ (e: 'logout'): void, (e: 'newConsultation'): void, (e: 'deleteSelectedConsultation'): void }>()
+const emit = defineEmits<{ (e: 'logout'): void, (e: 'newConsultation'): void, (e: 'deleteSelectedConsultation'): void}>()
 
 let consultations = ref<Consultation[]>([])
 const selectedId = ref<number | null>(null)

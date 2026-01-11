@@ -2,9 +2,6 @@ import type { ConsultationAccessLayer } from '@/model/ConsultationAccessLayer'
 import type { Consultation } from '@/model/entity/Consultation'
 import type { PatientVM } from '@/model/viewmodel/PatientVM'
 import type { ConsultationVM } from '@/model/viewmodel/ConsultationVM'
-import type { Specialty } from '../entity/Specialty'
-import type { DoctorVM } from '../viewmodel/DoctorVM'
-import type { SpecialtyVM } from '../viewmodel/SpecialtyVM'
 
 export class ConsultationNotFoundError extends Error {
     constructor(message: string) {
@@ -65,6 +62,42 @@ export class ConsultationDAO_API implements ConsultationAccessLayer {
         }
 
         return await res.json()
+    }
+
+    public async reserveConsultation(consultationVM: ConsultationVM, patientVM: PatientVM): Promise<void> {
+        if (!consultationVM.id) {
+            throw new ConsultationNotFoundError('ID consultation manquant')
+        }
+
+        if (!patientVM.id) {
+            throw new ConsultationNotFoundError('ID patient manquant')
+        }
+
+        if (!consultationVM.reason || consultationVM.reason.trim() === '') {
+            throw new ConsultationNotFoundError('Raison manquante')
+        }
+
+        const params = new URLSearchParams()
+        params.append('id', consultationVM.id)
+
+        const body = new URLSearchParams()
+        body.append('patientId', patientVM.id)
+        body.append('reason', consultationVM.reason)
+
+        const res = await fetch(
+            `${this.API_ENDPOINT}?${params.toString()}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: body.toString()
+            }
+        )
+
+        if (!res.ok) {
+            throw new ConsultationNotFoundError(await res.text())
+        }
     }
 
     public async deleteConsultation(consultationVM: ConsultationVM): Promise<void> {

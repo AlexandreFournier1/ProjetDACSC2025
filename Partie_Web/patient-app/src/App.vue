@@ -3,7 +3,9 @@
   import Login from '@/components/LoginForm.vue'
   import TabConsultation from "@/components/TabConsultation.vue";
   import ReservationConsultation from './components/ReservationConsultation.vue';
+
   const patientId = ref<string | null>(null)
+  const refreshKey = ref(0)
 
   function onLoginSuccess(id: number) {
     patientId.value = id.toString()
@@ -17,6 +19,10 @@
     patientId.value = null
   }
 
+  function refreshConsultations() {
+    refreshKey.value++
+  }
+
 </script>
 
 <template>
@@ -24,10 +30,11 @@
 
   <TabConsultation v-if="patientId != null"
       :patientId="patientId!"
+      :key="refreshKey"
       @logout="logout"
       @newConsultation="() => {}"
       @deleteConsultation="deleteConsultation"
   />
 
-  <ReservationConsultation v-if="patientId != null"/>
+  <ReservationConsultation v-if="patientId != null" :patient-id="patientId!" @reservation-done="refreshConsultations"/>
 </template>
