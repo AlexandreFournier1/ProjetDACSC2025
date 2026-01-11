@@ -40,13 +40,12 @@ public class HandlerSpecialities implements HttpHandler {
     private String convertSpecialityToJson(List<Speciality> speciality) {
         StringBuilder json = new StringBuilder("[");
 
-        for (int i = 0; i < speciality.size(); i++)
-        {
+        for (int i = 0; i < speciality.size(); i++) {
             Speciality c = speciality.get(i);
 
             json.append("{");
             json.append("\"id\": ").append(c.getId()).append(",");
-            json.append("\"name\": ").append(c.getName()).append(",");
+            json.append("\"name\": \"").append(c.getName()).append("\"");
             json.append("}");
 
             if (i < speciality.size() - 1)
