@@ -147,12 +147,14 @@ public class HandlerConsultations implements HttpHandler {
             json.append("\"reserved\": ").append(reserved).append(",");
             json.append("\"doctor_id\": ").append(c.getDoctor_id()).append(",");
             json.append("\"doctor_name\": \"").append(c.getDoctor_name()).append("\",");
-            json.append("\"specialty\": ").append(c.getSpeciality_name()).append(",");
+            json.append("\"specialty\": \"").append(c.getSpeciality_name()).append("\",");
+
             if (reserved) {
                 json.append("\"patient_id\": ").append(c.getPatient_id()).append(",");
             }
-            json.append("\"date\": ").append(LocalDate.parse(c.getDate().toString())).append(",");
-            json.append("\"hour\": ").append(LocalTime.parse(c.getHour().toString())).append(",");
+
+            json.append("\"date\": \"").append(c.getDate()).append("\",");
+            json.append("\"hour\": \"").append(c.getHour()).append("\"");
             json.append("}");
 
             if (i < consultations.size() - 1)
@@ -162,4 +164,5 @@ public class HandlerConsultations implements HttpHandler {
         json.append("]");
         return json.toString();
     }
+
 }

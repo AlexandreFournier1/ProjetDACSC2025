@@ -65,6 +65,7 @@ public class HandlerPatients implements HttpHandler {
                 PatientSearchVM search = new PatientSearchVM();
                 search.setFirst_name(firstName);
                 search.setLast_name(lastName);
+                search.setId(idPatient);
                 List<Patient> existing = dao.loadPatients(search);
 
                 if(!existing.isEmpty()) {
