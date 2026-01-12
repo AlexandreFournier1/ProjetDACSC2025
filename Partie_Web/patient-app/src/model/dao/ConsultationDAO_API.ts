@@ -50,7 +50,7 @@ export class ConsultationDAO_API implements ConsultationAccessLayer {
             params.append('specialty', consultationVM.specialty)
         }
 
-        if ([...params.keys()].length === 0) {
+        if ([params.keys()].length === 0) {
             throw new ConsultationNotFoundError('Aucun critère de recherche fourni')
         }
 

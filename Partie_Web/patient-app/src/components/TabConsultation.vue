@@ -101,7 +101,7 @@ onMounted(() => {
 
 <style scoped>
 .consultation {
-  padding-top: 15vh;
+  padding-top: 25vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

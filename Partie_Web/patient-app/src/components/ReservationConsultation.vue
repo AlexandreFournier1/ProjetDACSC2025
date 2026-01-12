@@ -184,6 +184,7 @@
 </template>
 <style>
     .reservation-consultation {
+        padding-top: 25vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
