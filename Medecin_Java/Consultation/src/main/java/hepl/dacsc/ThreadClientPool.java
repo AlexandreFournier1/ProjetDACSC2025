@@ -1,46 +1,45 @@
 package hepl.dacsc;
 
 import hepl.dacsc.ServerGeneriqueTCP.FileAttente;
+import hepl.dacsc.ServerGeneriqueTCP.ThreadClient;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Logger;
 import hepl.dacsc.ServerGeneriqueTCP.interfaces.Protocol;
-import hepl.dacsc.ServerGeneriqueTCP.ThreadClient;
-import hepl.dacsc.View.JFrame.MainJFrame;
 
 import java.io.IOException;
 
 public class ThreadClientPool extends ThreadClient {
-    private FileAttente connexionsEnAttente;
 
-    public ThreadClientPool(Protocol protocol, FileAttente file, ThreadGroup groupe, Logger logger) throws IOException
-    {
+    private final FileAttente connexionsEnAttente;
+
+    public ThreadClientPool(
+            Protocol protocol,
+            FileAttente file,
+            ThreadGroup groupe,
+            Logger logger) throws IOException {
         super(protocol, groupe, logger);
-        connexionsEnAttente = file;
+        this.connexionsEnAttente = file;
     }
 
     @Override
-    public void run()
-    {
-        logger.Trace("TH Client (Pool) démarre...");
+    public void run() {
+        logger.Trace("TH Client (Pool) démarré");
 
-        ClientCAP mf = new ClientCAP();
-        mf.setVisible(true);
+        boolean interrupted = false;
 
-        boolean interrompu = false;
-        while(!interrompu)
-        {
-            try
-            {
-                logger.Trace("Attente d'une connexion...");
+        while (!interrupted) {
+            try {
+                logger.Trace("Attente connexion...");
                 csocket = connexionsEnAttente.getConnexion();
-                logger.Trace("Connexion prise en charge.");
+                logger.Trace("Connexion prise en charge : " + csocket);
+
+                // lance le traitement classique ThreadClient
                 super.run();
-            }
-            catch (InterruptedException ex)
-            {
-                logger.Trace("Demande d'interruption...");
-                interrompu = true;
+
+            } catch (InterruptedException e) {
+                interrupted = true;
             }
         }
-        logger.Trace("TH Client (Pool) se termine.");
+
+        logger.Trace("TH Client (Pool) terminé");
     }
 }

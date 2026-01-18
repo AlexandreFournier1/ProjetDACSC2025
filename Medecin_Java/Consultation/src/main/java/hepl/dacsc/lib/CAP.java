@@ -17,234 +17,171 @@ import hepl.dacsc.model.viewmodel.ConsultationSearchVM;
 import hepl.dacsc.model.viewmodel.DoctorSearchVM;
 
 import java.net.Socket;
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CAP implements Protocol {
-    private HashMap<String, String> passwords;
-    private HashMap<String, Socket> medecinsConnectes;
-    private Logger logger = new Logger() {
-        @Override
-        public void Trace(String message) {
-            System.out.println("[PROTOCOL] " + message);
-        }
-    };;
 
-    private static Connection conn = null;
+    private final Logger logger = message ->
+            System.out.println("[CAP] " + message);
+
     private static int nbConsultation = 0;
 
     @Override
-    public synchronized Reponse TraiteRequete(Requete requete, Socket socket) throws FinConnexionException
-    {
-        // LOGIN
-        if (requete instanceof RequeteLOGIN) return TraitementLOGIN((RequeteLOGIN) requete);
+    public Reponse TraiteRequete(Requete requete, Socket socket)
+            throws FinConnexionException {
 
-        // ADD_CONSULTATION
-        if (requete instanceof RequeteADD_CONSULTATION) return TraiteRequeteADD_CONSULTATION((RequeteADD_CONSULTATION) requete);
+        if (requete instanceof RequeteLOGIN)
+            return traiterLOGIN((RequeteLOGIN) requete);
 
-        // ADD_PATIENT
-        if (requete instanceof RequeteADD_PATIENT) return TraiteRequeteADD_PATIENT((RequeteADD_PATIENT) requete);
+        if (requete instanceof RequeteADD_CONSULTATION)
+            return traiterADD_CONSULTATION((RequeteADD_CONSULTATION) requete);
 
-        // UPDATE_CONSULTATION
-        if (requete instanceof RequeteUPDATE_CONSULTATION) return TraiteRequeteUPDATE_CONSULTATION((RequeteUPDATE_CONSULTATION) requete);
+        if (requete instanceof RequeteADD_PATIENT)
+            return traiterADD_PATIENT((RequeteADD_PATIENT) requete);
 
-        // SEARCH_CONSULTATIONS
-        if (requete instanceof RequeteSEARCH_CONSULTATION) return TraiteRequeteSEARCH_CONSULTATION((RequeteSEARCH_CONSULTATION) requete);
+        if (requete instanceof RequeteUPDATE_CONSULTATION)
+            return traiterUPDATE_CONSULTATION((RequeteUPDATE_CONSULTATION) requete);
 
-        // DELETE_CONSULTATION
-        if (requete instanceof RequeteDELETE_CONSULTATION) return TraiteRequeteDELETE_CONSULTATION((RequeteDELETE_CONSULTATION) requete);
+        if (requete instanceof RequeteSEARCH_CONSULTATION)
+            return traiterSEARCH_CONSULTATION((RequeteSEARCH_CONSULTATION) requete);
 
-        // LOGOUT
+        if (requete instanceof RequeteDELETE_CONSULTATION)
+            return traiterDELETE_CONSULTATION((RequeteDELETE_CONSULTATION) requete);
 
-        // GET_CONSULTATION -> Pas demandé mais ajout pour afficher les consultations dans la fenêtre
-        if (requete instanceof RequeteGET_CONSULTATION) return TraiteRequeteGET_CONSULTATION((RequeteGET_CONSULTATION) requete);
+        if (requete instanceof RequeteGET_CONSULTATION)
+            return traiterGET_CONSULTATION((RequeteGET_CONSULTATION) requete);
 
+        if (requete instanceof RequeteLOGOUT)
+            return new ReponseLOGOUT(true);
 
         return null;
     }
 
-    // LOGIN
-    private synchronized ReponseLOGIN TraitementLOGIN(RequeteLOGIN requete) {
-        logger.Trace("Requete LOGIN reçue de : " + requete.getId());
+    private ReponseLOGIN traiterLOGIN(RequeteLOGIN req) {
+        logger.Trace("LOGIN reçu pour médecin ID=" + req.getId());
 
-        DoctorSearchVM doc = new DoctorSearchVM();
-        doc.setId(requete.getId());
-        doc.setLast_name(requete.getLastName());
-        doc.setFirst_name(requete.getFirstName());
-        doc.setMdp(requete.getMdp());
+        DoctorSearchVM vm = new DoctorSearchVM();
+        vm.setId(req.getId());
+        vm.setLast_name(req.getLastName());
+        vm.setFirst_name(req.getFirstName());
+        vm.setMdp(req.getMdp());
 
-        logger.Trace("Début requetteDAO");
         DoctorDAO dao = new DoctorDAO();
-        ArrayList<Doctor> result = dao.loadDoctor(doc);
-        logger.Trace("Fin requetteDAO");
-        System.out.println("=== Résultat loadDoctor() ===");
-        for (Doctor d : result) {
-            System.out.println(
-                    "ID=" + d.getId() +
-                            ", specialty_id=" + d.getSpecialty_id() +
-                            ", last_name=" + d.getLast_name() +
-                            ", first_name=" + d.getFirst_name() +
-                            ", mdp=" + d.getMdp()
-            );
-        }
+        ArrayList<Doctor> result = dao.loadDoctor(vm);
 
-        if (result.size() > 0){
-            System.out.println("=== true ===");
-            return new ReponseLOGIN(true);
-        }
-        else {
-            System.out.println("=== false ===");
-            return  new ReponseLOGIN(false);
-        }
-        //return new ReponseLOGIN(true);
+        boolean ok = !result.isEmpty();
+        logger.Trace("LOGIN " + (ok ? "OK" : "REFUSÉ"));
+
+        return new ReponseLOGIN(ok);
     }
-    // ADD_CONSULTATION
-    private synchronized ReponseADD_CONSULTATION TraiteRequeteADD_CONSULTATION(RequeteADD_CONSULTATION requete) {
-        logger.Trace("Requete ADD_CONSULTATION reçue !");
 
-        int doctorId = requete.getIdDoctor();
-        LocalDate date = requete.getDate();
-        LocalTime startHour = requete.getHour();
-        int duration = requete.getDuration();
-        int count = requete.getNbConsultation();
+    private ReponseADD_CONSULTATION traiterADD_CONSULTATION(
+            RequeteADD_CONSULTATION req) {
 
-        LocalTime currentHour = startHour;
+        logger.Trace("ADD_CONSULTATION reçu");
+
+        LocalTime start = req.getHour();
+        int duration = req.getDuration();
+        int count = req.getNbConsultation();
+
         LocalTime limit = LocalTime.of(17, 0);
-
-        LocalTime lastEnd = startHour.plusMinutes((long) duration * count);
+        LocalTime lastEnd = start.plusMinutes((long) duration * count);
 
         if (lastEnd.isAfter(limit)) {
-            return new ReponseADD_CONSULTATION(true);
+            return new ReponseADD_CONSULTATION(true); // dépasse 17h
         }
 
         ConsultationDAO dao = new ConsultationDAO();
+        LocalTime current = start;
 
         for (int i = 0; i < count; i++) {
+            Consultation c = new Consultation();
+            c.setDoctor_id(req.getIdDoctor());
+            c.setDate(req.getDate());
+            c.setHour(current);
+            c.setDuree(duration);
+            c.setPatient_id(null);
+            c.setReason(null);
 
-            Consultation consultation = new Consultation();
-            consultation.setDoctor_id(doctorId);
-            consultation.setDate(date);
-            consultation.setHour(currentHour);
-            consultation.setDuree(duration);
-            consultation.setPatient_id(null);
-            consultation.setReason(null);
-
-            dao.save(consultation);
-
-            currentHour = currentHour.plusMinutes(duration);
+            dao.save(c);
+            current = current.plusMinutes(duration);
+            nbConsultation++;
         }
 
         return new ReponseADD_CONSULTATION(false);
     }
 
-    // ADD_PATIENT
-    private synchronized ReponseADD_PATIENT TraiteRequeteADD_PATIENT(RequeteADD_PATIENT requete) {
-        logger.Trace("Requete ADD_PATIENT reçue !");
+    private ReponseADD_PATIENT traiterADD_PATIENT(RequeteADD_PATIENT req) {
+        logger.Trace("ADD_PATIENT reçu");
 
-        Patient patient = new Patient();
-        patient.setFirst_name(requete.getPrenom());
-        patient.setLast_name(requete.getNom());
+        Patient p = new Patient();
+        p.setLast_name(req.getNom());
+        p.setFirst_name(req.getPrenom());
 
         PatientDAO dao = new PatientDAO();
-        dao.save(patient);
+        dao.save(p);
 
-        //Patient newPatient = dao.getPatientByName(requete.getNom(), requete.getPrenom());
-
-        ReponseADD_PATIENT reponse = new ReponseADD_PATIENT(patient.getId());
-
-        return reponse;
+        return new ReponseADD_PATIENT(p.getId());
     }
+    private ReponseUPDATE_CONSULTATION traiterUPDATE_CONSULTATION(
+            RequeteUPDATE_CONSULTATION req) {
 
-    // UPDATE_CONSULTATION
-    private synchronized ReponseUPDATE_CONSULTATION TraiteRequeteUPDATE_CONSULTATION(RequeteUPDATE_CONSULTATION requete) {
-        logger.Trace("Requete UPDATE_CONSULTATION reçue !");
+        logger.Trace("UPDATE_CONSULTATION reçu");
 
         ConsultationDAO dao = new ConsultationDAO();
+        Consultation c = dao.getConsultationsById(req.getId());
 
-        ArrayList<Consultation> consultations = dao.loadConsultations();
-
-        Consultation consultation = dao.getConsultationsById(requete.getId());
-
-        if (consultation == null) {
-            logger.Trace("Consultation avec ID " + requete.getId() + " introuvable !");
+        if (c == null) {
             return new ReponseUPDATE_CONSULTATION(false);
         }
 
-        consultation.setPatient_id(requete.getIdPatient());
-        consultation.setReason(requete.getReason());
-        consultation.setDate(requete.getNewDate());
-        consultation.setHour(requete.getNewHour());
-        consultation.setDuree(requete.getDuration());
+        c.setDate(req.getNewDate());
+        c.setHour(req.getNewHour());
+        c.setDuree(req.getDuration());
+        c.setPatient_id(req.getIdPatient());
+        c.setReason(req.getReason());
 
-        dao.save(consultation);
-        ReponseUPDATE_CONSULTATION reponse = new ReponseUPDATE_CONSULTATION(true);
-
-        return reponse;
+        dao.save(c);
+        return new ReponseUPDATE_CONSULTATION(true);
     }
 
-    //Search Consultation
-    private synchronized ReponseSEARCH_CONSULTATION TraiteRequeteSEARCH_CONSULTATION(RequeteSEARCH_CONSULTATION requete) {
+    private ReponseSEARCH_CONSULTATION traiterSEARCH_CONSULTATION(
+            RequeteSEARCH_CONSULTATION req) {
+
+        ConsultationSearchVM vm = new ConsultationSearchVM();
+        vm.setDoctor_id(req.getDoctorId());
+
+        if (req.getDate() != null)
+            vm.setDate(req.getDate());
+
+        if (req.getId() != null && req.getId() != 0)
+            vm.setPatient_id(req.getId());
+
         ConsultationDAO dao = new ConsultationDAO();
-        ConsultationSearchVM cons = new ConsultationSearchVM();
+        ArrayList<Consultation> result = dao.loadConsultations(vm);
 
-        cons.setDoctor_id(requete.getDoctorId());
-        if (requete.getDate() != null) {
-            cons.setDate(requete.getDate());
-        }
-
-        Integer id = requete.getId();
-        if (id != null && id != 0) {
-            cons.setPatient_id(id);
-        }
-
-        System.out.println("=== OBJET cons ===");
-        System.out.println("doctor_id : " + cons.getDoctor_id());
-        System.out.println("patient_id : " + cons.getPatient_id());
-        System.out.println("date       : " + cons.getDate());
-
-        ArrayList<Consultation> all = dao.loadConsultations(cons);
-
-        System.out.println("Nombre de consultations filtrées : " + all.size());
-
-        return new ReponseSEARCH_CONSULTATION(all);
+        return new ReponseSEARCH_CONSULTATION(result);
     }
 
-    private synchronized ReponseDELETE_CONSULTATION TraiteRequeteDELETE_CONSULTATION(RequeteDELETE_CONSULTATION requete) {
+    private ReponseDELETE_CONSULTATION traiterDELETE_CONSULTATION(
+            RequeteDELETE_CONSULTATION req) {
 
         ConsultationDAO dao = new ConsultationDAO();
-        dao.delete(requete.getConsultationId());
+        dao.delete(req.getConsultationId());
 
         return new ReponseDELETE_CONSULTATION(true);
     }
 
+    private ReponseGET_CONSULTATION traiterGET_CONSULTATION(
+            RequeteGET_CONSULTATION req) {
 
-        // GET_CONSULTATION
-    private synchronized ReponseGET_CONSULTATION TraiteRequeteGET_CONSULTATION(RequeteGET_CONSULTATION requete) {
         ConsultationDAO dao = new ConsultationDAO();
-        ArrayList<Consultation> all = dao.loadConsultations();
+        ArrayList<Consultation> list =
+                dao.getConsultationsByDoctorId(req.getDoctorId());
 
-        System.out.println("Nombre de consultations chargées : " + all.size());
-        System.out.println(all);
-
-        for (Consultation consultation : all) {
-            System.out.println("Id : " + consultation.getId());
-        }
-
-        ArrayList<Consultation> list = dao.getConsultationsByDoctorId(requete.getDoctorId());
-
-        System.out.println("Id doctor dans CAP : " + requete.getDoctorId());
-        System.out.println(list);
-
-        for (Consultation consultation : list) {
-            System.out.println("Id : " + consultation.getId());
-        }
-
-        ReponseGET_CONSULTATION reponse = new ReponseGET_CONSULTATION(list);
-
-        return reponse;
+        return new ReponseGET_CONSULTATION(list);
     }
 
     @Override
@@ -254,9 +191,5 @@ public class CAP implements Protocol {
 
     public static int getNbConsultation() {
         return nbConsultation;
-    }
-
-    public static void setNbConsultation(int nbConsultation) {
-        CAP.nbConsultation = nbConsultation;
     }
 }

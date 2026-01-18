@@ -27,27 +27,34 @@ public class ThreadServeurPool extends ThreadServer {
         logger.Trace("Démarrage du TH Serveur (Pool)...");
         // Création du pool de threads
         try {
-            for (int i = 0; i < taillePool; i++)
-                new ThreadClientPool(protocol, connexionsEnAttente, pool, logger).start();
+            ThreadClientPool th;
+            for (int i = 0; i < taillePool; i++) {
+                th = new ThreadClientPool(
+                        protocol,
+                        connexionsEnAttente,
+                        pool,
+                        logger
+                );
+                th.start();
+            }
+
         } catch (IOException ex) {
             logger.Trace("Erreur I/O lors de la création du pool de threads");
             return;
         }
 
         // Attente des connexions
-        while (!this.isInterrupted()) {
-            Socket csocket;
+        while (!isInterrupted()) {
             try {
-                ssocket.setSoTimeout(2000);
-                csocket = ssocket.accept();
-                logger.Trace("Connexion acceptée, mise en file d'attente.");
+                Socket csocket = ssocket.accept();
+                logger.Trace("Connexion acceptée");
                 connexionsEnAttente.addConnexion(csocket);
-            } catch (SocketTimeoutException ex) {
-                // Pour vérifier si le thread a été interrompu
-            } catch (IOException ex) {
-                logger.Trace("Erreur I/O");
+            } catch (SocketTimeoutException ignored) {
+            } catch (IOException e) {
+                logger.Trace("Erreur I/O serveur");
             }
         }
+
         logger.Trace("TH Serveur (Pool) interrompu.");
         pool.interrupt();
     }
