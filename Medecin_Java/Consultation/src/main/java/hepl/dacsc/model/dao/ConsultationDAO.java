@@ -18,6 +18,7 @@ public class ConsultationDAO {
     }
 
     public Consultation getConsultationsById(Integer id) {
+        loadConsultations();
         for (Consultation entity : consultations) {
             if (Objects.equals(entity.getId(), id))
             {

@@ -4,7 +4,8 @@ import hepl.dacsc.View.JFrame.MainJFrame;
 
 public class Main {
     public static void main(String[] args) {
-        ClientCAP mf = new ClientCAP();
-        mf.setVisible(true);
+        //ClientCAP mf = new ClientCAP();
+        MainJFrame mainJFrame = new MainJFrame();
+        mainJFrame.setVisible(true);
     }
 }

@@ -133,7 +133,9 @@ public class CAP implements Protocol {
         ConsultationDAO dao = new ConsultationDAO();
         Consultation c = dao.getConsultationsById(req.getId());
 
+        System.out.println("[DEBUG] ID reçu = " + req.getId());
         if (c == null) {
+            System.out.println("[DEBUG] ID Consultation null");
             return new ReponseUPDATE_CONSULTATION(false);
         }
 
