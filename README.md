@@ -37,8 +37,9 @@ Tout code généré à l’aide d’une IA **doit être compris et explicable**.
 
 ## 🗺️ Architecture globale
 
-**Image – Schéma global de l’application**  
-➡️ *Page 2 du PDF*
+<p>
+  <img src="Image/Schema_Global.png" alt="Image – Schéma global de l’application">
+</p>
 
 L’architecture comprend :
 - Serveur Réservation (C/C++)
@@ -62,8 +63,9 @@ L’architecture comprend :
 
 ### Client Réservation (C/C++/Qt)
 
-**Image – Interface du client Qt**  
-➡️ *Page 3 du PDF*
+<p>
+  <img src="Image/Interface_Client_Qt.png" alt="Image – Interface du client Qt">
+</p>
 
 Fonctionnalités :
 - Login patient (nouveau ou existant)
@@ -99,8 +101,12 @@ Contraintes :
 
 #### Protocole CBP – Consultation Booking Protocol
 
-**Image – Tableau du protocole CBP**  
-➡️ *Pages 5–6 du PDF*
+<p>
+  <img src="Image/Protocol_CBP_1.png" alt="Image – Tableau du protocole CBP">
+</p>
+<p>
+  <img src="Image/Protocol_CBP_2.png" alt="Image – Tableau du protocole CBP">
+</p>
 
 Commandes principales :
 - `LOGIN`
@@ -124,17 +130,23 @@ Commandes principales :
 
 ### Client Admin (Java Swing)
 
-**Image – Client Admin et protocole ACBP**  
-➡️ *Page 6 du PDF*
+<p>
+  <img src="Image/Client_Admin.png" alt="Image – Client Admin">
+</p>
 
 - Connexion au `PORT_ADMIN`
 - Protocole **ACBP**
 - Commande unique : `LIST_CLIENTS`
 
+<p>
+  <img src="Image/Protocol_ACBP.png" alt="Image – Protocole ACBP">
+</p>
+
 ### DAO Java
 
-**Image – Structure des packages DAO**  
-➡️ *Page 7 du PDF*
+<p>
+  <img src="Image/Package_DAO.png" alt="Image – Structure des packages DAO">
+</p>
 
 - `entity` : Patient, Doctor, Consultation…
 - `dao` : CRUD + accès BD
@@ -144,16 +156,18 @@ Commandes principales :
 
 ### Serveur Consultation (Java)
 
-**Image – Serveur Consultation**  
-➡️ *Page 8 du PDF*
+<p>
+  <img src="Image/Serveur_Consultation.png" alt="Image – Serveur Consultation">
+</p>
 
 - Serveur **de requêtes**
 - Multi-threads (pool)
 - Port : `PORT_CONSULTATION`
 - Protocole **CAP** (objets Java sérialisés)
 
-**Image – Tableau du protocole CAP**  
-➡️ *Page 9 du PDF*
+<p>
+  <img src="Image/Protocol_CAP.png" alt="Image – Tableau du protocole CAP">
+</p>
 
 ---
 
@@ -163,8 +177,9 @@ Commandes principales :
 
 ### Serveur Rapport Médical sécurisé
 
-**Image – Schéma et protocole MRPS**  
-➡️ *Pages 10–11 du PDF*
+<p>
+  <img src="Image/Serveur_Rapport_Medical.png" alt="Image – Schéma Serveur Rapport Médical sécurisé">
+</p>
 
 - Java multi-threads
 - Serveur **de connexions**
@@ -177,6 +192,10 @@ Commandes principales :
 
 #### Protocole MRPS
 
+<p>
+  <img src="Image/Protocol_MRPS.png" alt="Image – Protocole MRPS">
+</p>
+
 Commandes :
 - `LOGIN` (digest salé + échange clé de session)
 - `ADD_REPORT`
@@ -188,8 +207,12 @@ Commandes :
 
 ## 🌐 API REST Java
 
-**Image – Routes de l’API REST**  
-➡️ *Pages 12–13 du PDF*
+<p>
+  <img src="Image/Protocol_API_REST_1.png" alt="Image – Routes de l’API REST">
+</p>
+<p>
+  <img src="Image/Protocol_API_REST_2.png" alt="Image – Routes de l’API REST">
+</p>
 
 - Implémentée **from scratch** avec `HttpServer`
 - Accès BD via DAO
@@ -207,8 +230,9 @@ Routes principales :
 
 ## 🖥️ Frontend Web – Vue.js 3
 
-**Image – Schéma frontend/backend**  
-➡️ *Pages 14–15 du PDF*
+<p>
+  <img src="Image/Vue_JS.png" alt="Image – Schéma frontend/backend">
+</p>
 
 Fonctionnalités patient :
 - Login
